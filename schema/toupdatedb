@@ -1,0 +1,1 @@
+docker-compose run feature-flag sh
