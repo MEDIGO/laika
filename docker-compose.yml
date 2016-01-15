@@ -1,0 +1,28 @@
+feature-flag:
+    build: .
+    links:
+        - mysql
+    ports:
+        - "8000:8000"
+    environment:
+        FEAT_FLAG_DATABASE_HOSTNAME: mysql
+        FEAT_FLAG_DATABASE_USERNAME: root
+        FEAT_FLAG_DATABASE_PASSWORD: root
+        FEAT_FLAG_DATABASE_NAME: feature-flag-db
+        STATSD_HOST: localhost
+        STATSD_PORT: 8125
+        MYSQL_HOST: 192.168.99.100
+        MYSQL_PORT: 3306
+        MYSQL_USERNAME: root
+        MYSQL_PASSWORD: root
+        MYSQL_DBNAME: feature-flag-db
+    volumes:
+        - ./:/go/src/github.com/medigo/feature-flag
+
+mysql:
+    image: mysql:5
+    ports:
+        - "3306:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: feature-flag-db
