@@ -1,0 +1,21 @@
+feat-flag:
+    build: .
+    links:
+        - mysql
+    ports:
+        - "8000:8000"
+    environment:
+        FEAT_FLAG_DATABASE_HOSTNAME: mysql
+        FEAT_FLAG_DATABASE_USERNAME: root
+        FEAT_FLAG_DATABASE_PASSWORD: root
+        FEAT_FLAG_DATABASE_NAME: featflagdb
+    volumes:
+        - ./:/go/src/github.com/medigo/feat-flag
+
+mysql:
+    image: mysql:5
+    ports:
+        - "3306:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: featflagdb
