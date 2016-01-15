@@ -1,0 +1,5 @@
+.DS_Store
+*.a
+data/sequelprologin
+data/toupdatedb
+dbtests

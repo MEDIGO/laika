@@ -1,0 +1,5 @@
+CREATE DATABASE IF NOT EXISTS `featflagdb`;
+CREATE TABLE IF NOT EXISTS `feature`(`id` INT NOT NULL AUTO_INCREMENT, `feature_key` VARCHAR(255) NOT NULL, `creation_date` DATE NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS `environment` (`id` INT NOT NULL AUTO_INCREMENT, `environment_key` VARCHAR(255) NOT NULL, `enabled` BOOLEAN NOT NULL, `creation_date` DATE NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS `environment_feature` (`id` INT NOT NULL AUTO_INCREMENT, `feature_id` INT NOT NULL, `environment_id` INT NOT NULL, `enabled` BOOLEAN NOT NULL, `creation_date` DATE NOT NULL, PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS `environment_feature_update` (`id` INT NOT NULL AUTO_INCREMENT, `feature_id` INT NOT NULL, `environment_id` INT NOT NULL, `enabled` BOOLEAN NOT NULL, `date` DATE NOT NULL, PRIMARY KEY (id));
