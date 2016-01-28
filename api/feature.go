@@ -51,11 +51,11 @@ func (r *FeatureResource) Create(c *echo.Context) error {
 		return BadRequest(err)
 	}
 
-	feature := model.NewFeature(*in.Name)
-
-	if err := feature.Validate(); err != nil {
+	if err := in.Validate(); err != nil {
 		return BadRequest(err)
 	}
+
+	feature := model.NewFeature(*in.Name)
 
 	if err := r.store.CreateFeature(feature); err != nil {
 		return InternalServerError(err)

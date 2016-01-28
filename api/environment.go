@@ -57,11 +57,11 @@ func (r *EnvironmentResource) Create(c *echo.Context) error {
 		return BadRequest(err)
 	}
 
-	environment := model.NewEnvironment(*in.Name, *in.Enabled, *in.FeatureId)
-
-	if err := environment.Validate(); err != nil {
+	if err := in.Validate(); err != nil {
 		return BadRequest(err)
 	}
+
+	environment := model.NewEnvironment(*in.Name, *in.Enabled, *in.FeatureId)
 
 	if err := r.store.CreateEnvironment(environment); err != nil {
 		return InternalServerError(err)
@@ -94,12 +94,16 @@ func (r *EnvironmentResource) Update(c *echo.Context) error {
 		return BadRequest(err)
 	}
 
-	if in.Name != nil {
-		environment.Name = in.Name
-	}
-
 	if in.Enabled != nil {
 		environment.Enabled = in.Enabled
+	}
+
+	if in.FeatureId != nil {
+		environment.FeatureId = in.FeatureId
+	}
+
+	if in.Name != nil {
+		environment.Name = in.Name
 	}
 
 	if err := environment.Validate(); err != nil {

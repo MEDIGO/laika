@@ -2,16 +2,14 @@ package model
 
 import (
 	"time"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type Environment struct {
-	Id        int64      `json:"id"                         meddler:"id,pk"            valid:"-"`
-	CreatedAt *time.Time `json:"created_at,omitempty"       meddler:"created_at"       valid:"-"`
-	Enabled   *bool      `json:"enabled,omitempty"          meddler:"enabled"          valid:"-"`
-	FeatureId *int64     `json:"feature_id,omitempty"       meddler:"feature_id"       valid:"required"`
-	Name      *string    `json:"name,omitempty"             meddler:"name"             valid:"alphanum,required"`
+	Id        int64      `json:"id"                         meddler:"id,pk"`
+	CreatedAt *time.Time `json:"created_at,omitempty"       meddler:"created_at"`
+	Enabled   *bool      `json:"enabled,omitempty"          meddler:"enabled"`
+	FeatureId *int64     `json:"feature_id,omitempty"       meddler:"feature_id"`
+	Name      *string    `json:"name,omitempty"             meddler:"name"`
 }
 
 func NewEnvironment(name string, enabled bool, featureId int64) *Environment {
@@ -25,6 +23,20 @@ func NewEnvironment(name string, enabled bool, featureId int64) *Environment {
 }
 
 func (e *Environment) Validate() error {
-	_, err := valid.ValidateStruct(e)
-	return err
+	if e.Enabled == nil {
+		return CustomError{
+			"Enabled: non zero value required;",
+		}
+	}
+	if e.FeatureId == nil {
+		return CustomError{
+			"FeatureId: non zero value required;",
+		}
+	}
+	if e.Name == nil {
+		return CustomError{
+			"Name: non zero value required;",
+		}
+	}
+	return nil
 }

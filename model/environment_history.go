@@ -2,17 +2,15 @@ package model
 
 import (
 	"time"
-
-	valid "github.com/asaskevich/govalidator"
 )
 
 type EnvironmentHistory struct {
-	Id        int64      `json:"id"                         meddler:"id,pk"            valid:"-"`
-	CreatedAt *time.Time `json:"created_at,omitempty"       meddler:"created_at"       valid:"-"`
-	Enabled   *bool      `json:"enabled,omitempty"          meddler:"enabled"          valid:"-"`
-	FeatureId *int64     `json:"feature_id,omitempty"       meddler:"feature_id"       valid:"required"`
-	Name      *string    `json:"name,omitempty"             meddler:"name"             valid:"alphanum,required"`
-	Timestamp *time.Time `json:"timestamp,omitempty"        meddler:"timestamp"        valid:"-"`
+	Id        int64      `json:"id"                         meddler:"id,pk"`
+	CreatedAt *time.Time `json:"created_at,omitempty"       meddler:"created_at"`
+	Enabled   *bool      `json:"enabled,omitempty"          meddler:"enabled"`
+	FeatureId *int64     `json:"feature_id,omitempty"       meddler:"feature_id"`
+	Name      *string    `json:"name,omitempty"             meddler:"name"`
+	Timestamp *time.Time `json:"timestamp,omitempty"        meddler:"timestamp"`
 }
 
 func NewEnvironmentHistory(createdAt time.Time, enabled bool, featureId int64, name string) *EnvironmentHistory {
@@ -26,7 +24,21 @@ func NewEnvironmentHistory(createdAt time.Time, enabled bool, featureId int64, n
 	return environmentHistory
 }
 
-func (eH *EnvironmentHistory) Validate() error {
-	_, err := valid.ValidateStruct(eH)
-	return err
+func (e *EnvironmentHistory) Validate() error {
+	if e.Enabled == nil {
+		return CustomError{
+			"Enabled: non zero value required;",
+		}
+	}
+	if e.FeatureId == nil {
+		return CustomError{
+			"FeatureId: non zero value required;",
+		}
+	}
+	if e.Name == nil {
+		return CustomError{
+			"Name: non zero value required;",
+		}
+	}
+	return nil
 }
