@@ -7,9 +7,9 @@ import (
 )
 
 type Environment struct {
-	Id        int64      `json:"id"                         meddler:"id,pk"            valid:"required"`
+	Id        int64      `json:"id"                         meddler:"id,pk"            valid:"-"`
 	CreatedAt *time.Time `json:"created_at,omitempty"       meddler:"created_at"       valid:"-"`
-	Enabled   *bool      `json:"enabled,omitempty"          meddler:"enabled"          valid:"required"`
+	Enabled   *bool      `json:"enabled,omitempty"          meddler:"enabled"          valid:"-"`
 	FeatureId *int64     `json:"feature_id,omitempty"       meddler:"feature_id"       valid:"required"`
 	Name      *string    `json:"name,omitempty"             meddler:"name"             valid:"alphanum,required"`
 }

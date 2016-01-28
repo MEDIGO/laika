@@ -17,7 +17,7 @@ feature-flag:
         MYSQL_PASSWORD: root
         MYSQL_DBNAME: feature-flag-db
     volumes:
-        - ./:/go/src/github.com/medigo/feature-flag
+        - ./:/go/src/github.com/MEDIGO/feature-flag
 
 mysql:
     image: mysql:5

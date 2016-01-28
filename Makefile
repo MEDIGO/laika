@@ -8,13 +8,18 @@ init:
 	@docker-compose run feature-flag mysql -h mysql -u root -proot feature-flag-db < data/feature-flagdbschema.sql
 .PHONY: init
 
-clean:
-	@echo "===>  Cleaning environment..."
-	@docker-compose stop
-	@docker-compose rm -f -v
-.PHONY: clean
+test:
+	@echo "===> Running tests..."
+	@docker-compose run feature-flag go test ./...
+.PHONY: test
 
 run:
 	@echo "===> Running services..."
 	@docker-compose up mysql
 .PHONY: run
+
+clean:
+	@echo "===>  Cleaning environment..."
+	@docker-compose stop
+	@docker-compose rm -f -v
+.PHONY: clean

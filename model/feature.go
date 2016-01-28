@@ -7,7 +7,7 @@ import (
 )
 
 type Feature struct {
-	Id        int64      `json:"id"                         meddler:"id,pk"            valid:"required"`
+	Id        int64      `json:"id"                         meddler:"id,pk"            valid:"-"`
 	CreatedAt *time.Time `json:"created_at,omitempty"       meddler:"created_at"       valid:"-"`
 	Name      *string    `json:"name,omitempty"             meddler:"name"             valid:"alphanum,required"`
 }
