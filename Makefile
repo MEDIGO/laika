@@ -15,7 +15,7 @@ test:
 
 run:
 	@echo "===> Running services..."
-	@docker-compose up mysql
+	@docker-compose up feature-flag
 .PHONY: run
 
 clean:

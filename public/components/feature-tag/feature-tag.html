@@ -1,0 +1,22 @@
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="feature-tag">
+  <template>
+    <iron-ajax auto
+        url=[[url]]
+        handle-as="json"
+        last-response="{{ajaxResponse}}"></iron-ajax>
+    <template is="dom-repeat" items="[[ajaxResponse]]">
+      <p>[[item.name]]</p>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+    is: 'feature-tag',
+    ready: function() {
+      this.url = window.config.apiServer + '/features';
+    }
+  });
+  </script>
+</dom-module>

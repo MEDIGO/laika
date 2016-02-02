@@ -1,0 +1,11 @@
+{
+  "name": "feature-flag",
+  "homepage": "https://github.com/mbernardes/feature-flag",
+  "authors": [
+    "Miguel Bernardes <miguel.bernardes@medigo.com>"
+  ],
+  "dependencies": {
+    "iron-ajax": "git://github.com/PolymerElements/iron-ajax.git#^1.1.1",
+    "polymer": "Polymer/polymer#^1.2.4"
+  }
+}

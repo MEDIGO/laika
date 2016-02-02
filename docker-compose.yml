@@ -1,5 +1,6 @@
 feature-flag:
     build: .
+    command: go run main.go
     links:
         - mysql
     ports:

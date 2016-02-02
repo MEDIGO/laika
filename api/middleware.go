@@ -56,9 +56,14 @@ func ResponseEncoderMiddleware() echo.MiddlewareFunc {
 					log.Error(v.Error())
 				}
 				return c.JSON(v.Status, v.Payload)
+			case *echo.HTTPError:
+				return c.JSON(v.Code(), model.APIError{v.Error()})
 			default:
-				log.Error(err)
-				return c.JSON(http.StatusInternalServerError, model.APIError{err.Error()})
+				if err != nil {
+					log.Error(err)
+					return c.JSON(http.StatusInternalServerError, model.APIError{err.Error()})
+				}
+				return nil
 			}
 		}
 	}

@@ -1,14 +1,16 @@
 package main
 
 import (
+	"os"
+	"time"
+
 	"github.com/DataDog/datadog-go/statsd"
-	"github.com/MEDIGO/feature-flag/api"
-	"github.com/MEDIGO/feature-flag/store"
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	graceful "gopkg.in/tylerb/graceful.v1"
-	"os"
-	"time"
+
+	"github.com/MEDIGO/feature-flag/api"
+	"github.com/MEDIGO/feature-flag/store"
 )
 
 func init() {
@@ -78,12 +80,11 @@ func main() {
 	}
 
 	app.Action = func(c *cli.Context) {
-
 		store, err := store.NewStore(
-			c.String("mysql-host"),
-			c.String("mysql-port"),
 			c.String("mysql-username"),
 			c.String("mysql-password"),
+			c.String("mysql-host"),
+			c.String("mysql-port"),
 			c.String("mysql-dbname"),
 		)
 

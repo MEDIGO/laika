@@ -29,5 +29,7 @@ func NewServer(store store.Store, stats *statsd.Client) *echo.Echo {
 	server.Post("/environments", environments.Create)
 	server.Patch("/environments/:id", environments.Update)
 
+	server.ServeDir("/", "public")
+
 	return server
 }
