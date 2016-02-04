@@ -1,0 +1,18 @@
+{
+  "name": "feature-flag",
+  "version": "1.0.0",
+  "description": "MEDIGO-feature-flag",
+  "private": true,
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:MEDIGO/feature-flag.git"
+  },
+  "author": "MEDIGO GmbH",
+  "homepage": "https://github.com/MEDIGO/feature-flag",
+  "devDependencies": {
+    "bower": "^1.7.7"
+  }
+}
