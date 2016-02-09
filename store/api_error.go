@@ -1,4 +1,4 @@
-package model
+package store
 
 type APIError struct {
 	Message string `json:"message"`
