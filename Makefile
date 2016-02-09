@@ -5,7 +5,7 @@ build:
 
 init:
 	@echo "===>  Creating database..."
-	@docker-compose run feature-flag mysql -h mysql -u root -proot feature-flag-db < data/feature-flagdbschema.sql
+	@docker-compose run feature-flag mysql -h mysql -u root -proot feature-flag-db < schema/feature-flagdbschema.sql
 .PHONY: init
 
 test:
