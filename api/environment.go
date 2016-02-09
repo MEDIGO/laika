@@ -30,7 +30,7 @@ func NewEnvironmentResource(store store.Store, stats *statsd.Client) *Environmen
 func (r *EnvironmentResource) Get(c *echo.Context) error {
 	name := c.Param("name")
 
-	environment, err := r.store.GetEnvironment(name)
+	environment, err := r.store.GetEnvironmentByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
@@ -74,7 +74,7 @@ func (r *EnvironmentResource) Create(c *echo.Context) error {
 func (r *EnvironmentResource) Update(c *echo.Context) error {
 	name := c.Param("name")
 
-	environment, err := r.store.GetEnvironment(name)
+	environment, err := r.store.GetEnvironmentByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)

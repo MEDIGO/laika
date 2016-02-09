@@ -16,17 +16,6 @@ type FeatureStatus struct {
 	EnvironmentId *int64     `json:"environment_id,omitempty"   meddler:"environment_id"`
 }
 
-func NewFeatureStatus(createdAt time.Time, enabled bool, featureId int64, environmentId int64) *FeatureStatus {
-	featureStatus := new(FeatureStatus)
-
-	featureStatus.CreatedAt = &createdAt
-	featureStatus.Enabled = &enabled
-	featureStatus.FeatureId = &featureId
-	featureStatus.EnvironmentId = &environmentId
-
-	return featureStatus
-}
-
 func (s *store) GetFeatureStatus(featureId int64, environmentId int64) (*FeatureStatus, error) {
 	featureStatus := new(FeatureStatus)
 

@@ -10,10 +10,10 @@ import (
 )
 
 type Feature struct {
-	Id        int64            `json:"id"`
-	CreatedAt *time.Time       `json:"created_at,omitempty"`
-	Name      *string          `json:"name,omitempty"`
-	Status    *map[string]bool `json:"status,omitempty"`
+	Id        int64           `json:"id"`
+	CreatedAt *time.Time      `json:"created_at,omitempty"`
+	Name      *string         `json:"name,omitempty"`
+	Status    map[string]bool `json:"status,omitempty"`
 }
 
 func (f *Feature) Validate() error {
@@ -37,7 +37,7 @@ func NewFeatureResource(store store.Store, stats *statsd.Client) *FeatureResourc
 func (r *FeatureResource) Get(c *echo.Context) error {
 	name := c.Param("name")
 
-	feature, err := r.store.GetFeature(name)
+	feature, err := r.store.GetFeatureByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
@@ -46,7 +46,7 @@ func (r *FeatureResource) Get(c *echo.Context) error {
 		}
 	}
 
-	featureStatus, err := r.store.ListFeaturesStatus(&feature.Id, nil)
+	featureStatus, err := r.store.ListFeatureStatus(&feature.Id, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
@@ -80,7 +80,7 @@ func (r *FeatureResource) Get(c *echo.Context) error {
 		Id:        feature.Id,
 		CreatedAt: feature.CreatedAt,
 		Name:      feature.Name,
-		Status:    &featureStatusMap,
+		Status:    featureStatusMap,
 	}
 
 	return OK(apiFeature)
@@ -91,7 +91,51 @@ func (r *FeatureResource) List(c *echo.Context) error {
 	if err != nil {
 		return InternalServerError(err)
 	}
-	return OK(features)
+
+	environments, err := r.store.ListEnvironments()
+	if err != nil {
+		if err == store.ErrNoRows {
+			return NotFound(err)
+		} else {
+			return InternalServerError(err)
+		}
+	}
+
+	featureList := make([]*Feature, len(features))
+	featureIndex := make(map[int64]*Feature, len(features))
+	environmentNames := make(map[int64]string, len(environments))
+
+	featureStatus, err := r.store.ListFeatureStatus(nil, nil)
+	if err != nil {
+		if err == store.ErrNoRows {
+			return NotFound(err)
+		} else {
+			return InternalServerError(err)
+		}
+	}
+
+	for i, feature := range features {
+		apiFeature := Feature{
+			Id:        feature.Id,
+			CreatedAt: feature.CreatedAt,
+			Name:      feature.Name,
+			Status:    make(map[string]bool),
+		}
+
+		for _, environment := range environments {
+			apiFeature.Status[*environment.Name] = false
+			environmentNames[environment.Id] = *environment.Name
+		}
+
+		featureList[i] = &apiFeature
+		featureIndex[feature.Id] = &apiFeature
+	}
+
+	for _, status := range featureStatus {
+		featureIndex[*status.FeatureId].Status[environmentNames[*status.EnvironmentId]] = *status.Enabled
+	}
+
+	return OK(featureList)
 }
 
 func (r *FeatureResource) Create(c *echo.Context) error {
@@ -118,7 +162,7 @@ func (r *FeatureResource) Create(c *echo.Context) error {
 func (r *FeatureResource) Update(c *echo.Context) error {
 	name := c.Param("name")
 
-	feature, err := r.store.GetFeature(name)
+	feature, err := r.store.GetFeatureByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)

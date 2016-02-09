@@ -10,7 +10,7 @@ init:
 
 test:
 	@echo "===> Running tests..."
-	@docker-compose run feature-flag go test ./...
+	@docker-compose run feature-flag go test . ./client ./test/integration
 .PHONY: test
 
 run:
