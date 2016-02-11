@@ -14,16 +14,7 @@ type Environment struct {
 	Name      *string    `json:"name,omitempty"             meddler:"name"`
 }
 
-func (e *Environment) Validate() error {
-	if e.Name == nil {
-		return CustomError{
-			"Name: non zero value required;",
-		}
-	}
-	return nil
-}
-
-func (s *store) GetEnvironment(name string) (*Environment, error) {
+func (s *store) GetEnvironmentByName(name string) (*Environment, error) {
 	environment := new(Environment)
 
 	query := sq.Select("*").From("environment")

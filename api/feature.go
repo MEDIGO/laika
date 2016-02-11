@@ -16,6 +16,15 @@ type Feature struct {
 	Status    *map[string]bool `json:"status,omitempty"`
 }
 
+func (f *Feature) Validate() error {
+	if f.Name == nil {
+		return CustomError{
+			"Name: non zero value required;",
+		}
+	}
+	return nil
+}
+
 type FeatureResource struct {
 	store store.Store
 	stats *statsd.Client
@@ -91,9 +100,9 @@ func (r *FeatureResource) Create(c *echo.Context) error {
 		return BadRequest(err)
 	}
 
-	/*if err := in.Validate(); err != nil {
+	if err := in.Validate(); err != nil {
 		return BadRequest(err)
-	}*/
+	}
 
 	feature := &store.Feature{
 		Name: store.String(*in.Name),
@@ -126,10 +135,6 @@ func (r *FeatureResource) Update(c *echo.Context) error {
 	if in.Name != nil {
 		feature.Name = in.Name
 	}
-
-	/*if err := feature.Validate(); err != nil {
-		return BadRequest(err)
-	}*/
 
 	if err := r.store.UpdateFeature(feature); err != nil {
 		return InternalServerError(err)

@@ -9,6 +9,15 @@ import (
 
 type Environment store.Environment
 
+func (e *Environment) Validate() error {
+	if e.Name == nil {
+		return CustomError{
+			"Name: non zero value required;",
+		}
+	}
+	return nil
+}
+
 type EnvironmentResource struct {
 	store store.Store
 	stats *statsd.Client
@@ -47,9 +56,9 @@ func (r *EnvironmentResource) Create(c *echo.Context) error {
 		return BadRequest(err)
 	}
 
-	/*if err := in.Validate(); err != nil {
+	if err := in.Validate(); err != nil {
 		return BadRequest(err)
-	}*/
+	}
 
 	environment := &store.Environment{
 		Name: store.String(*in.Name),
@@ -82,10 +91,6 @@ func (r *EnvironmentResource) Update(c *echo.Context) error {
 	if in.Name != nil {
 		environment.Name = in.Name
 	}
-
-	/*if err := environment.Validate(); err != nil {
-		return BadRequest(err)
-	}*/
 
 	if err := r.store.UpdateEnvironment(environment); err != nil {
 		return InternalServerError(err)

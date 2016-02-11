@@ -14,16 +14,7 @@ type Feature struct {
 	Name      *string    `json:"name,omitempty"             meddler:"name"`
 }
 
-func (f *Feature) Validate() error {
-	if f.Name == nil {
-		return CustomError{
-			"Name: non zero value required;",
-		}
-	}
-	return nil
-}
-
-func (s *store) GetFeature(name string) (*Feature, error) {
+func (s *store) GetFeatureByName(name string) (*Feature, error) {
 	feature := new(Feature)
 
 	query := sq.Select("*").From("feature")

@@ -27,25 +27,6 @@ func NewFeatureStatus(createdAt time.Time, enabled bool, featureId int64, enviro
 	return featureStatus
 }
 
-func (e *FeatureStatus) Validate() error {
-	if e.Enabled == nil {
-		return CustomError{
-			"Enabled: non zero value required;",
-		}
-	}
-	if e.FeatureId == nil {
-		return CustomError{
-			"FeatureId: non zero value required;",
-		}
-	}
-	if e.EnvironmentId == nil {
-		return CustomError{
-			"EnvironmentId: non zero value required;",
-		}
-	}
-	return nil
-}
-
 func (s *store) GetFeatureStatus(featureId int64, environmentId int64) (*FeatureStatus, error) {
 	featureStatus := new(FeatureStatus)
 
@@ -65,7 +46,7 @@ func (s *store) GetFeatureStatus(featureId int64, environmentId int64) (*Feature
 	return featureStatus, err
 }
 
-func (s *store) ListFeaturesStatus(featureId *int64, environmentId *int64) ([]*FeatureStatus, error) {
+func (s *store) ListFeatureStatus(featureId *int64, environmentId *int64) ([]*FeatureStatus, error) {
 	query := sq.Select("*").From("feature_status")
 
 	if featureId != nil {
