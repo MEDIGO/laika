@@ -13,7 +13,9 @@ type FeatureIntegrationSuite struct {
 
 func (suite *FeatureIntegrationSuite) TestExample() {
 	name := "featureKey"
-	exampleFeature := NewFeature(name)
+	exampleFeature := &Feature{
+		Name: String(name),
+	}
 	require.NotNil(suite.T(), exampleFeature.Id)
 	require.Equal(suite.T(), *exampleFeature.Name, name)
 }

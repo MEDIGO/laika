@@ -14,22 +14,23 @@ var ErrTxDone = sql.ErrTxDone
 
 type Store interface {
 	GetFeatureById(id int64) (*Feature, error)
-	ListFeatures() ([]Feature, error)
-	CreateFeature(feature Feature) error
-	UpdateFeature(feature Feature) error
+	ListFeatures() ([]*Feature, error)
+	CreateFeature(feature *Feature) error
+	UpdateFeature(feature *Feature) error
 
 	GetEnvironmentById(id int64) (*Environment, error)
-	ListEnvironments() ([]Environment, error)
-	CreateEnvironment(environment Environment) error
-	UpdateEnvironment(environment Environment) error
+	ListEnvironments() ([]*Environment, error)
+	CreateEnvironment(environment *Environment) error
+	UpdateEnvironment(environment *Environment) error
 
-	ListFeaturesStatus(featureId *int64, environmentId *int64) ([]FeatureStatus, error)
-	CreateFeatureStatus(featureStatus FeatureStatus) error
-	UpdateFeatureStatus(featureStatus FeatureStatus) error
+	GetFeatureStatus(featureId int64, environmentId int64) (*FeatureStatus, error)
+	ListFeaturesStatus(featureId *int64, environmentId *int64) ([]*FeatureStatus, error)
+	CreateFeatureStatus(featureStatus *FeatureStatus) error
+	UpdateFeatureStatus(featureStatus *FeatureStatus) error
 
-	ListFeaturesStatusHistory(featureId *int64, environmentId *int64, featureStatusId *int64) ([]FeatureStatusHistory, error)
-	CreateFeatureStatusHistory(featureStatusHistory FeatureStatusHistory) error
-	UpdateFeatureStatusHistory(featureStatusHistory FeatureStatusHistory) error
+	ListFeaturesStatusHistory(featureId *int64, environmentId *int64, featureStatusId *int64) ([]*FeatureStatusHistory, error)
+	CreateFeatureStatusHistory(featureStatusHistory *FeatureStatusHistory) error
+	UpdateFeatureStatusHistory(featureStatusHistory *FeatureStatusHistory) error
 
 	Ping() error
 }

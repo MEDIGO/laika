@@ -8,7 +8,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 
-	"github.com/MEDIGO/feature-flag/model"
+	"github.com/MEDIGO/feature-flag/store"
 )
 
 func LogRequestMiddleware() echo.MiddlewareFunc {
@@ -57,11 +57,11 @@ func ResponseEncoderMiddleware() echo.MiddlewareFunc {
 				}
 				return c.JSON(v.Status, v.Payload)
 			case *echo.HTTPError:
-				return c.JSON(v.Code(), model.APIError{v.Error()})
+				return c.JSON(v.Code(), store.APIError{v.Error()})
 			default:
 				if err != nil {
 					log.Error(err)
-					return c.JSON(http.StatusInternalServerError, model.APIError{err.Error()})
+					return c.JSON(http.StatusInternalServerError, store.APIError{err.Error()})
 				}
 				return nil
 			}

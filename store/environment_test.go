@@ -13,7 +13,9 @@ type EnvironmentIntegrationSuite struct {
 
 func (suite *EnvironmentIntegrationSuite) TestExample() {
 	name := "environmentName"
-	exampleEnvironment := NewEnvironment(name)
+	exampleEnvironment := &Environment{
+		Name: String(name),
+	}
 	require.NotNil(suite.T(), exampleEnvironment.Id)
 	require.Equal(suite.T(), *exampleEnvironment.Name, name)
 }

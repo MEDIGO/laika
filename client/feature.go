@@ -3,29 +3,29 @@ package client
 import (
 	"fmt"
 
-	"github.com/MEDIGO/feature-flag/model"
+	"github.com/MEDIGO/feature-flag/store"
 )
 
-func (c *client) FeatureGet(id int64) (*model.Feature, error) {
-	out := new(model.Feature)
-	err := c.get(fmt.Sprintf("/features/%d", id), out)
+func (c *client) FeatureGet(id int64) (*store.Feature, error) {
+	out := new(store.Feature)
+	err := c.get(fmt.Sprintf("/api/features/%d", id), out)
 	return out, err
 }
 
-func (c *client) FeatureCreate(in *model.Feature) (*model.Feature, error) {
-	out := new(model.Feature)
-	err := c.post("/features", in, out)
+func (c *client) FeatureCreate(in *store.Feature) (*store.Feature, error) {
+	out := new(store.Feature)
+	err := c.post("/api/features", in, out)
 	return out, err
 }
 
-func (c *client) FeatureList() ([]*model.Feature, error) {
-	out := []*model.Feature{}
-	err := c.get(fmt.Sprintf("/features"), &out)
+func (c *client) FeatureList() ([]*store.Feature, error) {
+	out := []*store.Feature{}
+	err := c.get(fmt.Sprintf("/api/features"), &out)
 	return out, err
 }
 
-func (c *client) FeatureUpdate(id int64, in *model.Feature) (*model.Feature, error) {
-	out := new(model.Feature)
-	err := c.patch(fmt.Sprintf("/features/%d", id), in, out)
+func (c *client) FeatureUpdate(id int64, in *store.Feature) (*store.Feature, error) {
+	out := new(store.Feature)
+	err := c.patch(fmt.Sprintf("/api/features/%d", id), in, out)
 	return out, err
 }

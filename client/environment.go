@@ -3,29 +3,29 @@ package client
 import (
 	"fmt"
 
-	"github.com/MEDIGO/feature-flag/model"
+	"github.com/MEDIGO/feature-flag/store"
 )
 
-func (c *client) EnvironmentGet(featureName string, environmentName string) (*model.Environment, error) {
-	out := new(model.Environment)
-	err := c.get(fmt.Sprintf("/features/%s/environments/%s", featureName, environmentName), out)
+func (c *client) EnvironmentGet(id int64) (*store.Environment, error) {
+	out := new(store.Environment)
+	err := c.get(fmt.Sprintf("/api/environments/%d", id), out)
 	return out, err
 }
 
-func (c *client) EnvironmentCreate(in *model.Environment) (*model.Environment, error) {
-	out := new(model.Environment)
-	err := c.post("/environments", in, out)
+func (c *client) EnvironmentCreate(in *store.Environment) (*store.Environment, error) {
+	out := new(store.Environment)
+	err := c.post("/api/environments", in, out)
 	return out, err
 }
 
-func (c *client) EnvironmentList() ([]*model.Environment, error) {
-	out := []*model.Environment{}
-	err := c.get(fmt.Sprintf("/environments"), &out)
+func (c *client) EnvironmentList() ([]*store.Environment, error) {
+	out := []*store.Environment{}
+	err := c.get(fmt.Sprintf("/api/environments"), &out)
 	return out, err
 }
 
-func (c *client) EnvironmentUpdate(id int64, in *model.Environment) (*model.Environment, error) {
-	out := new(model.Environment)
-	err := c.patch(fmt.Sprintf("/environments/%d", id), in, out)
+func (c *client) EnvironmentUpdate(id int64, in *store.Environment) (*store.Environment, error) {
+	out := new(store.Environment)
+	err := c.patch(fmt.Sprintf("/api/environments/%d", id), in, out)
 	return out, err
 }

@@ -14,14 +14,6 @@ type Environment struct {
 	Name      *string    `json:"name,omitempty"             meddler:"name"`
 }
 
-func NewEnvironment(name string) *Environment {
-	environment := new(Environment)
-
-	environment.Name = &name
-
-	return environment
-}
-
 func (e *Environment) Validate() error {
 	if e.Name == nil {
 		return CustomError{
@@ -38,7 +30,7 @@ func (s *store) GetEnvironmentById(id int64) (*Environment, error) {
 	return environment, err
 }
 
-func (s *store) ListEnvironments() ([]Environment, error) {
+func (s *store) ListEnvironments() ([]*Environment, error) {
 	query := sq.Select("*").From("environment")
 
 	sql, args, err := query.ToSql()
@@ -48,17 +40,17 @@ func (s *store) ListEnvironments() ([]Environment, error) {
 
 	log.Debug(sql)
 
-	environments := []Environment{}
+	environments := []*Environment{}
 	err = meddler.QueryAll(s.db, &environments, sql, args...)
 
 	return environments, err
 }
 
-func (s *store) CreateEnvironment(environment Environment) error {
+func (s *store) CreateEnvironment(environment *Environment) error {
 	environment.CreatedAt = Time(time.Now())
 	return meddler.Insert(s.db, "environment", environment)
 }
 
-func (s *store) UpdateEnvironment(environment Environment) error {
+func (s *store) UpdateEnvironment(environment *Environment) error {
 	return meddler.Update(s.db, "environment", environment)
 }

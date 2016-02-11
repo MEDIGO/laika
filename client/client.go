@@ -8,19 +8,24 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/MEDIGO/feature-flag/model"
+	"github.com/MEDIGO/feature-flag/store"
 )
 
 type Client interface {
-	FeatureCreate(*model.Feature) (*model.Feature, error)
-	FeatureGet(int64) (*model.Feature, error)
-	FeatureList() ([]*model.Feature, error)
-	FeatureUpdate(id int64, in *model.Feature) (*model.Feature, error)
+	FeatureCreate(*store.Feature) (*store.Feature, error)
+	FeatureGet(int64) (*store.Feature, error)
+	FeatureList() ([]*store.Feature, error)
+	FeatureUpdate(id int64, in *store.Feature) (*store.Feature, error)
 
-	EnvironmentCreate(*model.Environment) (*model.Environment, error)
-	EnvironmentGet(featureName string, environmentName string) (*model.Environment, error)
-	EnvironmentList() ([]*model.Environment, error)
-	EnvironmentUpdate(id int64, in *model.Environment) (*model.Environment, error)
+	EnvironmentCreate(*store.Environment) (*store.Environment, error)
+	EnvironmentGet(id int64) (*store.Environment, error)
+	EnvironmentList() ([]*store.Environment, error)
+	EnvironmentUpdate(id int64, in *store.Environment) (*store.Environment, error)
+
+	//FeatureStatusCreate(*store.FeatureStatus) (*store.FeatureStatus, error)
+	//FeatureStatusGet(featureId int64, environmentId int64) (*store.FeatureStatus, error)
+	//FeatureStatusList() ([]*store.FeatureStatus, error)
+	//FeatureStatusUpdate(featureId int64, environmentId int64, in *store.FeatureStatus) (*store.FeatureStatus, error)
 }
 
 type client struct {
@@ -76,7 +81,7 @@ func (c *client) do(method, endpoint string, in interface{}, out interface{}) er
 		}
 	}
 
-	e := new(model.APIError)
+	e := new(store.APIError)
 	json.NewDecoder(res.Body).Decode(e)
 
 	return e

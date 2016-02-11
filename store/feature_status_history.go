@@ -55,7 +55,7 @@ func (e *FeatureStatusHistory) Validate() error {
 	return nil
 }
 
-func (s *store) ListFeaturesStatusHistory(featureId *int64, environmentId *int64, featureStatusId *int64) ([]FeatureStatusHistory, error) {
+func (s *store) ListFeaturesStatusHistory(featureId *int64, environmentId *int64, featureStatusId *int64) ([]*FeatureStatusHistory, error) {
 	query := sq.Select("*").From("feature_status_history")
 
 	if featureId != nil {
@@ -77,17 +77,17 @@ func (s *store) ListFeaturesStatusHistory(featureId *int64, environmentId *int64
 
 	log.Debug(sql)
 
-	featuresStatusHistory := []FeatureStatusHistory{}
+	featuresStatusHistory := []*FeatureStatusHistory{}
 	err = meddler.QueryAll(s.db, &featuresStatusHistory, sql, args...)
 
 	return featuresStatusHistory, err
 }
 
-func (s *store) CreateFeatureStatusHistory(featureStatusHistory FeatureStatusHistory) error {
+func (s *store) CreateFeatureStatusHistory(featureStatusHistory *FeatureStatusHistory) error {
 	featureStatusHistory.CreatedAt = Time(time.Now())
 	return meddler.Insert(s.db, "feature_status_history", featureStatusHistory)
 }
 
-func (s *store) UpdateFeatureStatusHistory(featureStatusHistory FeatureStatusHistory) error {
+func (s *store) UpdateFeatureStatusHistory(featureStatusHistory *FeatureStatusHistory) error {
 	return meddler.Update(s.db, "feature_status_history", featureStatusHistory)
 }
