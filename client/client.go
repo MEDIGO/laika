@@ -8,19 +8,19 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/MEDIGO/feature-flag/model"
+	"github.com/MEDIGO/feature-flag/api"
 )
 
 type Client interface {
-	FeatureCreate(*model.Feature) (*model.Feature, error)
-	FeatureGet(int64) (*model.Feature, error)
-	FeatureList() ([]*model.Feature, error)
-	FeatureUpdate(id int64, in *model.Feature) (*model.Feature, error)
+	FeatureCreate(*api.Feature) (*api.Feature, error)
+	FeatureGet(name string) (*api.Feature, error)
+	FeatureList() ([]*api.Feature, error)
+	FeatureUpdate(name string, in *api.Feature) (*api.Feature, error)
 
-	EnvironmentCreate(*model.Environment) (*model.Environment, error)
-	EnvironmentGet(featureName string, environmentName string) (*model.Environment, error)
-	EnvironmentList() ([]*model.Environment, error)
-	EnvironmentUpdate(id int64, in *model.Environment) (*model.Environment, error)
+	EnvironmentCreate(*api.Environment) (*api.Environment, error)
+	EnvironmentGet(name string) (*api.Environment, error)
+	EnvironmentList() ([]*api.Environment, error)
+	EnvironmentUpdate(name string, in *api.Environment) (*api.Environment, error)
 }
 
 type client struct {
@@ -76,7 +76,7 @@ func (c *client) do(method, endpoint string, in interface{}, out interface{}) er
 		}
 	}
 
-	e := new(model.APIError)
+	e := new(api.APIError)
 	json.NewDecoder(res.Body).Decode(e)
 
 	return e

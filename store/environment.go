@@ -14,31 +14,25 @@ type Environment struct {
 	Name      *string    `json:"name,omitempty"             meddler:"name"`
 }
 
-func NewEnvironment(name string) *Environment {
+func (s *store) GetEnvironmentByName(name string) (*Environment, error) {
 	environment := new(Environment)
 
-	environment.Name = &name
+	query := sq.Select("*").From("environment")
+	query = query.Where(sq.Eq{"name": name})
 
-	return environment
-}
-
-func (e *Environment) Validate() error {
-	if e.Name == nil {
-		return CustomError{
-			"Name: non zero value required;",
-		}
+	sql, args, err := query.ToSql()
+	if err != nil {
+		return nil, err
 	}
-	return nil
-}
 
-func (s *store) GetEnvironmentById(id int64) (*Environment, error) {
-	environment := new(Environment)
-	err := meddler.Load(s.db, "environment", environment, id)
+	log.Debug(sql)
+
+	err = meddler.QueryRow(s.db, environment, sql, args...)
 
 	return environment, err
 }
 
-func (s *store) ListEnvironments() ([]Environment, error) {
+func (s *store) ListEnvironments() ([]*Environment, error) {
 	query := sq.Select("*").From("environment")
 
 	sql, args, err := query.ToSql()
@@ -48,17 +42,17 @@ func (s *store) ListEnvironments() ([]Environment, error) {
 
 	log.Debug(sql)
 
-	environments := []Environment{}
+	environments := []*Environment{}
 	err = meddler.QueryAll(s.db, &environments, sql, args...)
 
 	return environments, err
 }
 
-func (s *store) CreateEnvironment(environment Environment) error {
+func (s *store) CreateEnvironment(environment *Environment) error {
 	environment.CreatedAt = Time(time.Now())
 	return meddler.Insert(s.db, "environment", environment)
 }
 
-func (s *store) UpdateEnvironment(environment Environment) error {
+func (s *store) UpdateEnvironment(environment *Environment) error {
 	return meddler.Update(s.db, "environment", environment)
 }

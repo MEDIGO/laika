@@ -9,7 +9,6 @@ import (
 
 	"github.com/MEDIGO/feature-flag/api"
 	"github.com/MEDIGO/feature-flag/client"
-	"github.com/MEDIGO/feature-flag/model"
 	"github.com/MEDIGO/feature-flag/store"
 )
 
@@ -44,8 +43,8 @@ func (s *FeatureFlagSuite) SetupTest() {
 	}
 }
 
-func (s *FeatureFlagSuite) CreateRandFeature(userID int64) (*model.Feature, error) {
-	input := &model.Feature{}
+func (s *FeatureFlagSuite) CreateRandFeature(userID int64) (*api.Feature, error) {
+	input := &api.Feature{}
 	return s.client.FeatureCreate(input)
 }
 

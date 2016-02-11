@@ -27,26 +27,26 @@ func NewFeatureStatus(createdAt time.Time, enabled bool, featureId int64, enviro
 	return featureStatus
 }
 
-func (e *FeatureStatus) Validate() error {
-	if e.Enabled == nil {
-		return CustomError{
-			"Enabled: non zero value required;",
-		}
+func (s *store) GetFeatureStatus(featureId int64, environmentId int64) (*FeatureStatus, error) {
+	featureStatus := new(FeatureStatus)
+
+	query := sq.Select("*").From("feature_status")
+	query = query.Where(sq.Eq{"feature_id": featureId})
+	query = query.Where(sq.Eq{"environment_id": environmentId})
+
+	sql, args, err := query.ToSql()
+	if err != nil {
+		return nil, err
 	}
-	if e.FeatureId == nil {
-		return CustomError{
-			"FeatureId: non zero value required;",
-		}
-	}
-	if e.EnvironmentId == nil {
-		return CustomError{
-			"EnvironmentId: non zero value required;",
-		}
-	}
-	return nil
+
+	log.Debug(sql)
+
+	err = meddler.QueryRow(s.db, featureStatus, sql, args...)
+
+	return featureStatus, err
 }
 
-func (s *store) ListFeaturesStatus(featureId *int64, environmentId *int64) ([]FeatureStatus, error) {
+func (s *store) ListFeatureStatus(featureId *int64, environmentId *int64) ([]*FeatureStatus, error) {
 	query := sq.Select("*").From("feature_status")
 
 	if featureId != nil {
@@ -64,17 +64,17 @@ func (s *store) ListFeaturesStatus(featureId *int64, environmentId *int64) ([]Fe
 
 	log.Debug(sql)
 
-	featuresStatus := []FeatureStatus{}
+	featuresStatus := []*FeatureStatus{}
 	err = meddler.QueryAll(s.db, &featuresStatus, sql, args...)
 
 	return featuresStatus, err
 }
 
-func (s *store) CreateFeatureStatus(featureStatus FeatureStatus) error {
+func (s *store) CreateFeatureStatus(featureStatus *FeatureStatus) error {
 	featureStatus.CreatedAt = Time(time.Now())
 	return meddler.Insert(s.db, "feature_status", featureStatus)
 }
 
-func (s *store) UpdateFeatureStatus(featureStatus FeatureStatus) error {
+func (s *store) UpdateFeatureStatus(featureStatus *FeatureStatus) error {
 	return meddler.Update(s.db, "feature_status", featureStatus)
 }

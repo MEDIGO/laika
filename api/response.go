@@ -2,8 +2,6 @@ package api
 
 import (
 	"net/http"
-
-	"github.com/MEDIGO/feature-flag/model"
 )
 
 type Response struct {
@@ -32,13 +30,13 @@ func NoContent() Response {
 }
 
 func BadRequest(err error) Response {
-	return Response{http.StatusBadRequest, model.APIError{err.Error()}, err}
+	return Response{http.StatusBadRequest, APIError{err.Error()}, err}
 }
 
 func NotFound(err error) Response {
-	return Response{http.StatusNotFound, model.APIError{err.Error()}, err}
+	return Response{http.StatusNotFound, APIError{err.Error()}, err}
 }
 
 func InternalServerError(err error) Response {
-	return Response{http.StatusInternalServerError, model.APIError{err.Error()}, err}
+	return Response{http.StatusInternalServerError, APIError{err.Error()}, err}
 }
