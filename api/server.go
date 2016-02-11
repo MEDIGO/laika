@@ -19,15 +19,15 @@ func NewServer(store store.Store, stats *statsd.Client) *echo.Echo {
 	features := NewFeatureResource(store, stats)
 	environments := NewEnvironmentResource(store, stats)
 
-	server.Get("/api/features/:id", features.Get)
+	server.Get("/api/features/:name", features.Get)
 	server.Get("/api/features", features.List)
 	server.Post("/api/features", features.Create)
-	server.Patch("/api/features/:id", features.Update)
+	server.Patch("/api/features/:name", features.Update)
 
-	server.Get("/api/environments/:id", environments.Get)
+	server.Get("/api/environments/:name", environments.Get)
 	server.Get("/api/environments", environments.List)
 	server.Post("/api/environments", environments.Create)
-	server.Patch("/api/environments/:id", environments.Update)
+	server.Patch("/api/environments/:name", environments.Update)
 
 	server.ServeDir("/", "public")
 

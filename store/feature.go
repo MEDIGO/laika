@@ -23,9 +23,20 @@ func (f *Feature) Validate() error {
 	return nil
 }
 
-func (s *store) GetFeatureById(id int64) (*Feature, error) {
+func (s *store) GetFeature(name string) (*Feature, error) {
 	feature := new(Feature)
-	err := meddler.Load(s.db, "feature", feature, id)
+
+	query := sq.Select("*").From("feature")
+	query = query.Where(sq.Eq{"name": name})
+
+	sql, args, err := query.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debug(sql)
+
+	err = meddler.QueryRow(s.db, feature, sql, args...)
 
 	return feature, err
 }

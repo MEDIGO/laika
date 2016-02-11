@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/MEDIGO/feature-flag/api"
 	"github.com/MEDIGO/feature-flag/store"
 )
 
@@ -17,25 +18,25 @@ type EnvironmentServiceSuite struct {
 }
 
 func (s *EnvironmentServiceSuite) TestEnvironmentGet() {
-	s.mux.HandleFunc("/api/environments/1", func(w http.ResponseWriter, r *http.Request) {
+	s.mux.HandleFunc("/api/environments/e1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(s.T(), "GET", r.Method)
-		fmt.Fprint(w, `{"id": 1}`)
+		fmt.Fprint(w, `{"name": "e1"}`)
 	})
 
-	found, err := s.client.EnvironmentGet(1)
+	found, err := s.client.EnvironmentGet("e1")
 	assert.NoError(s.T(), err)
 
-	expected := &store.Environment{Id: 1}
+	expected := &api.Environment{Name: store.String("e1")}
 	assert.Equal(s.T(), expected, found)
 }
 
 func (s *EnvironmentServiceSuite) TestEnvironmentCreate() {
-	input := &store.Environment{Id: 2, Name: store.String("etest")}
+	input := &api.Environment{Id: 2, Name: store.String("etest")}
 
 	s.mux.HandleFunc("/api/environments", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(s.T(), "POST", r.Method)
 
-		received := new(store.Environment)
+		received := new(api.Environment)
 		json.NewDecoder(r.Body).Decode(received)
 		assert.Equal(s.T(), input, received)
 
@@ -45,7 +46,7 @@ func (s *EnvironmentServiceSuite) TestEnvironmentCreate() {
 	found, err := s.client.EnvironmentCreate(input)
 	assert.NoError(s.T(), err)
 
-	expected := &store.Environment{Id: 2, Name: store.String("etest")}
+	expected := &api.Environment{Id: 2, Name: store.String("etest")}
 	assert.Equal(s.T(), expected, found)
 }
 
@@ -53,34 +54,34 @@ func (s *EnvironmentServiceSuite) TestListEnvironments() {
 	s.mux.HandleFunc("/api/environments", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(s.T(), "GET", r.Method)
 
-		fmt.Fprint(w, `[{"id": 1, "name": "f1"}]`)
+		fmt.Fprint(w, `[{"id": 1, "name": "e1"}]`)
 	})
 
 	found, err := s.client.EnvironmentList()
 	assert.NoError(s.T(), err)
 	assert.Len(s.T(), found, 1)
 
-	expected := &store.Environment{Id: 1, Name: store.String("f1")}
+	expected := &api.Environment{Id: 1, Name: store.String("e1")}
 	assert.Equal(s.T(), expected, found[0])
 }
 
 func (s *EnvironmentServiceSuite) TestEnvironmentUpdate() {
-	input := &store.Environment{Name: store.String("f1")}
+	input := &api.Environment{Name: store.String("e1")}
 
-	s.mux.HandleFunc("/api/environments/1", func(w http.ResponseWriter, r *http.Request) {
+	s.mux.HandleFunc("/api/environments/e1", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(s.T(), "PATCH", r.Method)
 
-		received := new(store.Environment)
+		received := new(api.Environment)
 		json.NewDecoder(r.Body).Decode(received)
 		assert.Equal(s.T(), input, received)
 
-		fmt.Fprint(w, `{"id": 1, "name": "f1.1"}`)
+		fmt.Fprint(w, `{"id": 1, "name": "e1.1"}`)
 	})
 
-	found, err := s.client.EnvironmentUpdate(1, input)
+	found, err := s.client.EnvironmentUpdate("e1", input)
 	assert.NoError(s.T(), err)
 
-	expected := &store.Environment{Id: 1, Name: store.String("f1.1")}
+	expected := &api.Environment{Id: 1, Name: store.String("e1.1")}
 	assert.Equal(s.T(), expected, found)
 }
 

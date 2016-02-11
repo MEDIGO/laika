@@ -43,8 +43,8 @@ func (s *FeatureFlagSuite) SetupTest() {
 	}
 }
 
-func (s *FeatureFlagSuite) CreateRandFeature(userID int64) (*store.Feature, error) {
-	input := &store.Feature{}
+func (s *FeatureFlagSuite) CreateRandFeature(userID int64) (*api.Feature, error) {
+	input := &api.Feature{}
 	return s.client.FeatureCreate(input)
 }
 

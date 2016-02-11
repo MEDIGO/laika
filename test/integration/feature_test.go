@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/MEDIGO/feature-flag/api"
 	"github.com/MEDIGO/feature-flag/store"
 	"github.com/MEDIGO/feature-flag/util"
 )
@@ -14,9 +15,9 @@ type FeatureIntegrationSuite struct {
 	FeatureFlagSuite
 }
 
-func (s *FeatureIntegrationSuite) TestFeatureCRU() {
+func (s *FeatureIntegrationSuite) TestFeatureCRUD() {
 	name := util.Token()
-	input := &store.Feature{
+	input := &api.Feature{
 		Name: store.String(name),
 	}
 
@@ -25,7 +26,7 @@ func (s *FeatureIntegrationSuite) TestFeatureCRU() {
 	require.NotEqual(s.T(), 0, created.Id)
 	require.Equal(s.T(), store.String(name), created.Name)
 
-	found, err := s.client.FeatureGet(created.Id)
+	found, err := s.client.FeatureGet(*created.Name)
 	require.NoError(s.T(), err)
 	require.Equal(s.T(), created.Id, found.Id)
 	require.Equal(s.T(), created.Name, input.Name)
@@ -36,9 +37,9 @@ func (s *FeatureIntegrationSuite) TestFeatureCRU() {
 	require.Equal(s.T(), found.Id, listed[len(listed)-1].Id)
 
 	newName := util.Token()
-	input = &store.Feature{Name: store.String(newName)}
+	input = &api.Feature{Name: store.String(newName)}
 
-	updated, err := s.client.FeatureUpdate(found.Id, input)
+	updated, err := s.client.FeatureUpdate(*found.Name, input)
 	require.NoError(s.T(), err)
 	require.Equal(s.T(), found.Id, updated.Id)
 	require.Equal(s.T(), store.String(newName), updated.Name)

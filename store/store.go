@@ -13,12 +13,12 @@ var ErrNoRows = sql.ErrNoRows
 var ErrTxDone = sql.ErrTxDone
 
 type Store interface {
-	GetFeatureById(id int64) (*Feature, error)
+	GetFeature(name string) (*Feature, error)
 	ListFeatures() ([]*Feature, error)
 	CreateFeature(feature *Feature) error
 	UpdateFeature(feature *Feature) error
 
-	GetEnvironmentById(id int64) (*Environment, error)
+	GetEnvironment(name string) (*Environment, error)
 	ListEnvironments() ([]*Environment, error)
 	CreateEnvironment(environment *Environment) error
 	UpdateEnvironment(environment *Environment) error

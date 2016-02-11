@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	"github.com/MEDIGO/feature-flag/api"
 	"github.com/MEDIGO/feature-flag/store"
 	"github.com/MEDIGO/feature-flag/util"
 )
@@ -15,10 +16,10 @@ type EnvironmentIntegrationSuite struct {
 	FeatureFlagSuite
 }
 
-func (s *EnvironmentIntegrationSuite) TestEnvironmentCRU() {
+func (s *EnvironmentIntegrationSuite) TestEnvironmentCRUD() {
 	name := util.Token()
 
-	input := &store.Environment{
+	input := &api.Environment{
 		CreatedAt: store.Time(time.Now()),
 		Name:      store.String(name),
 	}
@@ -28,7 +29,7 @@ func (s *EnvironmentIntegrationSuite) TestEnvironmentCRU() {
 	require.NotEqual(s.T(), 0, created.Id)
 	require.Equal(s.T(), store.String(name), created.Name)
 
-	found, err := s.client.EnvironmentGet(created.Id)
+	found, err := s.client.EnvironmentGet(*created.Name)
 	require.NoError(s.T(), err)
 	require.Equal(s.T(), created.Id, found.Id)
 	require.Equal(s.T(), created.Name, input.Name)
@@ -39,9 +40,9 @@ func (s *EnvironmentIntegrationSuite) TestEnvironmentCRU() {
 	require.Equal(s.T(), found.Id, listed[len(listed)-1].Id)
 
 	newName := util.Token()
-	input = &store.Environment{Name: store.String(newName)}
+	input = &api.Environment{Name: store.String(newName)}
 
-	updated, err := s.client.EnvironmentUpdate(found.Id, input)
+	updated, err := s.client.EnvironmentUpdate(*found.Name, input)
 	require.NoError(s.T(), err)
 	require.Equal(s.T(), found.Id, updated.Id)
 	require.Equal(s.T(), store.String(newName), updated.Name)

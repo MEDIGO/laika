@@ -23,9 +23,20 @@ func (e *Environment) Validate() error {
 	return nil
 }
 
-func (s *store) GetEnvironmentById(id int64) (*Environment, error) {
+func (s *store) GetEnvironment(name string) (*Environment, error) {
 	environment := new(Environment)
-	err := meddler.Load(s.db, "environment", environment, id)
+
+	query := sq.Select("*").From("environment")
+	query = query.Where(sq.Eq{"name": name})
+
+	sql, args, err := query.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	log.Debug(sql)
+
+	err = meddler.QueryRow(s.db, environment, sql, args...)
 
 	return environment, err
 }
