@@ -2,6 +2,5 @@
 data/sequelprologin
 data/toupdatedb
 dbtests
-feature-flag
 public/bower_components/
 node_modules/

@@ -23,7 +23,7 @@
         <tr>
           <td>[[f.name]]</td>
           <template is="dom-repeat" items="[[environmentsData]]" as="e">
-            <td>[[getValue(f.status, e.name)]]</td>
+            <td><a href="/feature-flag/[[f.id]]">[[getValue(f.status, e.name)]]</a></td>
           </template>
         </tr>
       </template>

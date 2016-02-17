@@ -6,6 +6,8 @@
   ],
   "dependencies": {
     "iron-ajax": "git://github.com/PolymerElements/iron-ajax.git#^1.1.1",
-    "polymer": "Polymer/polymer#^1.2.4"
+    "polymer": "Polymer/polymer#^1.2.4",
+    "page": "page.js#^1.6.4",
+    "iron-pages": "git://github.com/PolymerElements/iron-pages.git#^1.0.7"
   }
 }

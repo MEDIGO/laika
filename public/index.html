@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Page Title</title>
-    <script>
-      var config = {apiServer: 'http://192.168.99.100:8000'};
-    </script>
-    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="bower_components/polymer/polymer.html">
-    <link rel="import" href="components/features-table/features-table.html">
-  </head>
-  <body>
-    <features-table></features-table>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MEDIGO Feature Flag</title>
+
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
+  </script>
+
+  <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+  <link rel="import" href="components/elements/routing.html">
+
+  <link rel="import" href="bower_components/polymer/polymer.html">
+  <link rel="import" href="components/features-table/features-table.html">
+  <link rel="import" href="components/feature-flag/feature-flag.html">
+
+  <script>var config = {apiServer: 'http://192.168.99.100:8000'};</script>
+</head>
+<body>
+  <template is="dom-bind" id="app">
+    <header class="main-header">
+      <h1 class="title">Medigo Feature Flag</h1>
+    </header>
+    <menu-list>
+      <a href="/">Home</a>
+    </menu-list>
+    <iron-pages attr-for-selected="data-route" selected="{{route}}">
+      <section data-route="home">
+        <features-table></features-table>
+      </section>
+      <section data-route="feature-flag">
+        <feature-flag></feature-flag>
+      </section>
+    </iron-pages>
+  </template>
+</body>
 </html>

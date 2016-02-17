@@ -1,0 +1,15 @@
+<script src="../../bower_components/page/page.js"></script>
+<script>
+  window.addEventListener('WebComponentsReady', function() {
+    // Homepage
+    page('/', function () {
+      app.route = 'home';
+    });
+
+    page('/feature-flag/:id', function(ctx) {
+      app.route = 'feature-flag';
+    });
+
+    page({});
+  });
+</script>
