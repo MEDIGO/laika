@@ -14,5 +14,8 @@
   "homepage": "https://github.com/MEDIGO/feature-flag",
   "devDependencies": {
     "bower": "^1.7.7"
+  },
+  "dependencies": {
+    "dot": "^1.0.3"
   }
 }

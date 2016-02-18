@@ -8,6 +8,12 @@
 
     page('/feature-flag/:id', function(ctx) {
       app.route = 'feature-flag';
+      var v = document.getElementById('feature-flag-element');
+
+      var tempFn = doT.template('<feature-flag><h1>You selected feature number {{=it.id}}</h1></feature-flag>');
+      var resultText = tempFn(ctx.params);
+
+      v.innerHTML = resultText;
     });
 
     page({});

@@ -15,6 +15,7 @@
   <link rel="import" href="components/features-table/features-table.html">
   <link rel="import" href="components/feature-flag/feature-flag.html">
 
+  <script type="text/javascript" src="bower_components/doT/doT.js"></script>
   <script>var config = {apiServer: 'http://192.168.99.100:8000'};</script>
 </head>
 <body>
@@ -29,8 +30,7 @@
       <section data-route="home">
         <features-table></features-table>
       </section>
-      <section data-route="feature-flag">
-        <feature-flag></feature-flag>
+      <section id="feature-flag-element" data-route="feature-flag">
       </section>
     </iron-pages>
   </template>
