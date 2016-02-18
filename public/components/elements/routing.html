@@ -6,11 +6,11 @@
       app.route = 'home';
     });
 
-    page('/feature-flag/:id', function(ctx) {
-      app.route = 'feature-flag';
-      var v = document.getElementById('feature-flag-element');
+    page('/feature-page/:name', function(ctx) {
+      app.route = 'feature-page';
+      var v = document.getElementById('feature-page');
 
-      var tempFn = doT.template('<feature-flag><h1>You selected feature number {{=it.id}}</h1></feature-flag>');
+      var tempFn = doT.template('<feature-page name="{{=it.name}}"></feature-page>');
       var resultText = tempFn(ctx.params);
 
       v.innerHTML = resultText;

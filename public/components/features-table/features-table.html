@@ -21,9 +21,9 @@
       </tr>
       <template is="dom-repeat" items="[[featuresData]]" as="f">
         <tr>
-          <td>[[f.name]]</td>
+          <td><a href="/feature-page/[[f.name]]">[[f.name]]</a></td>
           <template is="dom-repeat" items="[[environmentsData]]" as="e">
-            <td><a href="/feature-flag/[[f.id]]">[[getValue(f.status, e.name)]]</a></td>
+            <td>[[getValue(f.status, e.name)]]</td>
           </template>
         </tr>
       </template>
@@ -37,7 +37,6 @@
     ready: function() {
       this.environmentsUrl = window.config.apiServer + '/api/environments';
       this.featuresUrl = window.config.apiServer + '/api/features';
-      this.environmentData = [];
     },
 
     getValue: function(obj, key) {

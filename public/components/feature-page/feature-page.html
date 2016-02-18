@@ -1,0 +1,49 @@
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="feature-page">
+  <template>
+    <iron-ajax auto
+        url="[[featuresUrl]]"
+        handle-as="json"
+        last-response="{{featureData}}"></iron-ajax>
+
+    <iron-ajax auto
+        url="[[environmentsUrl]]"
+        handle-as="json"
+        last-response="{{environmentsData}}"></iron-ajax>
+
+    <h1>[[featureData.name]]</h1>
+    <h5>[[featureData.created_at]]</h5>
+
+    <table>
+      <tr>
+        <template is="dom-repeat" items="[[environmentsData]]" as="e">
+          <th>[[e.name]]</th>
+        </template>
+      </tr>
+      <tr>
+        <template is="dom-repeat" items="[[environmentsData]]" as="e">
+          <td>[[getValue(featureData.status, e.name)]]</td>
+        </template>
+      </tr>
+    </table>
+  </template>
+
+  <script>
+  Polymer({
+    is: 'feature-page',
+    properties: {
+      name: String
+    },
+
+    ready: function() {
+      this.environmentsUrl = window.config.apiServer + '/api/environments';
+      this.featuresUrl = window.config.apiServer + '/api/features/' + this.name;
+    },
+
+    getValue: function(obj, key) {
+      return obj[key];
+    }
+  });
+  </script>
+</dom-module>
