@@ -171,13 +171,43 @@ func (r *FeatureResource) Update(c *echo.Context) error {
 		}
 	}
 
-	in := new(store.Feature)
+	in := new(Feature)
 	if err := c.Bind(&in); err != nil {
 		return BadRequest(err)
 	}
 
 	if in.Name != nil {
 		feature.Name = in.Name
+	}
+
+	environments, err := r.store.ListEnvironments()
+	if err != nil {
+		if err == store.ErrNoRows {
+			return NotFound(err)
+		} else {
+			return InternalServerError(err)
+		}
+	}
+
+	featureStatus, err := r.store.ListFeatureStatus(&in.Id, nil)
+	if err != nil {
+		if err == store.ErrNoRows {
+			return NotFound(err)
+		} else {
+			return InternalServerError(err)
+		}
+	}
+
+	for _, environment := range environments {
+		for _, status := range featureStatus {
+			if *status.EnvironmentId == environment.Id && *status.Enabled != in.Status[*environment.Name] {
+				status.Enabled = store.Bool(in.Status[*environment.Name])
+				if err := r.store.UpdateFeatureStatus(status); err != nil {
+					return InternalServerError(err)
+				}
+				break
+			}
+		}
 	}
 
 	if err := r.store.UpdateFeature(feature); err != nil {
