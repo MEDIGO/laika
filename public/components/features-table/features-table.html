@@ -23,7 +23,14 @@
         <tr>
           <td><a href="/feature-page/[[f.name]]">[[f.name]]</a></td>
           <template is="dom-repeat" items="[[environmentsData]]" as="e">
-            <td>[[getValue(f.status, e.name)]]</td>
+            <td>
+              <template is="dom-if" if="[[!getValue(f.status, e.name)]]">
+                <input type="checkbox" name="status" value="false" disabled>
+              </template>
+              <template is="dom-if" if="[[getValue(f.status, e.name)]]">
+                <input type="checkbox" name="status" value="true" disabled checked>
+              </template>
+            </td>
           </template>
         </tr>
       </template>

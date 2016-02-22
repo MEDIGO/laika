@@ -1,48 +1,63 @@
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="feature-page-environment-status">
+  <template>
+    <div>
+      <content select=".name"></content>
+      <input id="status" type="checkbox" checked={{enabled}}>
+    </div>
+  </template>
+
+  <script>
+  Polymer({
+    is: 'feature-page-environment-status',
+    properties: {
+      enabled: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    getName: function() {
+      return Polymer.dom(this).querySelector('.name').innerHTML;
+    },
+
+    getStatus: function() {
+      return this.$.status.checked;
+    }
+  });
+  </script>
+</dom-module>
 
 <dom-module id="feature-page">
   <template>
-    <iron-ajax auto
-        url="[[featuresUrl]]"
-        handle-as="json"
-        last-response="{{featureData}}"></iron-ajax>
-
-    <iron-ajax auto
-        url="[[environmentsUrl]]"
-        handle-as="json"
-        last-response="{{environmentsData}}"></iron-ajax>
-
-    <h1>[[featureData.name]]</h1>
-    <h5>[[featureData.created_at]]</h5>
-
-    <table>
-      <tr>
-        <template is="dom-repeat" items="[[environmentsData]]" as="e">
-          <th>[[e.name]]</th>
-        </template>
-      </tr>
-      <tr>
-        <template is="dom-repeat" items="[[environmentsData]]" as="e">
-          <td>[[getValue(featureData.status, e.name)]]</td>
-        </template>
-      </tr>
-    </table>
+    <h1><content select=".name"></content></h1>
+    <h5><content select=".created-at"></content></h5>
+    <content select="feature-page-environment-status"></content>
+    <button on-click="formSubmit">Submit</button>
   </template>
 
   <script>
   Polymer({
     is: 'feature-page',
-    properties: {
-      name: String
-    },
 
     ready: function() {
-      this.environmentsUrl = window.config.apiServer + '/api/environments';
+      this.name = Polymer.dom(this).querySelector('.name').innerHTML;
       this.featuresUrl = window.config.apiServer + '/api/features/' + this.name;
     },
 
-    getValue: function(obj, key) {
-      return obj[key];
+    formSubmit: function() {
+      var featureFlags = Polymer.dom(this).querySelectorAll('feature-page-environment-status');
+      var status = {};
+
+      for (i = 0; i < featureFlags.length; i++) {
+        status[featureFlags[i].getName()] = featureFlags[i].getStatus();
+      }
+
+      var feature = {name: this.name, status: status}
+
+      var request = new XMLHttpRequest();
+      request.open('PATCH', this.featuresUrl, true);
+      request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      request.send(JSON.stringify(feature));
     }
   });
   </script>
