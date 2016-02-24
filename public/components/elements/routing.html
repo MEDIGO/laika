@@ -21,7 +21,7 @@
           <div class="name">{{=it.feature.name}}</div> \
           <div class="created-at">{{=it.feature.created_at}}</div> \
           {{~ it.environments :environment }} \
-            <feature-page-environment-status {{? !it.feature.status[environment.name] }} enabled {{?}}> \
+            <feature-page-environment-status {{? it.feature.status[environment.name] }} enabled {{?}}> \
               <div class="name">{{=environment.name}}</div> \
             </feature-page-environment-status> \
           {{~}} \

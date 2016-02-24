@@ -1,0 +1,33 @@
+<dom-module id="feature-creation">
+  <template>
+    <div id="error"></div>
+    <input id="name" type="text">
+    <button on-click="formSubmit">Submit</button>
+  </template>
+
+  <script>
+  Polymer({
+    is: 'feature-creation',
+
+    ready: function() {
+      this.featuresUrl = window.config.apiServer + '/api/features';
+    },
+
+    formSubmit: function() {
+      var value = this.$.name.value.trim();
+      if (value !== '') {
+        var feature = {name: value};
+        httpRequestHandler.sendRequest('POST', this.featuresUrl, feature, this.handleFeatureResponse.bind(this));
+      }
+    },
+
+    handleFeatureResponse: function(err) {
+      if (err !== undefined) {
+        this.$.error.innerHTML = err;
+      } else {
+        window.location.replace('/');
+      }
+    }
+  });
+  </script>
+</dom-module>

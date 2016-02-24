@@ -37,6 +37,10 @@ func NotFound(err error) Response {
 	return Response{http.StatusNotFound, APIError{err.Error()}, err}
 }
 
+func Conflict(err error) Response {
+	return Response{http.StatusConflict, APIError{err.Error()}, err}
+}
+
 func InternalServerError(err error) Response {
 	return Response{http.StatusInternalServerError, APIError{err.Error()}, err}
 }

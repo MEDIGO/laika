@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"time"
 
 	"github.com/DataDog/datadog-go/statsd"
@@ -144,19 +145,28 @@ func (r *FeatureResource) Create(c *echo.Context) error {
 		return BadRequest(err)
 	}
 
-	if err := in.Validate(); err != nil {
-		return BadRequest(err)
-	}
+	feature, err := r.store.GetFeatureByName(*in.Name)
+	if err != nil {
+		if err == store.ErrNoRows {
+			if err := in.Validate(); err != nil {
+				return BadRequest(err)
+			}
 
-	feature := &store.Feature{
-		Name: store.String(*in.Name),
-	}
+			feature = &store.Feature{
+				Name: store.String(*in.Name),
+			}
 
-	if err := r.store.CreateFeature(feature); err != nil {
-		return InternalServerError(err)
-	}
+			if err := r.store.CreateFeature(feature); err != nil {
+				return InternalServerError(err)
+			}
 
-	return Created(feature)
+			return Created(feature)
+		} else {
+			return InternalServerError(err)
+		}
+	}
+	err = errors.New("Feature already exists")
+	return Conflict(err)
 }
 
 func (r *FeatureResource) Update(c *echo.Context) error {
@@ -199,13 +209,32 @@ func (r *FeatureResource) Update(c *echo.Context) error {
 	}
 
 	for _, environment := range environments {
-		for _, status := range featureStatus {
-			if *status.EnvironmentId == environment.Id && *status.Enabled != in.Status[*environment.Name] {
+		var status *store.FeatureStatus
+		for _, s := range featureStatus {
+			if *s.EnvironmentId == environment.Id {
+				status = s
+				break
+			}
+		}
+
+		if status != nil {
+			if *status.Enabled != in.Status[*environment.Name] {
 				status.Enabled = store.Bool(in.Status[*environment.Name])
+
 				if err := r.store.UpdateFeatureStatus(status); err != nil {
 					return InternalServerError(err)
 				}
-				break
+			}
+		} else {
+			status = &store.FeatureStatus{
+				CreatedAt:     store.Time(time.Now()),
+				Enabled:       store.Bool(in.Status[*environment.Name]),
+				FeatureId:     store.Int(feature.Id),
+				EnvironmentId: store.Int(environment.Id),
+			}
+
+			if err := r.store.CreateFeatureStatus(status); err != nil {
+				return InternalServerError(err)
 			}
 		}
 	}

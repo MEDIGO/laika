@@ -29,6 +29,7 @@
 
 <dom-module id="feature-page">
   <template>
+    <div id="error"></div>
     <h1><content select=".name"></content></h1>
     <h5><content select=".created-at"></content></h5>
     <content select="feature-page-environment-status"></content>
@@ -53,11 +54,15 @@
       }
 
       var feature = {name: this.name, status: status}
+      httpRequestHandler.sendRequest('PATCH', this.featuresUrl, feature, this.handleFeatureResponse.bind(this));
+    },
 
-      var request = new XMLHttpRequest();
-      request.open('PATCH', this.featuresUrl, true);
-      request.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-      request.send(JSON.stringify(feature));
+    handleFeatureResponse: function(err) {
+      if (err !== undefined) {
+        this.$.error.innerHTML = err;
+      } else {
+        window.location.replace('/');
+      }
     }
   });
   </script>
