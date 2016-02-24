@@ -189,7 +189,7 @@ func (r *FeatureResource) Update(c *echo.Context) error {
 		}
 	}
 
-	featureStatus, err := r.store.ListFeatureStatus(&in.Id, nil)
+	featureStatus, err := r.store.ListFeatureStatus(&feature.Id, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
