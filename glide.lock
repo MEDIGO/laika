@@ -1,0 +1,74 @@
+hash: 8d6b64a55a22d03605904a88f6d81c6e3157140bfa5cca9a459f2a99dcec7807
+updated: 2016-02-24T11:06:24.080928692+01:00
+imports:
+- name: github.com/codegangsta/cli
+  version: 5db74198dee1cfe60cf06a611d03a420361baad6
+- name: github.com/codegangsta/negroni
+  version: c7477ad8e330bef55bf1ebe300cf8aa67c492d1b
+  repo: https://github.com/codegangsta/negroni
+- name: github.com/DataDog/datadog-go
+  version: 8b6f59aa4f252b3b547523c21381330138bfe3ac
+  subpackages:
+  - /statsd
+- name: github.com/davecgh/go-spew
+  version: 2df174808ee097f90d259e432cc04442cf60be21
+  subpackages:
+  - spew
+- name: github.com/go-sql-driver/mysql
+  version: 1309049fd598c1faa0290fd70ab1afde2b6df0f9
+- name: github.com/labstack/echo
+  version: edfed6497e03d8da62bdbaadfbaeaaa8ccd03284
+  subpackages:
+  - middleware
+- name: github.com/labstack/gommon
+  version: bfff5bf04688a4048a5cb4dd3b3f0697caaad19c
+  subpackages:
+  - /color
+  - log
+- name: github.com/lann/builder
+  version: f22ce00fd9394014049dad11c244859432bd6820
+- name: github.com/lann/ps
+  version: 62de8c46ede02a7675c4c79c84883eb164cb71e3
+- name: github.com/mattn/go-colorable
+  version: 9cbef7c35391cca05f15f8181dc0b18bc9736dbb
+- name: github.com/mattn/go-isatty
+  version: 56b76bdf51f7708750eac80fa38b952bb9f32639
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
+- name: github.com/russross/meddler
+  version: f742b0f9424f3bfaffe189e921d734608929e84f
+- name: github.com/Sirupsen/logrus
+  version: 74bde9ea4c5b2c78995da8ed56d37e75644dc941
+- name: github.com/stretchr/objx
+  version: cbeaeb16a013161a98496fad62933b1d21786672
+- name: github.com/stretchr/testify
+  version: 1f4a1643a57e798696635ea4c126e9127adb7d3c
+  subpackages:
+  - /suite
+- name: github.com/tylerb/graceful
+  version: 7116c7a8115899e80197cd9e0b97998c0f97ed8e
+  repo: https://github.com/tylerb/graceful
+- name: golang.org/x/crypto
+  version: 1f22c0103821b9390939b6776727195525381532
+  repo: https://golang.org/x/crypto
+- name: golang.org/x/net
+  version: 4599ae7937fce9b670ce32b8ad32bbb7ae726b3e
+  subpackages:
+  - /context
+  - websocket
+- name: golang.org/x/text
+  version: 07b9a78963006a15c538ec5175243979025fa7a8
+  repo: https://golang.org/x/text
+- name: gopkg.in/airbrake/gobrake.v2
+  version: c9d51adc624b5cc4c1bf8de730a09af4878ffe2d
+  repo: https://gopkg.in/airbrake/gobrake.v2
+- name: gopkg.in/gemnasium/logrus-airbrake-hook.v2
+  version: 31e6fd4bd5a98d8ee7673d24bc54ec73c31810dd
+  repo: https://gopkg.in/gemnasium/logrus-airbrake-hook.v2
+- name: gopkg.in/Masterminds/squirrel.v1
+  version: 1f8a6e983e7a153765cf26564d87cfb966da67c2
+- name: gopkg.in/tylerb/graceful.v1
+  version: 119c58e176bce26fd40698146d9a106c8f1723a5
+devImports: []

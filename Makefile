@@ -1,7 +1,15 @@
+all: build vendor test
+.PHONY: all
+
 build:
 	@echo "===>  Building project..."
 	@docker-compose build
 .PHONY: build
+
+vendor:
+	@echo "Installing dependencies..."
+	@docker-compose run feature-flag glide install
+.PHONY: vendor
 
 init:
 	@echo "===>  Creating database..."

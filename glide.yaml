@@ -1,0 +1,17 @@
+package: github.com/MEDIGO/feature-flag
+import:
+- package: github.com/DataDog/datadog-go
+  subpackages:
+  - /statsd
+- package: github.com/Sirupsen/logrus
+- package: github.com/codegangsta/cli
+- package: github.com/go-sql-driver/mysql
+- package: github.com/labstack/echo
+  subpackages:
+  - middleware
+- package: github.com/russross/meddler
+- package: github.com/stretchr/testify
+  subpackages:
+  - /suite
+- package: gopkg.in/Masterminds/squirrel.v1
+- package: gopkg.in/tylerb/graceful.v1
