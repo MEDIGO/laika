@@ -1,8 +1,55 @@
 <dom-module id="feature-page-environment-status">
   <template>
-    <div>
-      <content select=".name"></content>
+    <style>
+    :host {
+      margin: 10px 40px 50px 40px;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .environment-group {
+      margin: 10px;
+    }
+
+    h5 ::content {
+      margin: 0;
+      line-height: 38px;
+    }
+
+    input[type=checkbox] {
+      position: relative;
+      float: left;
+      margin-right: 30px;
+      visibility: hidden;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    input[type=checkbox]:after {
+      content: "\2718";
+      display: block;
+      width: 30px;
+      height: 30px;
+      border-radius: 20px;
+      font-size: 15px;
+      font-weight: 400;
+      text-align: center;
+      line-height: 30px;
+      visibility: visible;
+      background: #e74c3c;
+      cursor: pointer;
+    }
+
+    input[type=checkbox]:checked:after {
+        content: "✔";
+        color: white;
+        background: #2ecc71;
+    }
+    </style>
+
+    <div class="environment-group">
       <input id="status" type="checkbox" checked={{enabled}}>
+      <h5><content class="this" select=".name"></content></h5>
     </div>
   </template>
 
@@ -29,13 +76,52 @@
 
 <dom-module id="feature-page">
   <template>
-    <div id="error"></div>
-    <h1><content select=".name"></content></h1>
-    <h5><content select=".created-at"></content></h5>
-    <content select="feature-page-environment-status"></content>
-    <button on-click="formSubmit">Submit</button>
-  </template>
+    <style>
+      h1 {
+        font-weight: 700;
+      }
 
+      h1 ::content * {
+        display: inline;
+      }
+
+      h5 ::content * {
+        display: inline;
+      }
+
+      button {
+        display: block;
+        padding: 10px 20px;
+        margin: 5px 0;
+        font-size: 17px;
+        border-style: none;
+        color: white;
+        background-color: #e74c3c;
+        -webkit-box-shadow: 3px 3px 0px 0px rgba(192,57,43,1);
+        -moz-box-shadow: 3px 3px 0px 0px rgba(192,57,43,1);
+        box-shadow: 3px 3px 0px 0px rgba(192,57,43,1);
+        clear: both;
+      }
+
+      button:active {
+        margin-top: 8px;
+        margin-left: 3px;
+        -webkit-box-shadow: 0px 0px 0px 0px rgba(192,57,43,1);
+        -moz-box-shadow: 0px 0px 0px 0px rgba(192,57,43,1);
+        box-shadow: 0px 0px 0px 0px rgba(192,57,43,1);
+      }
+
+      button:focus {
+        outline:0;
+      }
+    </style>
+
+    <div id="error"></div>
+    <h1>Feature <content select=".name"></content></h1>
+    <h5>Created at: <content select=".created-at"></content></h5>
+    <content select="feature-page-environment-status"></content>
+    <button on-click="formSubmit">Save</button>
+  </template>
   <script>
   Polymer({
     is: 'feature-page',

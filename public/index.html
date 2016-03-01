@@ -16,6 +16,10 @@
   <link rel="import" href="components/feature-page/feature-page.html">
   <link rel="import" href="components/feature-creation/feature-creation.html">
 
+  <link rel="import" href="styles/shared-styles.html">
+  <style is="custom-style" include="shared-styles"></style>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+
   <script type="text/javascript" src="js/http-request-handler.js"></script>
   <script type="text/javascript" src="bower_components/doT/doT.js"></script>
   <script>var config = {apiServer: 'http://192.168.99.100:8000'};</script>
@@ -23,20 +27,21 @@
 <body>
   <template is="dom-bind" id="app">
     <header class="main-header">
-      <h1 class="title">Medigo Feature Flag</h1>
+      <h1 class="title">LAIKA</h1>
     </header>
-    <menu-list>
-      <a href="/">Home</a>
-    </menu-list>
-    <iron-pages attr-for-selected="data-route" selected="{{route}}">
-      <section data-route="home">
-        <features-table></features-table>
-        <h3>Create Feature</h3>
-        <feature-creation></feature-creation>
-      </section>
-      <section id="feature-page" data-route="feature-page">
-      </section>
-    </iron-pages>
+    <div class="outer-panel">
+      <div class="inner-panel">
+        <iron-pages attr-for-selected="data-route" selected="{{route}}">
+          <section data-route="home">
+            <feature-creation></feature-creation>
+            <features-table></features-table>
+          </section>
+          <section id="feature-page" data-route="feature-page">
+          </section>
+        </iron-pages>
+        <p>Made with &#10084; @ MEDIGO</p>
+      </div>
+    </div>
   </template>
 </body>
 </html>

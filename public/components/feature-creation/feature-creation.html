@@ -1,8 +1,47 @@
 <dom-module id="feature-creation">
   <template>
-    <div id="error"></div>
-    <input id="name" type="text">
-    <button on-click="formSubmit">Submit</button>
+    <style>
+      h1 {
+        font-weight: 700;
+      }
+
+      input {
+        width: 250px;
+        height: 35px;
+        padding-left: 10px;
+        margin: 5px 0 20px 0;
+        font-size: 17px;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px 10px;
+        font-size: 17px;
+        background-color: #e74c3c;
+        border-style: none;
+        color: white;
+        -webkit-box-shadow: 3px 3px 0px 0px rgba(192,57,43,1);
+        -moz-box-shadow: 3px 3px 0px 0px rgba(192,57,43,1);
+        box-shadow: 3px 3px 0px 0px rgba(192,57,43,1);
+      }
+
+      button:active {
+        margin-left: 13px;
+        -webkit-box-shadow: 0px 0px 0px 0px rgba(192,57,43,1);
+        -moz-box-shadow: 0px 0px 0px 0px rgba(192,57,43,1);
+        box-shadow: 0px 0px 0px 0px rgba(192,57,43,1);
+      }
+
+      button:focus {
+        outline:0;
+      }
+    </style>
+      <div class="inner">
+        <h1>Feature Flags</h1>
+        <div id="error"></div>
+        <input id="name" placeholder="Feature Name" type="text">
+        <button on-click="formSubmit">Create</button>
+      </div>
   </template>
 
   <script>
