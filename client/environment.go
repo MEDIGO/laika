@@ -3,7 +3,7 @@ package client
 import (
 	"fmt"
 
-	"github.com/MEDIGO/feature-flag/api"
+	"github.com/MEDIGO/laika/api"
 )
 
 func (c *client) EnvironmentGet(name string) (*api.Environment, error) {

@@ -1,4 +1,4 @@
-feature-flag:
+laika:
     build: .
     command: go run main.go
     links:
@@ -9,16 +9,16 @@ feature-flag:
         FEAT_FLAG_DATABASE_HOSTNAME: mysql
         FEAT_FLAG_DATABASE_USERNAME: root
         FEAT_FLAG_DATABASE_PASSWORD: root
-        FEAT_FLAG_DATABASE_NAME: feature-flag-db
+        FEAT_FLAG_DATABASE_NAME: laika-db
         STATSD_HOST: localhost
         STATSD_PORT: 8125
         MYSQL_HOST: mysql
         MYSQL_PORT: 3306
         MYSQL_USERNAME: root
         MYSQL_PASSWORD: root
-        MYSQL_DBNAME: feature-flag-db
+        MYSQL_DBNAME: laika-db
     volumes:
-        - ./:/go/src/github.com/MEDIGO/feature-flag
+        - ./:/go/src/github.com/MEDIGO/laika
 
 mysql:
     image: mysql:5
@@ -26,4 +26,4 @@ mysql:
         - "3306:3306"
     environment:
         MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: feature-flag-db
+        MYSQL_DATABASE: laika-db

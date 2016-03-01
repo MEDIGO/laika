@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/MEDIGO/feature-flag/api"
+	"github.com/MEDIGO/laika/api"
 )
 
 type Client interface {
@@ -33,7 +33,7 @@ func NewClient(u string) (Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &client{baseURL: baseURL, userAgent: "feature-flag-client"}, nil
+	return &client{baseURL: baseURL, userAgent: "laika-client"}, nil
 }
 
 func (c *client) do(method, endpoint string, in interface{}, out interface{}) error {

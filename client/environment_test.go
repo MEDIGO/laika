@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/MEDIGO/feature-flag/api"
-	"github.com/MEDIGO/feature-flag/store"
+	"github.com/MEDIGO/laika/api"
+	"github.com/MEDIGO/laika/store"
 )
 
 type EnvironmentServiceSuite struct {

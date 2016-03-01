@@ -17,8 +17,8 @@ RUN curl -fsSL "$GLIDE_URL" -o glide.tar.gz \
 RUN go get github.com/stretchr/testify/require
 RUN go get github.com/stretchr/testify/suite
 
-WORKDIR /go/src/github.com/MEDIGO/feature-flag
-COPY . /go/src/github.com/MEDIGO/feature-flag
+WORKDIR /go/src/github.com/MEDIGO/laika
+COPY . /go/src/github.com/MEDIGO/laika
 
 COPY glide.lock /go/src/github.com/medigo/core/
 COPY glide.yaml /go/src/github.com/medigo/core/
@@ -29,4 +29,4 @@ RUN ./node_modules/bower/bin/bower install --allow-root
 
 RUN go get .
 
-CMD [“feature-flag”]
+CMD [“laika”]

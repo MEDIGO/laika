@@ -1,17 +1,17 @@
 {
-  "name": "feature-flag",
+  "name": "laika",
   "version": "1.0.0",
-  "description": "MEDIGO-feature-flag",
+  "description": "MEDIGO-laika",
   "private": true,
   "directories": {
     "test": "test"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:MEDIGO/feature-flag.git"
+    "url": "git@github.com:MEDIGO/laika.git"
   },
   "author": "MEDIGO GmbH",
-  "homepage": "https://github.com/MEDIGO/feature-flag",
+  "homepage": "https://github.com/MEDIGO/laika",
   "devDependencies": {
     "bower": "^1.7.7"
   },

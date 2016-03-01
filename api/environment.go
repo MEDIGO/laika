@@ -4,7 +4,7 @@ import (
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/labstack/echo"
 
-	"github.com/MEDIGO/feature-flag/store"
+	"github.com/MEDIGO/laika/store"
 )
 
 type Environment store.Environment

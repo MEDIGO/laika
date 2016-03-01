@@ -9,8 +9,8 @@ import (
 	"github.com/codegangsta/cli"
 	graceful "gopkg.in/tylerb/graceful.v1"
 
-	"github.com/MEDIGO/feature-flag/api"
-	"github.com/MEDIGO/feature-flag/store"
+	"github.com/MEDIGO/laika/api"
+	"github.com/MEDIGO/laika/store"
 )
 
 func init() {
@@ -20,8 +20,8 @@ func init() {
 func main() {
 
 	app := cli.NewApp()
-	app.Name = "Feature-Flag"
-	app.Usage = "MEDIGO Feature-Flag Service"
+	app.Name = "laika"
+	app.Usage = "MEDIGO laika Service"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "port",
@@ -61,7 +61,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "mysql-dbname",
-			Value:  "feature-flag-db",
+			Value:  "laika-db",
 			Usage:  "MySQL dbname",
 			EnvVar: "MYSQL_DBNAME",
 		},

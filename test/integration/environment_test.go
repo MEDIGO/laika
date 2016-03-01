@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/MEDIGO/feature-flag/api"
-	"github.com/MEDIGO/feature-flag/store"
-	"github.com/MEDIGO/feature-flag/util"
+	"github.com/MEDIGO/laika/api"
+	"github.com/MEDIGO/laika/store"
+	"github.com/MEDIGO/laika/util"
 )
 
 type EnvironmentIntegrationSuite struct {

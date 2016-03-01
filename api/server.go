@@ -5,7 +5,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 
-	"github.com/MEDIGO/feature-flag/store"
+	"github.com/MEDIGO/laika/store"
 )
 
 func NewServer(store store.Store, stats *statsd.Client) *echo.Echo {

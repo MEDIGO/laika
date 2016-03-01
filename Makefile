@@ -8,22 +8,22 @@ build:
 
 vendor:
 	@echo "Installing dependencies..."
-	@docker-compose run feature-flag glide install
+	@docker-compose run laika glide install
 .PHONY: vendor
 
 init:
 	@echo "===>  Creating database..."
-	@docker-compose run feature-flag mysql -h mysql -u root -proot feature-flag-db < schema/feature-flagdbschema.sql
+	@docker-compose run laika mysql -h mysql -u root -proot laika-db < schema/laikadbschema.sql
 .PHONY: init
 
 test:
 	@echo "===> Running tests..."
-	@docker-compose run feature-flag go test . ./client ./test/integration
+	@docker-compose run laika go test . ./client ./test/integration
 .PHONY: test
 
 run:
 	@echo "===> Running services..."
-	@docker-compose up feature-flag
+	@docker-compose up laika
 .PHONY: run
 
 clean:

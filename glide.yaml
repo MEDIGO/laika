@@ -1,4 +1,4 @@
-package: github.com/MEDIGO/feature-flag
+package: github.com/MEDIGO/laika
 import:
 - package: github.com/DataDog/datadog-go
   subpackages:

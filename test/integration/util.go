@@ -7,9 +7,9 @@ import (
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/MEDIGO/feature-flag/api"
-	"github.com/MEDIGO/feature-flag/client"
-	"github.com/MEDIGO/feature-flag/store"
+	"github.com/MEDIGO/laika/api"
+	"github.com/MEDIGO/laika/client"
+	"github.com/MEDIGO/laika/store"
 )
 
 type FeatureFlagSuite struct {
