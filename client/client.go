@@ -12,6 +12,8 @@ import (
 )
 
 type Client interface {
+	HealthCheck() error
+
 	FeatureCreate(*api.Feature) (*api.Feature, error)
 	FeatureGet(name string) (*api.Feature, error)
 	FeatureList() ([]*api.Feature, error)
