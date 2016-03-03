@@ -16,8 +16,11 @@ func NewServer(store store.Store, stats *statsd.Client) *echo.Echo {
 	server.Use(ResponseEncoderMiddleware())
 	server.Use(middleware.Recover())
 
+	health := NewHealthResource(store, stats)
 	features := NewFeatureResource(store, stats)
 	environments := NewEnvironmentResource(store, stats)
+
+	server.Get("/api/health", health.Get)
 
 	server.Get("/api/features/:name", features.Get)
 	server.Get("/api/features", features.List)
