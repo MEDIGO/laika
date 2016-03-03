@@ -13,7 +13,11 @@
   "author": "MEDIGO GmbH",
   "homepage": "https://github.com/MEDIGO/laika",
   "devDependencies": {
-    "bower": "^1.7.7"
+    "bower": "^1.7.7",
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.1",
+    "gulp-eslint": "^2.0.0",
+    "gulp-modularize": "^2.1.0"
   },
   "dependencies": {
     "dot": "^1.0.3"

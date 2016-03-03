@@ -1,21 +1,22 @@
-var httpRequestHandler = {
+window.httpRequestHandler = {
   /**
    * Handles HTTP requests
    * @param {string} method - HTTP method of the request (GET, POST or PATCH)
    * @param {string} url - URL for the request
    * @param {object} info - information to send in the body of the request
    * @param {function} onComplete - function to call after the request is complete
+   * @returns {void}
    */
   sendRequest: function(method, url, info, onComplete) {
     var request = new XMLHttpRequest();
     request.open(method, url, true);
 
-    request.onreadystatechange = function (event) {
+    request.onreadystatechange = function() {
       if (request.readyState === 4) {
         if (request.status === 200 || request.status === 201) {
           onComplete()
         } else {
-           onComplete('Ops! Something went wrong!')
+          onComplete('Ops! Something went wrong!')
         }
       }
     };

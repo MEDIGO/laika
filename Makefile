@@ -1,5 +1,8 @@
-all: build vendor test
+all: build vendor validate
 .PHONY: all
+
+validate: lint test
+.PHONY: validate
 
 build:
 	@echo "===>  Building project..."
@@ -25,6 +28,11 @@ run:
 	@echo "===> Running services..."
 	@docker-compose up laika
 .PHONY: run
+
+lint:
+	@echo "===> Running gulp eslint..."
+	@docker-compose run laika ./node_modules/gulp-cli/bin/gulp.js eslint
+.PHONY: lint
 
 clean:
 	@echo "===>  Cleaning environment..."
