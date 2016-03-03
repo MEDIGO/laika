@@ -1,4 +1,4 @@
-all: build vendor validate publish
+all: build vendor init validate publish
 .PHONY: all
 
 build:
@@ -9,18 +9,19 @@ build:
 vendor:
 	@echo "===> Installing dependencies..."
 	@docker-compose run laika glide install
+	@docker-compose run laika npm install
 .PHONY: vendor
 
 init:
 	@echo "===> Initialising database..."
-	@docker-compose run laika mysql -h mysql -u root -proot laika-db < schema/1.sql
+	@docker-compose run laika mysql -h mysql -u root -proot laika < schema/1.sql
 .PHONY: init
 
 validate: lint test
 .PHONY: validate
 
 lint:
-	@echo "===> Running gulp eslint..."
+	@echo "===> Linting sourcecode..."
 	@docker-compose run laika ./node_modules/gulp-cli/bin/gulp.js eslint
 .PHONY: lint
 
