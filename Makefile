@@ -10,6 +10,7 @@ vendor:
 	@echo "===> Installing dependencies..."
 	@docker-compose run laika glide install
 	@docker-compose run laika npm install
+	@docker-compose run laika bower --allow-root install
 .PHONY: vendor
 
 init:
