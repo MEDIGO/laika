@@ -49,6 +49,13 @@ publish:
 	@docker push quay.io/medigo/laika:$(shell git rev-parse HEAD)
 .PHONY: publish
 
+deploy:
+	@echo "Deploying docker image..."
+	@docker pull quay.io/medigo/laika:$(shell git rev-parse HEAD)
+	@aws ecs register-task-definition --family $(ECS_FAMILY) --container-definitions '$(shell ./ecs-container-definitions.sh)'
+	@aws ecs update-service --service $(ECS_FAMILY) --task-definition $(ECS_FAMILY)
+.PHONY: deploy
+
 clean:
 	@echo "===> Cleaning environment..."
 	@docker-compose stop
