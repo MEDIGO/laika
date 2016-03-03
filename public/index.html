@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MEDIGO Feature Flag</title>
+  <title>Laika</title>
 
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
   </script>
@@ -22,7 +22,7 @@
 
   <script type="text/javascript" src="js/http-request-handler.js"></script>
   <script type="text/javascript" src="bower_components/doT/doT.js"></script>
-  <script>var config = {apiServer: 'http://192.168.99.100:8000'};</script>
+  <script>var config = {apiServer: window.location.origin};</script>
 </head>
 <body>
   <template is="dom-bind" id="app">
