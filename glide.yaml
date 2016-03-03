@@ -15,3 +15,5 @@ import:
   - /suite
 - package: gopkg.in/Masterminds/squirrel.v1
 - package: gopkg.in/tylerb/graceful.v1
+- package: require
+- package: suite
