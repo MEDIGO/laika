@@ -1,23 +1,28 @@
-all: build vendor validate
+all: build vendor validate publish
 .PHONY: all
 
-validate: lint test
-.PHONY: validate
-
 build:
-	@echo "===>  Building project..."
+	@echo "===> Building project..."
 	@docker-compose build
 .PHONY: build
 
 vendor:
-	@echo "Installing dependencies..."
+	@echo "===> Installing dependencies..."
 	@docker-compose run laika glide install
 .PHONY: vendor
 
 init:
-	@echo "===>  Creating database..."
-	@docker-compose run laika mysql -h mysql -u root -proot laika-db < schema/laikadbschema.sql
+	@echo "===> Initialising database..."
+	@docker-compose run laika mysql -h mysql -u root -proot laika-db < schema/1.sql
 .PHONY: init
+
+validate: lint test
+.PHONY: validate
+
+lint:
+	@echo "===> Running gulp eslint..."
+	@docker-compose run laika ./node_modules/gulp-cli/bin/gulp.js eslint
+.PHONY: lint
 
 test:
 	@echo "===> Running tests..."
@@ -29,13 +34,16 @@ run:
 	@docker-compose up laika
 .PHONY: run
 
-lint:
-	@echo "===> Running gulp eslint..."
-	@docker-compose run laika ./node_modules/gulp-cli/bin/gulp.js eslint
-.PHONY: lint
+publish:
+	@echo "===> Publishing docker image..."
+	@docker build -t quay.io/medigo/laika .
+	@docker tag -f quay.io/medigo/laika:latest quay.io/medigo/laika:$(shell git rev-parse HEAD)
+	@docker push quay.io/medigo/laika
+	@docker push quay.io/medigo/laika:$(shell git rev-parse HEAD)
+.PHONY: publish
 
 clean:
-	@echo "===>  Cleaning environment..."
+	@echo "===> Cleaning environment..."
 	@docker-compose stop
 	@docker-compose rm -f -v
 .PHONY: clean
