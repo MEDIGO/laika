@@ -20,17 +20,17 @@ type FeatureFlagSuite struct {
 
 func (s *FeatureFlagSuite) SetupTest() {
 	store, err := store.NewStore(
-		os.Getenv("MYSQL_USERNAME"),
-		os.Getenv("MYSQL_PASSWORD"),
-		os.Getenv("MYSQL_HOST"),
-		os.Getenv("MYSQL_PORT"),
-		os.Getenv("MYSQL_DBNAME"),
+		os.Getenv("LAIKA_MYSQL_USERNAME"),
+		os.Getenv("LAIKA_MYSQL_PASSWORD"),
+		os.Getenv("LAIKA_MYSQL_HOST"),
+		os.Getenv("LAIKA_MYSQL_PORT"),
+		os.Getenv("LAIKA_MYSQL_DBNAME"),
 	)
 	if err != nil {
 		panic(err)
 	}
 
-	stats, err := statsd.New(os.Getenv("STATSD_HOST") + ":" + os.Getenv("STATSD_PORT"))
+	stats, err := statsd.New(os.Getenv("LAIKA_STATSD_HOST") + ":" + os.Getenv("LAIKA_STATSD_PORT"))
 	if err != nil {
 		panic(err)
 	}

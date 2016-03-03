@@ -34,6 +34,11 @@ run:
 	@docker-compose up laika
 .PHONY: run
 
+shell:
+	@echo "===> Opening shell..."
+	@docker-compose run laika sh
+.PHONY: shell
+
 publish:
 	@echo "===> Publishing docker image..."
 	@docker build -t quay.io/medigo/laika .
