@@ -13,6 +13,9 @@ laika:
         LAIKA_MYSQL_DBNAME: laika
         LAIKA_STATSD_HOST: localhost
         LAIKA_STATSD_PORT: 8125
+        LAIKA_AUTH_USERNAME: medigo
+        LAIKA_AUTH_PASSWORD: troldaydian
+
     volumes:
         - ./:/go/src/github.com/MEDIGO/laika
 

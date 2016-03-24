@@ -77,9 +77,22 @@ func main() {
 			Usage:  "Statsd port",
 			EnvVar: "LAIKA_STATSD_PORT",
 		},
+		cli.StringFlag{
+			Name:   "auth-username",
+			Value:  "medigo",
+			Usage:  "Authentication username",
+			EnvVar: "LAIKA_AUTH_USERNAME",
+		},
+		cli.StringFlag{
+			Name:   "auth-password",
+			Value:  "troldaydian",
+			Usage:  "Authentication password",
+			EnvVar: "LAIKA_AUTH_PASSWORD",
+		},
 	}
 
 	app.Action = func(c *cli.Context) {
+
 		store, err := store.NewStore(
 			c.String("mysql-username"),
 			c.String("mysql-password"),
