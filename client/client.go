@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 
 	"github.com/MEDIGO/laika/api"
@@ -48,6 +49,8 @@ func (c *client) do(method, endpoint string, in interface{}, out interface{}) er
 	if err != nil {
 		return err
 	}
+
+	req.SetBasicAuth(os.Getenv("LAIKA_AUTH_USERNAME"), os.Getenv("LAIKA_AUTH_PASSWORD"))
 	req.Header.Set("User-Agent", c.userAgent)
 	req.Header.Set("Content-Type", "application/json")
 
