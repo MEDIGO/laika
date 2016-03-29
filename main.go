@@ -79,13 +79,11 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "auth-username",
-			Value:  "medigo",
 			Usage:  "Authentication username",
 			EnvVar: "LAIKA_AUTH_USERNAME",
 		},
 		cli.StringFlag{
 			Name:   "auth-password",
-			Value:  "troldaydian",
 			Usage:  "Authentication password",
 			EnvVar: "LAIKA_AUTH_PASSWORD",
 		},
