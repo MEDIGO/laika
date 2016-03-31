@@ -20,6 +20,6 @@ func NewHealthResource(store store.Store, stats *statsd.Client) *HealthResource 
 	return &HealthResource{store, stats}
 }
 
-func (r *HealthResource) Get(c *echo.Context) error {
+func (r *HealthResource) Get(c echo.Context) error {
 	return OK(Health{"OK"})
 }

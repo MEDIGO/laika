@@ -35,7 +35,7 @@ func NewFeatureResource(store store.Store, stats *statsd.Client) *FeatureResourc
 	return &FeatureResource{store, stats}
 }
 
-func (r *FeatureResource) Get(c *echo.Context) error {
+func (r *FeatureResource) Get(c echo.Context) error {
 	name := c.Param("name")
 
 	feature, err := r.store.GetFeatureByName(name)
@@ -87,7 +87,7 @@ func (r *FeatureResource) Get(c *echo.Context) error {
 	return OK(apiFeature)
 }
 
-func (r *FeatureResource) List(c *echo.Context) error {
+func (r *FeatureResource) List(c echo.Context) error {
 	features, err := r.store.ListFeatures()
 	if err != nil {
 		return InternalServerError(err)
@@ -139,7 +139,7 @@ func (r *FeatureResource) List(c *echo.Context) error {
 	return OK(featureList)
 }
 
-func (r *FeatureResource) Create(c *echo.Context) error {
+func (r *FeatureResource) Create(c echo.Context) error {
 	in := new(Feature)
 	if err := c.Bind(&in); err != nil {
 		return BadRequest(err)
@@ -169,7 +169,7 @@ func (r *FeatureResource) Create(c *echo.Context) error {
 	return Conflict(err)
 }
 
-func (r *FeatureResource) Update(c *echo.Context) error {
+func (r *FeatureResource) Update(c echo.Context) error {
 	name := c.Param("name")
 
 	feature, err := r.store.GetFeatureByName(name)

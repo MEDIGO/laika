@@ -10,43 +10,43 @@ import (
 )
 
 func LogRequestMiddleware() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c *echo.Context) error {
+	return func(next echo.Handler) echo.Handler {
+		return echo.HandlerFunc(func(c echo.Context) error {
 			start := time.Now()
-			err := next(c)
+			err := next.Handle(c)
 			duration := time.Since(start)
 
 			log.WithFields(log.Fields{
-				"request":      c.Request().RequestURI,
-				"method":       c.Request().Method,
-				"remote":       c.Request().RemoteAddr,
+				"request":      c.Request().URI(),
+				"method":       c.Request().Method(),
+				"remote":       c.Request().RemoteAddress(),
 				"status":       c.Response().Status(),
 				"request_time": duration,
 			}).Info("request handled")
 
 			return err
-		}
+		})
 	}
 }
 
 func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c *echo.Context) error {
+	return func(next echo.Handler) echo.Handler {
+		return echo.HandlerFunc(func(c echo.Context) error {
 			start := time.Now()
-			err := next(c)
+			err := next.Handle(c)
 			duration := time.Since(start)
 
 			stats.Histogram("core.request_time", duration.Seconds(), nil, 1)
 
 			return err
-		}
+		})
 	}
 }
 
 func ResponseEncoderMiddleware() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c *echo.Context) error {
-			err := next(c)
+	return func(next echo.Handler) echo.Handler {
+		return echo.HandlerFunc(func(c echo.Context) error {
+			err := next.Handle(c)
 
 			switch v := err.(type) {
 			case Response:
@@ -55,7 +55,7 @@ func ResponseEncoderMiddleware() echo.MiddlewareFunc {
 				}
 				return c.JSON(v.Status, v.Payload)
 			case *echo.HTTPError:
-				return c.JSON(v.Code(), APIError{v.Error()})
+				return c.JSON(v.Code, APIError{v.Error()})
 			default:
 				if err != nil {
 					log.Error(err)
@@ -63,6 +63,6 @@ func ResponseEncoderMiddleware() echo.MiddlewareFunc {
 				}
 				return nil
 			}
-		}
+		})
 	}
 }

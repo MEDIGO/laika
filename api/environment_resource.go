@@ -27,7 +27,7 @@ func NewEnvironmentResource(store store.Store, stats *statsd.Client) *Environmen
 	return &EnvironmentResource{store, stats}
 }
 
-func (r *EnvironmentResource) Get(c *echo.Context) error {
+func (r *EnvironmentResource) Get(c echo.Context) error {
 	name := c.Param("name")
 
 	environment, err := r.store.GetEnvironmentByName(name)
@@ -42,7 +42,7 @@ func (r *EnvironmentResource) Get(c *echo.Context) error {
 	return OK(environment)
 }
 
-func (r *EnvironmentResource) List(c *echo.Context) error {
+func (r *EnvironmentResource) List(c echo.Context) error {
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
 		return InternalServerError(err)
@@ -50,7 +50,7 @@ func (r *EnvironmentResource) List(c *echo.Context) error {
 	return OK(environments)
 }
 
-func (r *EnvironmentResource) Create(c *echo.Context) error {
+func (r *EnvironmentResource) Create(c echo.Context) error {
 	in := new(Environment)
 	if err := c.Bind(&in); err != nil {
 		return BadRequest(err)
@@ -71,7 +71,7 @@ func (r *EnvironmentResource) Create(c *echo.Context) error {
 	return Created(environment)
 }
 
-func (r *EnvironmentResource) Update(c *echo.Context) error {
+func (r *EnvironmentResource) Update(c echo.Context) error {
 	name := c.Param("name")
 
 	environment, err := r.store.GetEnvironmentByName(name)
