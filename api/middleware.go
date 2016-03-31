@@ -36,7 +36,8 @@ func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
 			err := next.Handle(c)
 			duration := time.Since(start)
 
-			stats.Histogram("core.request_time", duration.Seconds(), nil, 1)
+			stats.Count("laika.request_total", 1, nil, 1)
+			stats.Histogram("laika.request_time", duration.Seconds(), nil, 1)
 
 			return err
 		})
