@@ -65,5 +65,30 @@ func (s *store) CreateFeatureStatus(featureStatus *FeatureStatus) error {
 }
 
 func (s *store) UpdateFeatureStatus(featureStatus *FeatureStatus) error {
-	return meddler.Update(s.db, "feature_status", featureStatus)
+	featureStatusHistory := &FeatureStatusHistory{
+		CreatedAt:       Time(time.Now()),
+		Enabled:         featureStatus.Enabled,
+		FeatureId:       featureStatus.FeatureId,
+		EnvironmentId:   featureStatus.EnvironmentId,
+		FeatureStatusId: &featureStatus.Id,
+	}
+
+	tx, err := s.db.Begin()
+	if err != nil {
+		return err
+	}
+
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+		return
+	}()
+
+	if err := meddler.Insert(tx, "feature_status_history", featureStatusHistory); err != nil {
+		return err
+	}
+	return meddler.Update(tx, "feature_status", featureStatus)
 }

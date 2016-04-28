@@ -9,10 +9,11 @@ import (
 	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 
+	"github.com/MEDIGO/laika/notifier"
 	"github.com/MEDIGO/laika/store"
 )
 
-func NewServer(store store.Store, stats *statsd.Client) *standard.Server {
+func NewServer(store store.Store, stats *statsd.Client, notifier notifier.Notifier) *standard.Server {
 	e := echo.New()
 
 	basicAuthMiddleware := middleware.BasicAuth(func(user, password string) bool {
@@ -25,7 +26,7 @@ func NewServer(store store.Store, stats *statsd.Client) *standard.Server {
 	e.Use(middleware.Recover())
 
 	health := NewHealthResource(store, stats)
-	features := NewFeatureResource(store, stats)
+	features := NewFeatureResource(store, stats, notifier)
 	environments := NewEnvironmentResource(store, stats)
 
 	e.Get("/api/health", echo.HandlerFunc(health.Get))

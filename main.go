@@ -10,6 +10,7 @@ import (
 	graceful "gopkg.in/tylerb/graceful.v1"
 
 	"github.com/MEDIGO/laika/api"
+	"github.com/MEDIGO/laika/notifier"
 	"github.com/MEDIGO/laika/store"
 )
 
@@ -87,6 +88,16 @@ func main() {
 			Usage:  "Authentication password",
 			EnvVar: "LAIKA_AUTH_PASSWORD",
 		},
+		cli.StringFlag{
+			Name:   "slack-token",
+			Usage:  "Slack API Token",
+			EnvVar: "SLACK_TOKEN",
+		},
+		cli.StringFlag{
+			Name:   "slack-channel",
+			Usage:  "Slack Channel",
+			EnvVar: "SLACK_CHANNEL",
+		},
 	}
 
 	app.Action = func(c *cli.Context) {
@@ -108,7 +119,9 @@ func main() {
 			log.Fatal("failed to create Statsd client: ", err)
 		}
 
-		server := api.NewServer(store, stats)
+		notifier := notifier.NewSlackNotifier(c.String("slack-token"), c.String("slack-channel"))
+
+		server := api.NewServer(store, stats, notifier)
 
 		log.Info("Starting server on port ", c.String("port"))
 		graceful.Run(":"+c.String("port"), time.Duration(c.Int("timeout"))*time.Second, server)

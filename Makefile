@@ -16,6 +16,7 @@ vendor:
 init:
 	@echo "===> Initialising database..."
 	@docker-compose run laika mysql -h mysql -u root -proot laika < schema/1.sql
+	@docker-compose run laika mysql -h mysql -u root -proot laika < schema/2.sql
 .PHONY: init
 
 validate: lint test

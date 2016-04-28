@@ -29,8 +29,6 @@ type Store interface {
 	UpdateFeatureStatus(featureStatus *FeatureStatus) error
 
 	ListFeatureStatusHistory(featureId *int64, environmentId *int64, featureStatusId *int64) ([]*FeatureStatusHistory, error)
-	CreateFeatureStatusHistory(featureStatusHistory *FeatureStatusHistory) error
-	UpdateFeatureStatusHistory(featureStatusHistory *FeatureStatusHistory) error
 
 	Ping() error
 }

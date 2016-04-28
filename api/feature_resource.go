@@ -7,6 +7,7 @@ import (
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/labstack/echo"
 
+	"github.com/MEDIGO/laika/notifier"
 	"github.com/MEDIGO/laika/store"
 )
 
@@ -27,12 +28,13 @@ func (f *Feature) Validate() error {
 }
 
 type FeatureResource struct {
-	store store.Store
-	stats *statsd.Client
+	store    store.Store
+	stats    *statsd.Client
+	notifier notifier.Notifier
 }
 
-func NewFeatureResource(store store.Store, stats *statsd.Client) *FeatureResource {
-	return &FeatureResource{store, stats}
+func NewFeatureResource(store store.Store, stats *statsd.Client, notifier notifier.Notifier) *FeatureResource {
+	return &FeatureResource{store, stats, notifier}
 }
 
 func (r *FeatureResource) Get(c echo.Context) error {
@@ -42,27 +44,24 @@ func (r *FeatureResource) Get(c echo.Context) error {
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 
 	featureStatus, err := r.store.ListFeatureStatus(&feature.Id, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 
 	featureStatusMap := make(map[string]bool)
@@ -97,9 +96,8 @@ func (r *FeatureResource) List(c echo.Context) error {
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 
 	featureList := make([]*Feature, len(features))
@@ -110,9 +108,8 @@ func (r *FeatureResource) List(c echo.Context) error {
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 
 	for i, feature := range features {
@@ -161,9 +158,8 @@ func (r *FeatureResource) Create(c echo.Context) error {
 			}
 
 			return Created(feature)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 	err = errors.New("Feature already exists")
 	return Conflict(err)
@@ -176,9 +172,8 @@ func (r *FeatureResource) Update(c echo.Context) error {
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 
 	in := new(Feature)
@@ -194,18 +189,16 @@ func (r *FeatureResource) Update(c echo.Context) error {
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 
 	featureStatus, err := r.store.ListFeatureStatus(&feature.Id, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
 			return NotFound(err)
-		} else {
-			return InternalServerError(err)
 		}
+		return InternalServerError(err)
 	}
 
 	for _, environment := range environments {
@@ -224,6 +217,10 @@ func (r *FeatureResource) Update(c echo.Context) error {
 				if err := r.store.UpdateFeatureStatus(status); err != nil {
 					return InternalServerError(err)
 				}
+
+				if err := r.notifier.NotifyStatusChange(*feature.Name, in.Status[*environment.Name], *environment.Name); err != nil {
+					return InternalServerError(err)
+				}
 			}
 		} else {
 			status = &store.FeatureStatus{
@@ -234,6 +231,10 @@ func (r *FeatureResource) Update(c echo.Context) error {
 			}
 
 			if err := r.store.CreateFeatureStatus(status); err != nil {
+				return InternalServerError(err)
+			}
+
+			if err := r.notifier.NotifyStatusChange(*feature.Name, in.Status[*environment.Name], *environment.Name); err != nil {
 				return InternalServerError(err)
 			}
 		}
