@@ -9,6 +9,7 @@ import (
 
 	"github.com/MEDIGO/laika/api"
 	"github.com/MEDIGO/laika/client"
+	"github.com/MEDIGO/laika/notifier"
 	"github.com/MEDIGO/laika/store"
 )
 
@@ -35,7 +36,9 @@ func (s *FeatureFlagSuite) SetupTest() {
 		panic(err)
 	}
 
-	s.server = httptest.NewServer(api.NewServer(store, stats))
+	notifier := notifier.NewSlackNotifier(os.Getenv("SLACK_TOKEN"), os.Getenv("SLACK_CHANNEL"))
+
+	s.server = httptest.NewServer(api.NewServer(store, stats, notifier))
 
 	s.client, err = client.NewClient(s.server.URL)
 	if err != nil {
