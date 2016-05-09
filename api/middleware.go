@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/DataDog/datadog-go/statsd"
@@ -9,37 +10,40 @@ import (
 	"github.com/labstack/echo"
 )
 
-func LogRequestMiddleware() echo.MiddlewareFunc {
+// LogMiddleware logs information about the current request.
+func LogMiddleware() echo.MiddlewareFunc {
 	return func(next echo.Handler) echo.Handler {
 		return echo.HandlerFunc(func(c echo.Context) error {
-			start := time.Now()
-			err := next.Handle(c)
-			duration := time.Since(start)
+			defer func(start time.Time) {
+				log.WithFields(log.Fields{
+					"uri":                   c.Request().URI(),
+					"method":                c.Request().Method(),
+					"remote_addr":           c.Request().RemoteAddress(),
+					"status":                c.Response().Status(),
+					"duration_microseconds": int(time.Since(start).Seconds() * 1000000),
+				}).Info("request handled")
+			}(time.Now())
 
-			log.WithFields(log.Fields{
-				"request":      c.Request().URI(),
-				"method":       c.Request().Method(),
-				"remote":       c.Request().RemoteAddress(),
-				"status":       c.Response().Status(),
-				"request_time": duration,
-			}).Info("request handled")
-
-			return err
+			return next.Handle(c)
 		})
 	}
 }
 
+// InstrumentMiddleware collects metrics about the current request.
 func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
 	return func(next echo.Handler) echo.Handler {
 		return echo.HandlerFunc(func(c echo.Context) error {
-			start := time.Now()
-			err := next.Handle(c)
-			duration := time.Since(start)
+			defer func(start time.Time) {
+				tags := []string{
+					"method:" + c.Request().Method(),
+					"status:" + strconv.Itoa(c.Response().Status()),
+				}
 
-			stats.Count("laika.request_total", 1, nil, 1)
-			stats.Histogram("laika.request_duration_milliseconds", duration.Seconds() * 1000, nil, 1)
+				stats.Count("laika.request_total", 1, tags, 1)
+				stats.Histogram("laika.request_duration_microseconds", float64(int(time.Since(start).Seconds()*1000000)), tags, 1)
+			}(time.Now())
 
-			return err
+			return next.Handle(c)
 		})
 	}
 }

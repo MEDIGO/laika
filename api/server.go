@@ -20,7 +20,7 @@ func NewServer(store store.Store, stats *statsd.Client, notifier notifier.Notifi
 		return user == os.Getenv("LAIKA_AUTH_USERNAME") && password == os.Getenv("LAIKA_AUTH_PASSWORD")
 	})
 
-	e.Use(LogRequestMiddleware())
+	e.Use(LogMiddleware())
 	e.Use(InstrumentMiddleware(stats))
 	e.Use(ResponseEncoderMiddleware())
 	e.Use(middleware.Recover())
