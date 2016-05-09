@@ -1,11 +1,10 @@
-hash: 3e26b5d73129cdb270a41eb362a54ba8c514d422852514d08b5378b039122ee2
-updated: 2016-03-30T08:41:57.009279582Z
+hash: e645dd7ac8d8122c9e4d1b82da278fa93596e87ad1ddaea15bfb5079e0ea4e4a
+updated: 2016-05-09T08:23:47.934691396Z
 imports:
 - name: github.com/codegangsta/cli
   version: bc465becccd1d527002fda095fc3c19d9c115029
 - name: github.com/codegangsta/negroni
   version: c7477ad8e330bef55bf1ebe300cf8aa67c492d1b
-  repo: https://github.com/codegangsta/negroni
 - name: github.com/DataDog/datadog-go
   version: cc2f4770f4d61871e19bfee967bc767fe730b0d9
   subpackages:
@@ -18,13 +17,10 @@ imports:
   version: 1421caf44f6464fd2ee8de694c7508ee13f92964
 - name: github.com/klauspost/compress
   version: 9d711f4445beb7f6488148ce04e3b4dc6e72242d
-  repo: https://github.com/klauspost/compress
 - name: github.com/klauspost/cpuid
   version: 09cded8978dc9e80714c4d85b0322337b0a1e5e0
-  repo: https://github.com/klauspost/cpuid
 - name: github.com/klauspost/crc32
   version: 19b0b332c9e4516a6370a0456e6182c3b5036720
-  repo: https://github.com/klauspost/crc32
 - name: github.com/labstack/echo
   version: 55e3dba946252d42e54f6b78040403b38911f612
   subpackages:
@@ -36,16 +32,14 @@ imports:
   - log
 - name: github.com/lann/builder
   version: f22ce00fd9394014049dad11c244859432bd6820
-  repo: https://github.com/lann/builder
 - name: github.com/lann/ps
   version: 62de8c46ede02a7675c4c79c84883eb164cb71e3
-  repo: https://github.com/lann/ps
 - name: github.com/mattn/go-colorable
   version: 9cbef7c35391cca05f15f8181dc0b18bc9736dbb
-  repo: https://github.com/mattn/go-colorable
 - name: github.com/mattn/go-isatty
   version: 56b76bdf51f7708750eac80fa38b952bb9f32639
-  repo: https://github.com/mattn/go-isatty
+- name: github.com/nlopes/slack
+  version: e337a7316d3fe9aa55b7063035d6d32f3dbcaeb9
 - name: github.com/pmezard/go-difflib
   version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
   subpackages:
@@ -62,14 +56,12 @@ imports:
   - /suite
 - name: github.com/tylerb/graceful
   version: 9a3d4236b03bb5d26f7951134d248f9d5510d599
-  repo: https://github.com/tylerb/graceful
 - name: github.com/valyala/fasthttp
   version: 12ba9899844060189449e9768dc0900a56d3624b
 - name: github.com/valyala/fasttemplate
   version: 3b874956e03f1636d171bda64b130f9135f42cff
 - name: golang.org/x/crypto
   version: 9e7f5dc375abeb9619ea3c5c58502c428f457aa2
-  repo: https://golang.org/x/crypto
 - name: golang.org/x/net
   version: 31df19d69da8728e9220def59b80ee577c3e48bf
   subpackages:
@@ -77,20 +69,16 @@ imports:
   - websocket
 - name: golang.org/x/text
   version: 1b466db55e0ba5d56ef5315c728216b42f796491
-  repo: https://golang.org/x/text
 - name: gopkg.in/airbrake/gobrake.v2
   version: ffa39d09712dfb3d20dc9b5564bb62cf6d8125d0
-  repo: https://gopkg.in/airbrake/gobrake.v2
 - name: gopkg.in/gemnasium/logrus-airbrake-hook.v2
   version: 31e6fd4bd5a98d8ee7673d24bc54ec73c31810dd
-  repo: https://gopkg.in/gemnasium/logrus-airbrake-hook.v2
 - name: gopkg.in/Masterminds/squirrel.v1
   version: e21b13aa472ea70fe2e8172d668d1fee4028d2fd
 - name: gopkg.in/tylerb/graceful.v1
   version: 9a3d4236b03bb5d26f7951134d248f9d5510d599
 - name: gopkg.in/yaml.v2
   version: a83829b6f1293c91addabc89d0571c246397bbf4
-  repo: https://gopkg.in/yaml.v2
 - name: require
   version: ""
 - name: suite

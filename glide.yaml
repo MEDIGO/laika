@@ -17,3 +17,4 @@ import:
 - package: gopkg.in/tylerb/graceful.v1
 - package: require
 - package: suite
+- package: github.com/nlopes/slack
