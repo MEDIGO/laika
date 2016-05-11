@@ -1,8 +1,4 @@
 .DS_Store
 .env
-data/sequelprologin
-data/toupdatedb
-dbtests
 public/bower_components/
 node_modules/
-vendor/

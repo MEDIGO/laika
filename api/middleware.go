@@ -12,8 +12,8 @@ import (
 
 // LogMiddleware logs information about the current request.
 func LogMiddleware() echo.MiddlewareFunc {
-	return func(next echo.Handler) echo.Handler {
-		return echo.HandlerFunc(func(c echo.Context) error {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
 			defer func(start time.Time) {
 				log.WithFields(log.Fields{
 					"uri":                   c.Request().URI(),
@@ -24,15 +24,15 @@ func LogMiddleware() echo.MiddlewareFunc {
 				}).Info("request handled")
 			}(time.Now())
 
-			return next.Handle(c)
-		})
+			return next(c)
+		}
 	}
 }
 
 // InstrumentMiddleware collects metrics about the current request.
 func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
-	return func(next echo.Handler) echo.Handler {
-		return echo.HandlerFunc(func(c echo.Context) error {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
 			defer func(start time.Time) {
 				tags := []string{
 					"method:" + c.Request().Method(),
@@ -43,15 +43,15 @@ func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
 				stats.Histogram("laika.request_duration_microseconds", float64(int(time.Since(start).Seconds()*1000000)), tags, 1)
 			}(time.Now())
 
-			return next.Handle(c)
-		})
+			return next(c)
+		}
 	}
 }
 
 func ResponseEncoderMiddleware() echo.MiddlewareFunc {
-	return func(next echo.Handler) echo.Handler {
-		return echo.HandlerFunc(func(c echo.Context) error {
-			err := next.Handle(c)
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			err := next(c)
 
 			switch v := err.(type) {
 			case Response:
@@ -68,6 +68,6 @@ func ResponseEncoderMiddleware() echo.MiddlewareFunc {
 				}
 				return nil
 			}
-		})
+		}
 	}
 }

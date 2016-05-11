@@ -43,7 +43,7 @@ func NewServer(store store.Store, stats *statsd.Client, notifier notifier.Notifi
 
 	e.Static("/", "public")
 
-	server := standard.NewFromConfig(engine.Config{})
+	server := standard.WithConfig(engine.Config{})
 	server.SetHandler(e)
 
 	return server
