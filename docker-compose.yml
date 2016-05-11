@@ -1,6 +1,6 @@
 laika:
     build: .
-    command: go run main.go
+    command: go run main.go --migrate
     links:
         - mysql
     ports:

@@ -24,6 +24,10 @@ func main() {
 	app.Name = "laika"
 	app.Usage = "MEDIGO laika Service"
 	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:  "migrate",
+			Usage: "Migrates the store schema to the latest available version",
+		},
 		cli.StringFlag{
 			Name:   "port",
 			Value:  "8000",
@@ -101,7 +105,6 @@ func main() {
 	}
 
 	app.Action = func(c *cli.Context) {
-
 		store, err := store.NewStore(
 			c.String("mysql-username"),
 			c.String("mysql-password"),
@@ -112,6 +115,16 @@ func main() {
 
 		if err != nil {
 			log.Fatal("failed to create Store: ", err)
+		}
+
+		if c.Bool("migrate") {
+			if err := store.Ping(); err != nil {
+				log.Fatal("Failed to connect with store: ", err)
+			}
+
+			if err := store.Migrate(); err != nil {
+				log.Fatal("Failed to migrate store schema: ", err)
+			}
 		}
 
 		stats, err := statsd.New(c.String("statsd-host") + ":" + c.String("statsd-port"))

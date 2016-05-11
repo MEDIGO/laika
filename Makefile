@@ -1,6 +1,6 @@
 PACKAGES = ./api/... ./client/... ./notifier/... ./store/... ./test/... ./util/...
 
-all: build deps init lint test publish
+all: build deps lint test publish
 
 build:
 	@echo "===> Building project..."
@@ -11,10 +11,9 @@ deps:
 	@docker-compose run laika npm install
 	@docker-compose run laika bower --allow-root install
 
-init:
-	@echo "===> Initialising database..."
-	@docker-compose run laika mysql -h mysql -u root -proot laika < schema/1.sql
-	@docker-compose run laika mysql -h mysql -u root -proot laika < schema/2.sql
+schema:
+	@echo "===> Generating schema..."
+	@go-bindata -pkg schema -o store/schema/schema.go -ignore \.go store/schema/...
 
 lint:
 	@echo "===> Linting sourcecode..."
@@ -51,4 +50,4 @@ clean:
 	@docker-compose stop
 	@docker-compose rm -f -v
 
-.PHONY: all build deps init lint test run shell publish deploy clean
+.PHONY: all build deps schema lint test run shell publish deploy clean

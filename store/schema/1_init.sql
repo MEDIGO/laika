@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS `laika`;
+-- +migrate Up
 
 CREATE TABLE IF NOT EXISTS `feature`(
   `id`         INT NOT NULL AUTO_INCREMENT,
@@ -44,3 +44,10 @@ CREATE TABLE IF NOT EXISTS `feature_status_history` (
   FOREIGN KEY (environment_id) REFERENCES environment(id),
   FOREIGN KEY (feature_status_id) REFERENCES feature_status(id)
 );
+
+-- +migrate Down
+
+DROP TABLE IF EXISTS feature_status_history;
+DROP TABLE IF EXISTS feature_status;
+DROP TABLE IF EXISTS environment;
+DROP TABLE IF EXISTS feature;

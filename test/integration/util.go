@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/DataDog/datadog-go/statsd"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
 	"github.com/MEDIGO/laika/api"
@@ -28,12 +29,20 @@ func (s *FeatureFlagSuite) SetupTest() {
 		os.Getenv("LAIKA_MYSQL_DBNAME"),
 	)
 	if err != nil {
-		panic(err)
+		require.NoError(s.T(), err)
+	}
+
+	if err := store.Ping(); err != nil {
+		require.NoError(s.T(), err)
+	}
+
+	if err := store.Reset(); err != nil {
+		require.NoError(s.T(), err)
 	}
 
 	stats, err := statsd.New(os.Getenv("LAIKA_STATSD_HOST") + ":" + os.Getenv("LAIKA_STATSD_PORT"))
 	if err != nil {
-		panic(err)
+		require.NoError(s.T(), err)
 	}
 
 	notifier := notifier.NewSlackNotifier(os.Getenv("SLACK_TOKEN"), os.Getenv("SLACK_CHANNEL"))
@@ -42,7 +51,7 @@ func (s *FeatureFlagSuite) SetupTest() {
 
 	s.client, err = client.NewClient(s.server.URL)
 	if err != nil {
-		panic(err)
+		require.NoError(s.T(), err)
 	}
 }
 

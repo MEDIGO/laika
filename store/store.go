@@ -7,6 +7,9 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/rubenv/sql-migrate"
+
+	"github.com/MEDIGO/laika/store/schema"
 )
 
 var ErrNoRows = sql.ErrNoRows
@@ -31,12 +34,19 @@ type Store interface {
 	ListFeatureStatusHistory(featureId *int64, environmentId *int64, featureStatusId *int64) ([]*FeatureStatusHistory, error)
 
 	Ping() error
+
+	// Migrate migrates the database schema to the latest available version.
+	Migrate() error
+
+	// Reset removes all stored data.
+	Reset() error
 }
 
 type store struct {
 	db *sql.DB
 }
 
+// NewStore creates a new Store.
 func NewStore(username, password, host, port, dbname string) (Store, error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", username, password, host, port, dbname)
 	db, err := sql.Open("mysql", dsn)
@@ -59,8 +69,33 @@ func (s *store) Ping() error {
 
 		log.Warn("Failed to ping the database. Retry in 1s.")
 		time.Sleep(time.Second)
-
 	}
 
+	return err
+}
+
+func (s *store) Migrate() error {
+	migrations := &migrate.AssetMigrationSource{
+		Asset:    schema.Asset,
+		AssetDir: schema.AssetDir,
+		Dir:      "store/schema",
+	}
+
+	_, err := migrate.Exec(s.db, "mysql", migrations, migrate.Up)
+	return err
+}
+
+func (s *store) Reset() error {
+	migrations := &migrate.AssetMigrationSource{
+		Asset:    schema.Asset,
+		AssetDir: schema.AssetDir,
+		Dir:      "store/schema",
+	}
+
+	if _, err := migrate.ExecMax(s.db, "mysql", migrations, migrate.Down, 0); err != nil {
+		return err
+	}
+
+	_, err := migrate.Exec(s.db, "mysql", migrations, migrate.Up)
 	return err
 }
