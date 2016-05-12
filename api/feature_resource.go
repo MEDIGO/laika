@@ -20,9 +20,7 @@ type Feature struct {
 
 func (f *Feature) Validate() error {
 	if f.Name == nil {
-		return CustomError{
-			"Name: non zero value required;",
-		}
+		return errors.New("missing name")
 	}
 	return nil
 }
@@ -43,25 +41,25 @@ func (r *FeatureResource) Get(c echo.Context) error {
 	feature, err := r.store.GetFeatureByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	featureStatus, err := r.store.ListFeatureStatus(&feature.Id, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	featureStatusMap := make(map[string]bool)
@@ -83,21 +81,21 @@ func (r *FeatureResource) Get(c echo.Context) error {
 		Status:    featureStatusMap,
 	}
 
-	return OK(apiFeature)
+	return OK(c, apiFeature)
 }
 
 func (r *FeatureResource) List(c echo.Context) error {
 	features, err := r.store.ListFeatures()
 	if err != nil {
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	featureList := make([]*Feature, len(features))
@@ -107,9 +105,9 @@ func (r *FeatureResource) List(c echo.Context) error {
 	featureStatus, err := r.store.ListFeatureStatus(nil, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	for i, feature := range features {
@@ -133,20 +131,20 @@ func (r *FeatureResource) List(c echo.Context) error {
 		featureIndex[*status.FeatureId].Status[environmentNames[*status.EnvironmentId]] = *status.Enabled
 	}
 
-	return OK(featureList)
+	return OK(c, featureList)
 }
 
 func (r *FeatureResource) Create(c echo.Context) error {
 	in := new(Feature)
 	if err := c.Bind(&in); err != nil {
-		return BadRequest(err)
+		return BadRequest(c, err)
 	}
 
 	feature, err := r.store.GetFeatureByName(*in.Name)
 	if err != nil {
 		if err == store.ErrNoRows {
 			if err := in.Validate(); err != nil {
-				return BadRequest(err)
+				return BadRequest(c, err)
 			}
 
 			feature = &store.Feature{
@@ -154,15 +152,15 @@ func (r *FeatureResource) Create(c echo.Context) error {
 			}
 
 			if err := r.store.CreateFeature(feature); err != nil {
-				return InternalServerError(err)
+				return InternalServerError(c, err)
 			}
 
-			return Created(feature)
+			return Created(c, feature)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
-	err = errors.New("Feature already exists")
-	return Conflict(err)
+
+	return Conflict(c, errors.New("Feature already exists"))
 }
 
 func (r *FeatureResource) Update(c echo.Context) error {
@@ -171,14 +169,14 @@ func (r *FeatureResource) Update(c echo.Context) error {
 	feature, err := r.store.GetFeatureByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	in := new(Feature)
 	if err := c.Bind(&in); err != nil {
-		return BadRequest(err)
+		return BadRequest(c, err)
 	}
 
 	if in.Name != nil {
@@ -188,17 +186,17 @@ func (r *FeatureResource) Update(c echo.Context) error {
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	featureStatus, err := r.store.ListFeatureStatus(&feature.Id, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		}
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
 	for _, environment := range environments {
@@ -215,11 +213,11 @@ func (r *FeatureResource) Update(c echo.Context) error {
 				status.Enabled = store.Bool(in.Status[*environment.Name])
 
 				if err := r.store.UpdateFeatureStatus(status); err != nil {
-					return InternalServerError(err)
+					return InternalServerError(c, err)
 				}
 
 				if err := r.notifier.NotifyStatusChange(*feature.Name, in.Status[*environment.Name], *environment.Name); err != nil {
-					return InternalServerError(err)
+					return InternalServerError(c, err)
 				}
 			}
 		} else {
@@ -231,18 +229,18 @@ func (r *FeatureResource) Update(c echo.Context) error {
 			}
 
 			if err := r.store.CreateFeatureStatus(status); err != nil {
-				return InternalServerError(err)
+				return InternalServerError(c, err)
 			}
 
 			if err := r.notifier.NotifyStatusChange(*feature.Name, in.Status[*environment.Name], *environment.Name); err != nil {
-				return InternalServerError(err)
+				return InternalServerError(c, err)
 			}
 		}
 	}
 
 	if err := r.store.UpdateFeature(feature); err != nil {
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
-	return OK(feature)
+	return OK(c, feature)
 }

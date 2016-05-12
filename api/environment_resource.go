@@ -1,6 +1,8 @@
 package api
 
 import (
+	"errors"
+
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/labstack/echo"
 
@@ -11,10 +13,9 @@ type Environment store.Environment
 
 func (e *Environment) Validate() error {
 	if e.Name == nil {
-		return CustomError{
-			"Name: non zero value required;",
-		}
+		return errors.New("missing name")
 	}
+
 	return nil
 }
 
@@ -33,31 +34,31 @@ func (r *EnvironmentResource) Get(c echo.Context) error {
 	environment, err := r.store.GetEnvironmentByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		} else {
-			return InternalServerError(err)
+			return InternalServerError(c, err)
 		}
 	}
 
-	return OK(environment)
+	return OK(c, environment)
 }
 
 func (r *EnvironmentResource) List(c echo.Context) error {
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
-	return OK(environments)
+	return OK(c, environments)
 }
 
 func (r *EnvironmentResource) Create(c echo.Context) error {
 	in := new(Environment)
 	if err := c.Bind(&in); err != nil {
-		return BadRequest(err)
+		return BadRequest(c, err)
 	}
 
 	if err := in.Validate(); err != nil {
-		return BadRequest(err)
+		return BadRequest(c, err)
 	}
 
 	environment := &store.Environment{
@@ -65,10 +66,10 @@ func (r *EnvironmentResource) Create(c echo.Context) error {
 	}
 
 	if err := r.store.CreateEnvironment(environment); err != nil {
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
-	return Created(environment)
+	return Created(c, environment)
 }
 
 func (r *EnvironmentResource) Update(c echo.Context) error {
@@ -77,15 +78,15 @@ func (r *EnvironmentResource) Update(c echo.Context) error {
 	environment, err := r.store.GetEnvironmentByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(err)
+			return NotFound(c, err)
 		} else {
-			return InternalServerError(err)
+			return InternalServerError(c, err)
 		}
 	}
 
 	in := new(store.Environment)
 	if err := c.Bind(&in); err != nil {
-		return BadRequest(err)
+		return BadRequest(c, err)
 	}
 
 	if in.Name != nil {
@@ -93,8 +94,8 @@ func (r *EnvironmentResource) Update(c echo.Context) error {
 	}
 
 	if err := r.store.UpdateEnvironment(environment); err != nil {
-		return InternalServerError(err)
+		return InternalServerError(c, err)
 	}
 
-	return OK(environment)
+	return OK(c, environment)
 }

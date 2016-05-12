@@ -3,6 +3,7 @@ package client
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -81,10 +82,10 @@ func (c *client) do(method, endpoint string, in interface{}, out interface{}) er
 		}
 	}
 
-	e := new(api.APIError)
+	e := new(api.Error)
 	json.NewDecoder(res.Body).Decode(e)
 
-	return e
+	return errors.New(e.Message)
 }
 
 func (c *client) get(endpoint string, out interface{}) error {

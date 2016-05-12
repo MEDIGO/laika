@@ -2,45 +2,46 @@ package api
 
 import (
 	"net/http"
+
+	"github.com/labstack/echo"
 )
 
-type Response struct {
-	Status  int
-	Payload interface{}
-	Err     error
+// Error represents an error message.
+type Error struct {
+	Message string `json:"message"`
 }
 
-func (r Response) Error() string {
-	if r.Err != nil {
-		return r.Err.Error()
-	}
-	return "no error"
+// OK generates an HTTP 200 OK response with specified payload serialized as JSON.
+func OK(c echo.Context, payload interface{}) error {
+	return c.JSON(http.StatusOK, payload)
 }
 
-func OK(payload interface{}) Response {
-	return Response{http.StatusOK, payload, nil}
+// Created generates an HTTP 201 Created response with specified payload serialized as JSON.
+func Created(c echo.Context, payload interface{}) error {
+	return c.JSON(http.StatusCreated, payload)
 }
 
-func Created(payload interface{}) Response {
-	return Response{http.StatusCreated, payload, nil}
+// NoContent generates an empty HTTP 204 No Conent response.
+func NoContent(c echo.Context) error {
+	return c.NoContent(http.StatusNoContent)
 }
 
-func NoContent() Response {
-	return Response{http.StatusNoContent, nil, nil}
+// BadRequest generates an HTTP 400 Bad Request response with specified error serialized as JSON.
+func BadRequest(c echo.Context, err error) error {
+	return c.JSON(http.StatusBadRequest, Error{err.Error()})
 }
 
-func BadRequest(err error) Response {
-	return Response{http.StatusBadRequest, APIError{err.Error()}, err}
+// NotFound generates an HTTP 404 Not Found response with specified error serialized as JSON.
+func NotFound(c echo.Context, err error) error {
+	return c.JSON(http.StatusNotFound, Error{err.Error()})
 }
 
-func NotFound(err error) Response {
-	return Response{http.StatusNotFound, APIError{err.Error()}, err}
+// Conflict generates an HTTP 409 Conflict response with specified error serialized as JSON.
+func Conflict(c echo.Context, err error) error {
+	return c.JSON(http.StatusConflict, Error{err.Error()})
 }
 
-func Conflict(err error) Response {
-	return Response{http.StatusConflict, APIError{err.Error()}, err}
-}
-
-func InternalServerError(err error) Response {
-	return Response{http.StatusInternalServerError, APIError{err.Error()}, err}
+// InternalServerError generates an HTTP 500 Internal Server Error response with specified error serialized as JSON.
+func InternalServerError(c echo.Context, err error) error {
+	return c.JSON(http.StatusInternalServerError, Error{err.Error()})
 }

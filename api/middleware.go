@@ -1,7 +1,6 @@
 package api
 
 import (
-	"net/http"
 	"strconv"
 	"time"
 
@@ -44,30 +43,6 @@ func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
 			}(time.Now())
 
 			return next(c)
-		}
-	}
-}
-
-func ResponseEncoderMiddleware() echo.MiddlewareFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			err := next(c)
-
-			switch v := err.(type) {
-			case Response:
-				if v.Status >= 500 {
-					log.Error(v.Error())
-				}
-				return c.JSON(v.Status, v.Payload)
-			case *echo.HTTPError:
-				return c.JSON(v.Code, APIError{v.Error()})
-			default:
-				if err != nil {
-					log.Error(err)
-					return c.JSON(http.StatusInternalServerError, APIError{err.Error()})
-				}
-				return nil
-			}
 		}
 	}
 }

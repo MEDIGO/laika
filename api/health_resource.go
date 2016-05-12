@@ -21,5 +21,5 @@ func NewHealthResource(store store.Store, stats *statsd.Client) *HealthResource 
 }
 
 func (r *HealthResource) Get(c echo.Context) error {
-	return OK(Health{"OK"})
+	return OK(c, Health{"OK"})
 }

@@ -13,6 +13,7 @@ import (
 	"github.com/MEDIGO/laika/store"
 )
 
+// NewServer creates a new server.
 func NewServer(store store.Store, stats *statsd.Client, notifier notifier.Notifier) *standard.Server {
 	e := echo.New()
 
@@ -22,7 +23,6 @@ func NewServer(store store.Store, stats *statsd.Client, notifier notifier.Notifi
 
 	e.Use(LogMiddleware())
 	e.Use(InstrumentMiddleware(stats))
-	e.Use(ResponseEncoderMiddleware())
 	e.Use(middleware.Recover())
 
 	health := NewHealthResource(store, stats)
