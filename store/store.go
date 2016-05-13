@@ -7,9 +7,9 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/rubenv/sql-migrate"
 
 	"github.com/MEDIGO/laika/store/schema"
+	migrate "github.com/rubenv/sql-migrate"
 )
 
 var ErrNoRows = sql.ErrNoRows
@@ -30,6 +30,9 @@ type Store interface {
 	ListFeatureStatus(featureId *int64, environmentId *int64) ([]*FeatureStatus, error)
 	CreateFeatureStatus(featureStatus *FeatureStatus) error
 	UpdateFeatureStatus(featureStatus *FeatureStatus) error
+
+	GetUserByUsername(username string) (*User, error)
+	CreateUser(user *User) error
 
 	ListFeatureStatusHistory(featureId *int64, environmentId *int64, featureStatusId *int64) ([]*FeatureStatusHistory, error)
 
