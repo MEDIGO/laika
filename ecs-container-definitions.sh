@@ -15,6 +15,22 @@ cat << EOM
            {
                "name": "LAIKA_MYSQL_HOST",
                "value": "$ECS_LAIKA_MYSQL_HOST"
+           },
+           {
+               "name": "LAIKA_ROOT_USERNAME",
+               "value": "$ECS_LAIKA_ROOT_USERNAME"
+           },
+           {
+               "name": "LAIKA_ROOT_PASSWORD",
+               "value": "$ECS_LAIKA_ROOT_PASSWORD"
+           },
+           {
+               "name": "LAIKA_SLACK_TOKEN",
+               "value": "$ECS_LAIKA_SLACK_TOKEN"
+           },
+           {
+               "name": "LAIKA_SLACK_CHANNEL",
+               "value": "$ECS_LAIKA_SLACK_CHANNEL"
            }
        ],
        "name": "laika",

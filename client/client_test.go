@@ -1,27 +1,41 @@
 package client
 
 import (
-	"net/http"
-	"net/http/httptest"
+	"testing"
 
-	"github.com/stretchr/testify/suite"
+	"github.com/stretchr/testify/require"
+
+	"github.com/MEDIGO/laika/api"
 )
 
-type ClientSuite struct {
-	suite.Suite
-	client Client
-	server *httptest.Server
-	mux    *http.ServeMux
+func TestClientToggle(t *testing.T) {
+	server := api.NewTestServer(t)
+	defer server.Close()
+
+	client, err := NewClient(Config{
+		Addr:        server.URL,
+		Username:    "root",
+		Password:    "root",
+		Environment: "test",
+	})
+	require.NoError(t, err)
+
+	status := client.IsEnabled("test_feature", false)
+	require.True(t, status)
 }
 
-func (s *ClientSuite) SetupTest() {
-	s.mux = http.NewServeMux()
-	s.server = httptest.NewServer(s.mux)
+func TestClientToggleUnknown(t *testing.T) {
+	server := api.NewTestServer(t)
+	defer server.Close()
 
-	client, _ := NewClient(s.server.URL)
-	s.client = client
-}
+	client, err := NewClient(Config{
+		Addr:        server.URL,
+		Username:    "root",
+		Password:    "root",
+		Environment: "test",
+	})
+	require.NoError(t, err)
 
-func (s *ClientSuite) TearDownTest() {
-	s.server.Close()
+	status := client.IsEnabled("awesome_unknown_feature", true)
+	require.True(t, status)
 }
