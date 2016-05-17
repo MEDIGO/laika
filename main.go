@@ -19,10 +19,10 @@ func init() {
 }
 
 func main() {
+
 	app := cli.NewApp()
 	app.Name = "laika"
-	app.Usage = "A feature flag service"
-	app.Author = "MEDIGO GmbH"
+	app.Usage = "MEDIGO laika Service"
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
 			Name:  "migrate",
@@ -83,24 +83,24 @@ func main() {
 			EnvVar: "LAIKA_STATSD_PORT",
 		},
 		cli.StringFlag{
-			Name:   "root-username",
-			Usage:  "Root username",
-			EnvVar: "LAIKA_ROOT_USERNAME",
+			Name:   "auth-username",
+			Usage:  "Authentication username",
+			EnvVar: "LAIKA_AUTH_USERNAME",
 		},
 		cli.StringFlag{
-			Name:   "root-password",
-			Usage:  "Root password",
-			EnvVar: "LAIKA_ROOT_PASSWORD",
+			Name:   "auth-password",
+			Usage:  "Authentication password",
+			EnvVar: "LAIKA_AUTH_PASSWORD",
 		},
 		cli.StringFlag{
 			Name:   "slack-token",
 			Usage:  "Slack API Token",
-			EnvVar: "LAIKA_SLACK_TOKEN",
+			EnvVar: "SLACK_TOKEN",
 		},
 		cli.StringFlag{
 			Name:   "slack-channel",
 			Usage:  "Slack Channel",
-			EnvVar: "LAIKA_SLACK_CHANNEL",
+			EnvVar: "SLACK_CHANNEL",
 		},
 	}
 
@@ -114,7 +114,7 @@ func main() {
 		)
 
 		if err != nil {
-			log.Fatal("Failed to create Store: ", err)
+			log.Fatal("failed to create Store: ", err)
 		}
 
 		if c.Bool("migrate") {
@@ -129,26 +129,17 @@ func main() {
 
 		stats, err := statsd.New(c.String("statsd-host") + ":" + c.String("statsd-port"))
 		if err != nil {
-			log.Fatal("Failed to create Statsd client: ", err)
+			log.Fatal("failed to create Statsd client: ", err)
 		}
 
 		notifier := notifier.NewSlackNotifier(c.String("slack-token"), c.String("slack-channel"))
 
-		server, err := api.NewServer(api.ServerConfig{
-			RootUsername: c.String("root-username"),
-			RootPassword: c.String("root-password"),
-			Store:        store,
-			Stats:        stats,
-			Notifier:     notifier,
-		})
-		if err != nil {
-			log.Fatal("Failed to create server: ", err)
+		server := api.NewServer(store, stats, notifier)
 
-		}
-		
 		log.Info("Starting server on port ", c.String("port"))
 		graceful.Run(":"+c.String("port"), time.Duration(c.Int("timeout"))*time.Second, server)
 	}
 
 	app.Run(os.Args)
+
 }
