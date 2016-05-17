@@ -9,7 +9,7 @@ type SlackNotifier struct {
 	channel string
 }
 
-func NewSlackNotifier(token, channel string) *SlackNotifier {
+func NewSlackNotifier(token, channel string) Notifier {
 	return &SlackNotifier{token, channel}
 }
 
