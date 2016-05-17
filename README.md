@@ -1,70 +1,24 @@
-# Laika
+# laika
 
 Laika is a feature flag/feature toggle service, written in Go, that allows the creation of flags and their activation/deactivation for specific environments. This way it is possible to control in which environments each feature is available. For instance, when a new feature is developed and released, it would make sense if it was only made available, at first, in a testing or Q&A environment, and only later in production. With Laika this can be achieved by simply going to a web page, selecting the feature, and changing its status on the desired environments.
 
 Using Laika in a project thus allows for fast and continuous feature release and deployment.
 
-`laika-php` is a PHP library that handles communication with Laika's API. You can get it here https://github.com/MEDIGO/laika-php.
+laika-php is a PHP library that handles communication with Laika's API. You can get it here https://github.com/MEDIGO/laika-php.
 
-## API
+##API
 
-| Method  | Endpoint                  | Description                |
-| ------- | ------------------------- | -------------------------- |
-| `GET`   | `/api/health`             | Check the service health   |
-| `GET`   | `/api/features`           | List all features          |
-| `GET`   | `/api/features/:name`     | Get a feature by name      |
-| `POST`  | `/api/features`           | Create a feature           |
-| `PATCH` | `/api/features/:name`     | Update a feature           |
-| `GET`   | `/api/environments`       | List all environments      |
-| `GET`   | `/api/environments/:name` | Get an environment by name |
-| `POST`  | `/api/environments`       | Create an environment      |
-| `PATCH` | `/api/environments/:name` | Update an environment      |
+GET /api/health - Health check
 
-## Client
+GET /api/features - Get all features
+GET /api/features/:name - Get feature by name
+POST /api/features - Create feature
+PATCH /api/features/:name - Update feature
 
-Laika contains a polling HTTP client that allows to easily check for enabled/disabled
-features on Go code. It can be found in the `client` pacakge. While Laika uses
-the `vendor` directory to store external dependencies, `client` can be imported
-without any vendoring.
-
-
-### Install
-
-```
-go get github.com/MEDIGO/laika/client
-```
-
-### Usage
-
-```go
-package main
-
-import (
-	"log"
-
-	"github.com/MEDIGO/laika/client"
-)
-
-func main() {
-	cfg := client.Config{
-		Addr:        "127.0.0.1:8000",
-		Username:    "my-username",
-		Password:    "my-password",
-		Environment: "prod",
-	}
-
-	c, err := client.NewClient(cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	if c.IsEnabled("my-awesome-feature", false) {
-		log.Print("IT'S ALIVE!")
-	} else {
-		log.Print("Move along. Nothing to see here.")
-	}
-}
-```
+GET /api/environments - Get all environments
+GET /api/environments/:name - Get environment by name
+POST /api/environments - Create environment
+PATCH /api/environments/:name - Update environment
 
 ## Setup
 
@@ -75,11 +29,11 @@ Clone the Laika project, open Docker Quickstart Terminal and go to the project d
 Create a .env file with a username and password
 
 ```
-LAIKA_ROOT_USERNAME=myusername
-LAIKA_ROOT_PASSWORD=mypassword
+LAIKA_AUTH_USERNAME=myusername
+LAIKA_AUTH_PASSWORD=mypassword
 ```
 
-Build the application by running `make build` inside its directory.
+Build the application by running `make build` inside its directory and, afterwards, run `make init`.
 
 Finally, you can run the application using the `make run` command.
 
@@ -104,18 +58,20 @@ To run tests:
 make test
 ```
 
-## Current state of the project
+##Current state of the project
 In the current release of Laika, it is possible to create feature flags and enable/disable them in the existing environments.
 
-## Wishlist
+##Wishlist
 
 - Specify country access (e.g. feature only enabled in Germany)
 - Specify user access with percentage (e.g. feature only enabled for 30% of the user base)
 - Have a field for environment creation on the web page
+- SSL support
 - History for flag status changes
+- Slack notifications / webhooks
 - New flags auto-registering when seen for the first time by laika
 
-## How to contribute
+##How to contribute
 
 - Fork the repository
 - Clone it
@@ -123,4 +79,4 @@ In the current release of Laika, it is possible to create feature flags and enab
 - Code code code code code
 - Make a pull request
 
-### Thank you!
+###Thank you!
