@@ -4,12 +4,13 @@ import (
 	"errors"
 
 	"github.com/DataDog/datadog-go/statsd"
-	"github.com/MEDIGO/laika/notifier"
-	"github.com/MEDIGO/laika/store"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/engine"
 	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
+
+	"github.com/MEDIGO/laika/notifier"
+	"github.com/MEDIGO/laika/store"
 )
 
 // ServerConfig is used to parametrize a Server.
@@ -41,7 +42,9 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 
 	e := echo.New()
 
-	basicAuthMiddleware := AuthMiddleware(conf.RootUsername, conf.RootPassword, conf.Store)
+	basicAuthMiddleware := middleware.BasicAuth(func(user, password string) bool {
+		return user == conf.RootUsername && password == conf.RootPassword
+	})
 
 	e.Use(LogMiddleware())
 	e.Use(InstrumentMiddleware(conf.Stats))
@@ -50,7 +53,6 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 	health := NewHealthResource(conf.Store, conf.Stats)
 	features := NewFeatureResource(conf.Store, conf.Stats, conf.Notifier)
 	environments := NewEnvironmentResource(conf.Store, conf.Stats)
-	users := NewUserResource(conf.Store, conf.Stats)
 
 	e.Get("/api/health", echo.HandlerFunc(health.Get))
 
@@ -63,9 +65,6 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 	e.Get("/api/environments", echo.HandlerFunc(environments.List), basicAuthMiddleware)
 	e.Post("/api/environments", echo.HandlerFunc(environments.Create), basicAuthMiddleware)
 	e.Patch("/api/environments/:name", echo.HandlerFunc(environments.Update), basicAuthMiddleware)
-
-	e.Get("/api/users/:username", echo.HandlerFunc(users.Get), basicAuthMiddleware)
-	e.Post("/api/users", echo.HandlerFunc(users.Create), basicAuthMiddleware)
 
 	e.Static("/", "public")
 

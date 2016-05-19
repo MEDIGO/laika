@@ -11,8 +11,7 @@ import (
 
 // NewTestServer creates a new initialised Laika httptest.Server. The server
 // root credentials are "root" as username and password. It contains an
-// environment named "test" with an enabled featured named "test_feature",
-// and a user whose username is "user" and password is "password".
+// environment named "test" with a enabled featured named "test_feature".
 func NewTestServer(t *testing.T) *httptest.Server {
 	s, err := store.NewStore(
 		os.Getenv("LAIKA_MYSQL_USERNAME"),
@@ -50,13 +49,6 @@ func NewTestServer(t *testing.T) *httptest.Server {
 		EnvironmentId: store.Int(environment.Id),
 	}
 	err = s.CreateFeatureStatus(&status)
-	require.NoError(t, err)
-
-	user := store.User{
-		Username:     "awesome_username",
-		PasswordHash: "awesome_password",
-	}
-	err = s.CreateUser(&user)
 	require.NoError(t, err)
 
 	server, err := NewServer(ServerConfig{
