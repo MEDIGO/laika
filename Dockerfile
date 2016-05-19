@@ -1,7 +1,7 @@
 FROM golang:1.6-alpine
 
 RUN apk add --update --no-cache git nodejs
-RUN npm install -g gulp bower
+RUN npm install -g gulp-cli bower
 
 RUN go get -u github.com/jteeuwen/go-bindata/...
 

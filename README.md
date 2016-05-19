@@ -19,6 +19,8 @@ Using Laika in a project thus allows for fast and continuous feature release and
 | `GET`   | `/api/environments/:name` | Get an environment by name |
 | `POST`  | `/api/environments`       | Create an environment      |
 | `PATCH` | `/api/environments/:name` | Update an environment      |
+| `GET`   | `/api/users/:username`    | Get a user by username     |
+| `POST`  | `/api/users`              | Create a user              |
 
 ## Client
 
@@ -84,6 +86,8 @@ Build the application by running `make build` inside its directory.
 Finally, you can run the application using the `make run` command.
 
 After Laika is running, open a browser and enter the IP of your docker machine (get it by running `docker-machine ip`).
+
+Login by using root or user credentials.
 
 Currently, when you create a new feature on the web page, you will not be able to enable/disable it yet as there are no environments. To create environments, you have to add them manually to the database. To do so you can use a software like Sequel Pro and insert the following on the corresponding fields:
 
