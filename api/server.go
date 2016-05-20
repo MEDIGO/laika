@@ -1,7 +1,7 @@
 package api
 
 import (
-	"errors"
+	"os"
 
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/labstack/echo"
@@ -13,46 +13,21 @@ import (
 	"github.com/MEDIGO/laika/store"
 )
 
-// ServerConfig is used to parametrize a Server.
-type ServerConfig struct {
-	RootUsername string
-	RootPassword string
-	Store        store.Store
-	Stats        *statsd.Client
-	Notifier     notifier.Notifier
-}
-
 // NewServer creates a new server.
-func NewServer(conf ServerConfig) (*standard.Server, error) {
-	if conf.RootPassword == "" {
-		return nil, errors.New("missing root username")
-	}
-
-	if conf.RootPassword == "" {
-		return nil, errors.New("missing root password")
-	}
-
-	if conf.Store == nil {
-		return nil, errors.New("missing store")
-	}
-
-	if conf.Notifier == nil {
-		conf.Notifier = notifier.NewNOOPNotifier()
-	}
-
+func NewServer(store store.Store, stats *statsd.Client, notifier notifier.Notifier) *standard.Server {
 	e := echo.New()
 
 	basicAuthMiddleware := middleware.BasicAuth(func(user, password string) bool {
-		return user == conf.RootUsername && password == conf.RootPassword
+		return user == os.Getenv("LAIKA_AUTH_USERNAME") && password == os.Getenv("LAIKA_AUTH_PASSWORD")
 	})
 
 	e.Use(LogMiddleware())
-	e.Use(InstrumentMiddleware(conf.Stats))
+	e.Use(InstrumentMiddleware(stats))
 	e.Use(middleware.Recover())
 
-	health := NewHealthResource(conf.Store, conf.Stats)
-	features := NewFeatureResource(conf.Store, conf.Stats, conf.Notifier)
-	environments := NewEnvironmentResource(conf.Store, conf.Stats)
+	health := NewHealthResource(store, stats)
+	features := NewFeatureResource(store, stats, notifier)
+	environments := NewEnvironmentResource(store, stats)
 
 	e.Get("/api/health", echo.HandlerFunc(health.Get))
 
@@ -71,5 +46,5 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 	server := standard.WithConfig(engine.Config{})
 	server.SetHandler(e)
 
-	return server, nil
+	return server
 }

@@ -16,6 +16,6 @@ RUN bower --allow-root install
 
 COPY . /go/src/github.com/MEDIGO/laika
 
-RUN go get .
+RUN go build .
 
 CMD [“laika”]

@@ -86,27 +86,16 @@ func (s *store) Migrate() error {
 }
 
 func (s *store) Reset() error {
-	tables := []string{
-		"feature_status_history",
-		"feature_status",
-		"environment",
-		"feature",
-		"user",
+	migrations := &migrate.AssetMigrationSource{
+		Asset:    schema.Asset,
+		AssetDir: schema.AssetDir,
+		Dir:      "store/schema",
 	}
 
-	if _, err := s.db.Exec("SET FOREIGN_KEY_CHECKS=0"); err != nil {
+	if _, err := migrate.ExecMax(s.db, "mysql", migrations, migrate.Down, 0); err != nil {
 		return err
 	}
 
-	for _, table := range tables {
-		if _, err := s.db.Exec("TRUNCATE TABLE " + table); err != nil {
-			return err
-		}
-	}
-
-	if _, err := s.db.Exec("SET FOREIGN_KEY_CHECKS=1"); err != nil {
-		return err
-	}
-
-	return nil
+	_, err := migrate.Exec(s.db, "mysql", migrations, migrate.Up)
+	return err
 }
