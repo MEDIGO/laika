@@ -92,7 +92,7 @@ In the current release of Laika, it is possible to create feature flags and enab
 - Fork the repository
 - Clone it
 - `git remote add upstream git@github.com:MEDIGO/laika.git`
-- Code code code code code
+- Code code code code
 - Make a pull request
 
 ###Thank you!
