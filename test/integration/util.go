@@ -4,7 +4,6 @@ import (
 	"net/http/httptest"
 	"os"
 
-	"github.com/DataDog/datadog-go/statsd"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
@@ -40,14 +39,8 @@ func (s *FeatureFlagSuite) SetupTest() {
 		require.NoError(s.T(), err)
 	}
 
-	stats, err := statsd.New(os.Getenv("LAIKA_STATSD_HOST") + ":" + os.Getenv("LAIKA_STATSD_PORT"))
-	if err != nil {
-		require.NoError(s.T(), err)
-	}
-
 	notifier := notifier.NewSlackNotifier(os.Getenv("SLACK_TOKEN"), os.Getenv("SLACK_CHANNEL"))
-
-	s.server = httptest.NewServer(api.NewServer(store, stats, notifier))
+	s.server = httptest.NewServer(api.NewServer(store, nil, notifier))
 
 	s.client, err = client.NewClient(s.server.URL)
 	if err != nil {

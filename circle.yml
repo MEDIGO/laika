@@ -1,0 +1,22 @@
+machine:
+    environment:
+      GO15VENDOREXPERIMENT: 1
+      BASE_DIR: $HOME/.go_project/src/github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+      LAIKA_MYSQL_USERNAME: ubuntu
+      LAIKA_MYSQL_HOST: localhost
+      LAIKA_MYSQL_PORT: 3306
+      LAIKA_MYSQL_DBNAME: circle_test
+
+general:
+  build_dir:
+    ../../../$BASE_DIR
+
+dependencies:
+    override:
+        - mkdir -p $(dirname $BASE_DIR) && ln -fs $HOME/$CIRCLE_PROJECT_REPONAME $BASE_DIR:
+            pwd: /
+        - echo 'export GOPATH=$GOPATH:$HOME/.go_project' >> ~/.circlerc
+
+test:
+  override:
+    - go test $(go list ./... | grep -v /vendor/)
