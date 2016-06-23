@@ -1,71 +1,102 @@
 package client
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
-	"strconv"
-
-	"github.com/MEDIGO/laika/api"
+	"time"
 )
 
+// Config is used to parameterize a client
+type Config struct {
+	Addr            string
+	Username        string
+	Password        string
+	Environment     string
+	PollingInterval time.Duration
+}
+
+// Client is a threadsafe client for the Laika API.
 type Client interface {
-	HealthCheck() error
-
-	FeatureCreate(*api.Feature) (*api.Feature, error)
-	FeatureGet(name string) (*api.Feature, error)
-	FeatureList() ([]*api.Feature, error)
-	FeatureUpdate(name string, in *api.Feature) (*api.Feature, error)
-
-	EnvironmentCreate(*api.Environment) (*api.Environment, error)
-	EnvironmentGet(name string) (*api.Environment, error)
-	EnvironmentList() ([]*api.Environment, error)
-	EnvironmentUpdate(name string, in *api.Environment) (*api.Environment, error)
+	IsEnabled(string, bool) bool
 }
 
 type client struct {
-	baseURL   *url.URL
-	userAgent string
+	features *FeatureCache
+
+	url             *url.URL
+	username        string
+	password        string
+	environment     string
+	pollingInterval time.Duration
 }
 
-func NewClient(u string) (Client, error) {
-	baseURL, err := url.Parse(u)
+// NewClient creates a new Client.
+func NewClient(conf Config) (Client, error) {
+	if conf.Addr == "" {
+		return nil, errors.New("missing address")
+	}
+
+	if conf.Username == "" {
+		return nil, errors.New("missing username")
+	}
+
+	if conf.Password == "" {
+		return nil, errors.New("missing password")
+	}
+
+	if conf.Environment == "" {
+		return nil, errors.New("missing environment")
+	}
+
+	if conf.PollingInterval == 0 {
+		conf.PollingInterval = 10 * time.Second
+	}
+
+	addr, err := url.Parse(conf.Addr)
 	if err != nil {
 		return nil, err
 	}
-	return &client{baseURL: baseURL, userAgent: "laika-client"}, nil
+
+	endpoint, err := url.Parse("/api/features")
+	if err != nil {
+		return nil, err
+	}
+
+	cl := &client{
+		features:        NewFeatureCache(),
+		url:             addr.ResolveReference(endpoint),
+		username:        conf.Username,
+		password:        conf.Password,
+		environment:     conf.Environment,
+		pollingInterval: conf.PollingInterval,
+	}
+
+	if err := cl.poll(); err != nil {
+		return nil, err
+	}
+
+	go func(cl *client) {
+		for {
+			cl.poll()
+			time.Sleep(cl.pollingInterval)
+		}
+	}(cl)
+
+	return cl, nil
 }
 
-func (c *client) do(method, endpoint string, in interface{}, out interface{}) error {
-	rel, err := url.Parse(endpoint)
-	if err != nil {
-		return err
-	}
-	url := c.baseURL.ResolveReference(rel)
-	req, err := http.NewRequest(method, url.String(), nil)
+// Poll polls the Laika API for the latest Feature statuses, storing the results
+// in the internal cache.
+func (c *client) poll() error {
+	req, err := http.NewRequest("GET", c.url.String(), nil)
 	if err != nil {
 		return err
 	}
 
-	req.SetBasicAuth(os.Getenv("LAIKA_AUTH_USERNAME"), os.Getenv("LAIKA_AUTH_PASSWORD"))
-	req.Header.Set("User-Agent", c.userAgent)
+	req.SetBasicAuth(c.username, c.password)
 	req.Header.Set("Content-Type", "application/json")
-
-	if in != nil {
-		payload, err := json.Marshal(in)
-		if err != nil {
-			return err
-		}
-		buf := bytes.NewBuffer(payload)
-		req.Body = ioutil.NopCloser(buf)
-
-		req.ContentLength = int64(len(payload))
-		req.Header.Set("Content-Length", strconv.Itoa(len(payload)))
-	}
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -74,28 +105,37 @@ func (c *client) do(method, endpoint string, in interface{}, out interface{}) er
 
 	defer res.Body.Close()
 
-	if code := res.StatusCode; 200 <= code && code <= 299 {
-		if out != nil {
-			return json.NewDecoder(res.Body).Decode(out)
-		} else {
-			return nil
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		e := new(Error)
+		if err := json.NewDecoder(res.Body).Decode(e); err != nil {
+			return err
 		}
+
+		return errors.New(e.Message)
 	}
 
-	e := new(api.Error)
-	json.NewDecoder(res.Body).Decode(e)
+	features := []*Feature{}
+	if err := json.NewDecoder(res.Body).Decode(&features); err != nil {
+		return err
+	}
 
-	return errors.New(e.Message)
+	c.features.AddAll(features)
+
+	return nil
 }
 
-func (c *client) get(endpoint string, out interface{}) error {
-	return c.do("GET", endpoint, nil, out)
-}
+// IsEnabled returns the status of the Feature. If the Feature is unknown,
+// it will return the default value provided.
+func (c *client) IsEnabled(name string, defval bool) bool {
+	feature := c.features.Get(name)
+	if feature == nil {
+		return defval
+	}
 
-func (c *client) post(endpoint string, in, out interface{}) error {
-	return c.do("POST", endpoint, in, out)
-}
+	status, ok := feature.Status[c.environment]
+	if !ok {
+		return defval
+	}
 
-func (c *client) patch(endpoint string, in, out interface{}) error {
-	return c.do("PATCH", endpoint, in, out)
+	return status
 }
