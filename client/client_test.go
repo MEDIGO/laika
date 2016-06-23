@@ -8,7 +8,7 @@ import (
 	"github.com/MEDIGO/laika/api"
 )
 
-func TestClientToggle(t *testing.T) {
+func TestClientIsEnabled(t *testing.T) {
 	server := api.NewTestServer(t)
 	defer server.Close()
 
@@ -24,7 +24,7 @@ func TestClientToggle(t *testing.T) {
 	require.True(t, status)
 }
 
-func TestClientToggleUnknown(t *testing.T) {
+func TestClientIsEnabledUnknown(t *testing.T) {
 	server := api.NewTestServer(t)
 	defer server.Close()
 
