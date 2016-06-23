@@ -1,6 +1,10 @@
 package store
 
-import "time"
+import (
+	"crypto/rand"
+	"encoding/hex"
+	"time"
+)
 
 func Bool(b bool) *bool {
 	x := b
@@ -20,4 +24,17 @@ func String(s string) *string {
 func Time(t time.Time) *time.Time {
 	x := t
 	return &x
+}
+
+func Token() string {
+	return Randstr(13)
+}
+
+func Randstr(len int) string {
+	b := make([]byte, len)
+	if _, err := rand.Read(b); err != nil {
+		panic(err)
+	}
+
+	return hex.EncodeToString(b)[:len]
 }

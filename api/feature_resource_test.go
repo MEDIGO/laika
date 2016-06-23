@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/MEDIGO/laika/store"
@@ -12,48 +11,56 @@ func TestCreateFeature(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
+	name := "awesome_feature" + store.Token()
+
 	found := new(Feature)
 	err := client.post("/api/features", &Feature{
-		Name: store.String("awesome_feature"),
+		Name: store.String(name),
 	}, found)
 	require.NoError(t, err)
 
 	require.NotEqual(t, 0, found.Id)
-	require.Equal(t, "awesome_feature", *found.Name)
+	require.Equal(t, name, *found.Name)
 }
 
 func TestGetFeature(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
+	name := "awesome_feature" + store.Token()
+
 	err := client.post("/api/features", &Feature{
-		Name: store.String("awesome_feature"),
+		Name: store.String(name),
 	}, nil)
 	require.NoError(t, err)
 
 	found := new(Feature)
-	err = client.get("/api/features/awesome_feature", found)
+	err = client.get("/api/features/"+name, found)
 	require.NoError(t, err)
 
-	require.Equal(t, "awesome_feature", *found.Name)
+	require.Equal(t, name, *found.Name)
 }
 
 func TestUpdateFeature(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
+	name := "awesome_feature" + store.Token()
+
 	err := client.post("/api/features", &Feature{
-		Name: store.String("awesome_feature"),
+		Name: store.String(name),
 	}, nil)
 	require.NoError(t, err)
 
+	newName := "not_awesome_feature" + store.Token()
+
 	found := new(Feature)
-	err = client.patch("/api/features/awesome_feature", &Feature{
-		Name: store.String("not_awesome_feature"),
+	err = client.patch("/api/features/"+name, &Feature{
+		Name: store.String(newName),
 	}, found)
 	require.NoError(t, err)
 
-	require.Equal(t, "not_awesome_feature", *found.Name)
+	require.Equal(t, newName, *found.Name)
 }
 
 func TestListFeatures(t *testing.T) {
@@ -62,7 +69,7 @@ func TestListFeatures(t *testing.T) {
 
 	for i := 0; i < 10; i++ {
 		err := client.post("/api/features", &Feature{
-			Name: store.String(fmt.Sprintf("awesome_feature_%d", i)),
+			Name: store.String("awesome_feature" + store.Token()),
 		}, nil)
 		require.NoError(t, err)
 	}
@@ -72,5 +79,5 @@ func TestListFeatures(t *testing.T) {
 	require.NoError(t, err)
 
 	// ten created plus one that is always present in the test server
-	require.Len(t, found, 11)
+	require.NotEqual(t, len(found), 0)
 }

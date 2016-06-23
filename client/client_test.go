@@ -12,6 +12,8 @@ func TestClientIsEnabled(t *testing.T) {
 	server := api.NewTestServer(t)
 	defer server.Close()
 
+	feature := api.CreateFeatureStatus(t)
+
 	client, err := NewClient(Config{
 		Addr:        server.URL,
 		Username:    "root",
@@ -20,7 +22,7 @@ func TestClientIsEnabled(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	status := client.IsEnabled("test_feature", false)
+	status := client.IsEnabled(feature, false)
 	require.True(t, status)
 }
 
