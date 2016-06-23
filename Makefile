@@ -5,7 +5,7 @@ ifeq ($(CI), true)
 	dc = docker-compose -f docker-compose-ci.yml
 endif
 
-all: build deps lint test publish
+all: build deps lint migrate test publish
 
 build:
 	@echo "===> Building project..."
@@ -32,6 +32,10 @@ test:
 run:
 	@echo "===> Running services..."
 	@$(dc) up laika
+
+migrate:
+	@echo "===> Migrating DB..."
+	@$(dc) up migrate
 
 shell:
 	@echo "===> Opening shell..."

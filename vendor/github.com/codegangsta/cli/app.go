@@ -5,28 +5,11 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path/filepath"
-	"reflect"
-	"sort"
+	"path"
 	"time"
 )
 
-var (
-	changeLogURL                    = "https://github.com/codegangsta/cli/blob/master/CHANGELOG.md"
-	appActionDeprecationURL         = fmt.Sprintf("%s#deprecated-cli-app-action-signature", changeLogURL)
-	runAndExitOnErrorDeprecationURL = fmt.Sprintf("%s#deprecated-cli-app-runandexitonerror", changeLogURL)
-
-	contactSysadmin = "This is an error in the application.  Please contact the distributor of this application if this is not you."
-
-	errNonFuncAction = NewExitError("ERROR invalid Action type.  "+
-		fmt.Sprintf("Must be a func of type `cli.ActionFunc`.  %s", contactSysadmin)+
-		fmt.Sprintf("See %s", appActionDeprecationURL), 2)
-	errInvalidActionSignature = NewExitError("ERROR invalid Action signature.  "+
-		fmt.Sprintf("Must be `cli.ActionFunc`.  %s", contactSysadmin)+
-		fmt.Sprintf("See %s", appActionDeprecationURL), 2)
-)
-
-// App is the main structure of a cli application. It is recommended that
+// App is the main structure of a cli application. It is recomended that
 // an app be created with the cli.NewApp() function
 type App struct {
 	// The name of the program. Defaults to path.Base(os.Args[0])
@@ -35,8 +18,6 @@ type App struct {
 	HelpName string
 	// Description of the program.
 	Usage string
-	// Text to override the USAGE section of help
-	UsageText string
 	// Description of the program argument format.
 	ArgsUsage string
 	// Version of the program
@@ -49,27 +30,20 @@ type App struct {
 	EnableBashCompletion bool
 	// Boolean to hide built-in help command
 	HideHelp bool
-	// Boolean to hide built-in version flag and the VERSION section of help
+	// Boolean to hide built-in version flag
 	HideVersion bool
-	// Populate on app startup, only gettable throught method Categories()
-	categories CommandCategories
 	// An action to execute when the bash-completion flag is set
-	BashComplete BashCompleteFunc
+	BashComplete func(context *Context)
 	// An action to execute before any subcommands are run, but after the context is ready
 	// If a non-nil error is returned, no subcommands are run
-	Before BeforeFunc
+	Before func(context *Context) error
 	// An action to execute after any subcommands are run, but after the subcommand has finished
 	// It is run even if Action() panics
-	After AfterFunc
+	After func(context *Context) error
 	// The action to execute when no subcommands are specified
-	Action interface{}
-	// TODO: replace `Action: interface{}` with `Action: ActionFunc` once some kind
-	// of deprecation period has passed, maybe?
-
+	Action func(context *Context)
 	// Execute this function if the proper command cannot be found
-	CommandNotFound CommandNotFoundFunc
-	// Execute this function if an usage error occurs
-	OnUsageError OnUsageErrorFunc
+	CommandNotFound func(context *Context, command string)
 	// Compilation date
 	Compiled time.Time
 	// List of all authors who contributed
@@ -82,8 +56,6 @@ type App struct {
 	Email string
 	// Writer writer to write output to
 	Writer io.Writer
-	// Other custom info
-	Metadata map[string]interface{}
 }
 
 // Tries to find out when this binary was compiled.
@@ -99,10 +71,9 @@ func compileTime() time.Time {
 // Creates a new cli Application with some reasonable defaults for Name, Usage, Version and Action.
 func NewApp() *App {
 	return &App{
-		Name:         filepath.Base(os.Args[0]),
-		HelpName:     filepath.Base(os.Args[0]),
+		Name:         path.Base(os.Args[0]),
+		HelpName:     path.Base(os.Args[0]),
 		Usage:        "A new cli application",
-		UsageText:    "",
 		Version:      "0.0.0",
 		BashComplete: DefaultAppComplete,
 		Action:       helpCommand.Action,
@@ -126,12 +97,6 @@ func (a *App) Run(arguments []string) (err error) {
 	}
 	a.Commands = newCmds
 
-	a.categories = CommandCategories{}
-	for _, command := range a.Commands {
-		a.categories = a.categories.AddCommand(command.Category, command)
-	}
-	sort.Sort(a.categories)
-
 	// append help to commands
 	if a.Command(helpCommand.Name) == nil && !a.HideHelp {
 		a.Commands = append(a.Commands, helpCommand)
@@ -154,29 +119,23 @@ func (a *App) Run(arguments []string) (err error) {
 	set.SetOutput(ioutil.Discard)
 	err = set.Parse(arguments[1:])
 	nerr := normalizeFlags(a.Flags, set)
-	context := NewContext(a, set, nil)
 	if nerr != nil {
 		fmt.Fprintln(a.Writer, nerr)
+		context := NewContext(a, set, nil)
 		ShowAppHelp(context)
 		return nerr
 	}
+	context := NewContext(a, set, nil)
 
 	if checkCompletions(context) {
 		return nil
 	}
 
 	if err != nil {
-		if a.OnUsageError != nil {
-			err := a.OnUsageError(context, err, false)
-			if err != nil {
-				HandleExitCoder(err)
-			}
-			return err
-		} else {
-			fmt.Fprintf(a.Writer, "%s\n\n", "Incorrect Usage.")
-			ShowAppHelp(context)
-			return err
-		}
+		fmt.Fprintln(a.Writer, "Incorrect Usage.")
+		fmt.Fprintln(a.Writer)
+		ShowAppHelp(context)
+		return err
 	}
 
 	if !a.HideHelp && checkHelp(context) {
@@ -191,7 +150,8 @@ func (a *App) Run(arguments []string) (err error) {
 
 	if a.After != nil {
 		defer func() {
-			if afterErr := a.After(context); afterErr != nil {
+			afterErr := a.After(context)
+			if afterErr != nil {
 				if err != nil {
 					err = NewMultiError(err, afterErr)
 				} else {
@@ -202,12 +162,8 @@ func (a *App) Run(arguments []string) (err error) {
 	}
 
 	if a.Before != nil {
-		beforeErr := a.Before(context)
-		if beforeErr != nil {
-			fmt.Fprintf(a.Writer, "%v\n\n", beforeErr)
-			ShowAppHelp(context)
-			HandleExitCoder(beforeErr)
-			err = beforeErr
+		err := a.Before(context)
+		if err != nil {
 			return err
 		}
 	}
@@ -222,19 +178,12 @@ func (a *App) Run(arguments []string) (err error) {
 	}
 
 	// Run default Action
-	err = HandleAction(a.Action, context)
-
-	if err != nil {
-		HandleExitCoder(err)
-	}
-	return err
+	a.Action(context)
+	return nil
 }
 
-// DEPRECATED: Another entry point to the cli app, takes care of passing arguments and error handling
+// Another entry point to the cli app, takes care of passing arguments and error handling
 func (a *App) RunAndExitOnError() {
-	fmt.Fprintf(os.Stderr,
-		"DEPRECATED cli.App.RunAndExitOnError.  %s  See %s\n",
-		contactSysadmin, runAndExitOnErrorDeprecationURL)
 	if err := a.Run(os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -290,15 +239,10 @@ func (a *App) RunAsSubcommand(ctx *Context) (err error) {
 	}
 
 	if err != nil {
-		if a.OnUsageError != nil {
-			err = a.OnUsageError(context, err, true)
-			HandleExitCoder(err)
-			return err
-		} else {
-			fmt.Fprintf(a.Writer, "%s\n\n", "Incorrect Usage.")
-			ShowSubcommandHelp(context)
-			return err
-		}
+		fmt.Fprintln(a.Writer, "Incorrect Usage.")
+		fmt.Fprintln(a.Writer)
+		ShowSubcommandHelp(context)
+		return err
 	}
 
 	if len(a.Commands) > 0 {
@@ -315,7 +259,6 @@ func (a *App) RunAsSubcommand(ctx *Context) (err error) {
 		defer func() {
 			afterErr := a.After(context)
 			if afterErr != nil {
-				HandleExitCoder(err)
 				if err != nil {
 					err = NewMultiError(err, afterErr)
 				} else {
@@ -326,10 +269,8 @@ func (a *App) RunAsSubcommand(ctx *Context) (err error) {
 	}
 
 	if a.Before != nil {
-		beforeErr := a.Before(context)
-		if beforeErr != nil {
-			HandleExitCoder(beforeErr)
-			err = beforeErr
+		err := a.Before(context)
+		if err != nil {
 			return err
 		}
 	}
@@ -344,12 +285,9 @@ func (a *App) RunAsSubcommand(ctx *Context) (err error) {
 	}
 
 	// Run default Action
-	err = HandleAction(a.Action, context)
+	a.Action(context)
 
-	if err != nil {
-		HandleExitCoder(err)
-	}
-	return err
+	return nil
 }
 
 // Returns the named command on App. Returns nil if the command does not exist
@@ -361,16 +299,6 @@ func (a *App) Command(name string) *Command {
 	}
 
 	return nil
-}
-
-// Returnes the array containing all the categories with the commands they contain
-func (a *App) Categories() CommandCategories {
-	return a.categories
-}
-
-// VisibleFlags returns a slice of the Flags with Hidden=false
-func (a *App) VisibleFlags() []Flag {
-	return visibleFlags(a.Flags)
 }
 
 func (a *App) hasFlag(flag Flag) bool {
@@ -403,44 +331,4 @@ func (a Author) String() string {
 	}
 
 	return fmt.Sprintf("%v %v", a.Name, e)
-}
-
-// HandleAction uses ✧✧✧reflection✧✧✧ to figure out if the given Action is an
-// ActionFunc, a func with the legacy signature for Action, or some other
-// invalid thing.  If it's an ActionFunc or a func with the legacy signature for
-// Action, the func is run!
-func HandleAction(action interface{}, context *Context) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			switch r.(type) {
-			case error:
-				err = r.(error)
-			default:
-				err = NewExitError(fmt.Sprintf("ERROR unknown Action error: %v. See %s", r, appActionDeprecationURL), 2)
-			}
-		}
-	}()
-
-	if reflect.TypeOf(action).Kind() != reflect.Func {
-		return errNonFuncAction
-	}
-
-	vals := reflect.ValueOf(action).Call([]reflect.Value{reflect.ValueOf(context)})
-
-	if len(vals) == 0 {
-		fmt.Fprintf(os.Stderr,
-			"DEPRECATED Action signature.  Must be `cli.ActionFunc`.  %s  See %s\n",
-			contactSysadmin, appActionDeprecationURL)
-		return nil
-	}
-
-	if len(vals) > 1 {
-		return errInvalidActionSignature
-	}
-
-	if retErr, ok := reflect.ValueOf(vals[0]).Interface().(error); ok {
-		return retErr
-	}
-
-	return err
 }

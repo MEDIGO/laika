@@ -21,10 +21,10 @@
 			"revisionTime": "2015-10-27T12:58:02Z"
 		},
 		{
-			"checksumSHA1": "53rkuQL8yZu/tEc1pKwQoIvbrfo=",
+			"checksumSHA1": "QQrfFD89Xt7gSvmrTxK1ABLNZ/M=",
 			"path": "github.com/codegangsta/cli",
-			"revision": "ff84ca213d003974c6900fdbde23332111d661c6",
-			"revisionTime": "2016-05-01T14:34:16Z"
+			"revision": "c31a7975863e7810c92e2e288a9ab074f9a88f29",
+			"revisionTime": "2015-12-21T18:40:36Z"
 		},
 		{
 			"checksumSHA1": "5rPfda8jFccr3A6heL+JAmi9K9g=",
@@ -129,10 +129,10 @@
 			"revisionTime": "2015-10-28T09:42:44Z"
 		},
 		{
-			"checksumSHA1": "CqDegJjRb/31f7GFic4QqN5CM20=",
+			"checksumSHA1": "Y1gIGoR8z/lDf2j+vcH1eKZGDSk=",
 			"path": "github.com/rubenv/sql-migrate",
-			"revision": "8dc77fb3a659924fe7005d97c80c856287acccbb",
-			"revisionTime": "2016-01-30T13:43:45Z"
+			"revision": "6f4757563362064790a6687a6b60f182062c8634",
+			"revisionTime": "2016-06-20T08:32:29Z"
 		},
 		{
 			"checksumSHA1": "aoSLe79p1m0Lznfed0X0SoYofNg=",
@@ -222,6 +222,10 @@
 			"path": "gopkg.in/tylerb/graceful.v1",
 			"revision": "9a3d4236b03bb5d26f7951134d248f9d5510d599",
 			"revisionTime": "2016-03-20T21:35:05Z"
+		},
+		{
+			"path": "https://github.com/Masterminds/squirrel.git",
+			"revision": ""
 		}
 	],
 	"rootPath": "github.com/MEDIGO/laika"

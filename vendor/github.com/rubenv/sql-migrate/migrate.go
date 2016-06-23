@@ -29,6 +29,25 @@ var tableName = "gorp_migrations"
 var schemaName = ""
 var numberPrefixRegex = regexp.MustCompile(`^(\d+).*$`)
 
+// TxError is returned when any error is encountered during a database
+// transaction. It contains the relevant *Migration and notes it's Id in the
+// Error function output.
+type TxError struct {
+	Migration *Migration
+	Err       error
+}
+
+func newTxError(migration *PlannedMigration, err error) error {
+	return &TxError{
+		Migration: migration.Migration,
+		Err:       err,
+	}
+}
+
+func (e *TxError) Error() string {
+	return e.Err.Error() + " handling " + e.Migration.Id
+}
+
 // Set the name of the table used to store migration info.
 //
 // Should be called before any other call such as (Exec, ExecMax, ...).
@@ -62,7 +81,7 @@ type Migration struct {
 
 func (m Migration) Less(other *Migration) bool {
 	switch {
-	case m.isNumeric() && other.isNumeric():
+	case m.isNumeric() && other.isNumeric() && m.VersionInt() != other.VersionInt():
 		return m.VersionInt() < other.VersionInt()
 	case m.isNumeric() && !other.isNumeric():
 		return true
@@ -109,7 +128,7 @@ type MigrationRecord struct {
 var MigrationDialects = map[string]gorp.Dialect{
 	"sqlite3":  gorp.SqliteDialect{},
 	"postgres": gorp.PostgresDialect{},
-	"mysql":    gorp.MySQLDialect{"InnoDB", "UTF8"},
+	"mysql":    gorp.MySQLDialect{Engine: "InnoDB", Encoding: "UTF8"},
 	"mssql":    gorp.SqlServerDialect{},
 	"oci8":     gorp.OracleDialect{},
 }
@@ -266,14 +285,13 @@ func ExecMax(db *sql.DB, dialect string, m MigrationSource, dir MigrationDirecti
 	for _, migration := range migrations {
 		trans, err := dbMap.Begin()
 		if err != nil {
-			return applied, err
+			return applied, newTxError(migration, err)
 		}
 
 		for _, stmt := range migration.Queries {
-			_, err := trans.Exec(stmt)
-			if err != nil {
+			if _, err := trans.Exec(stmt); err != nil {
 				trans.Rollback()
-				return applied, err
+				return applied, newTxError(migration, err)
 			}
 		}
 
@@ -283,22 +301,21 @@ func ExecMax(db *sql.DB, dialect string, m MigrationSource, dir MigrationDirecti
 				AppliedAt: time.Now(),
 			})
 			if err != nil {
-				return applied, err
+				return applied, newTxError(migration, err)
 			}
 		} else if dir == Down {
 			_, err := trans.Delete(&MigrationRecord{
 				Id: migration.Id,
 			})
 			if err != nil {
-				return applied, err
+				return applied, newTxError(migration, err)
 			}
 		} else {
 			panic("Not possible")
 		}
 
-		err = trans.Commit()
-		if err != nil {
-			return applied, err
+		if err := trans.Commit(); err != nil {
+			return applied, newTxError(migration, err)
 		}
 
 		applied++

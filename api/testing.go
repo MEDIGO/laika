@@ -29,31 +29,8 @@ func NewTestServer(t *testing.T) *httptest.Server {
 	err = s.Migrate()
 	require.NoError(t, err)
 
-	err = s.Reset()
-	require.NoError(t, err)
-
-	environment := store.Environment{
-		Name: store.String("test"),
-	}
-	err = s.CreateEnvironment(&environment)
-	require.NoError(t, err)
-
-	feature := store.Feature{
-		Name: store.String("test_feature"),
-	}
-	err = s.CreateFeature(&feature)
-	require.NoError(t, err)
-
-	status := store.FeatureStatus{
-		Enabled:       store.Bool(true),
-		FeatureId:     store.Int(feature.Id),
-		EnvironmentId: store.Int(environment.Id),
-	}
-	err = s.CreateFeatureStatus(&status)
-	require.NoError(t, err)
-
 	user := store.User{
-		Username:     "awesome_username",
+		Username:     "test_username" + store.Token(),
 		PasswordHash: "awesome_password",
 	}
 	err = s.CreateUser(&user)
@@ -67,4 +44,44 @@ func NewTestServer(t *testing.T) *httptest.Server {
 	require.NoError(t, err)
 
 	return httptest.NewServer(server)
+}
+
+// CreateFeatureStatus creates an environment, a feature, and a freature status. Returns the name of the feature.
+func CreateFeatureStatus(t *testing.T) string {
+	s, err := store.NewStore(
+		os.Getenv("LAIKA_MYSQL_USERNAME"),
+		os.Getenv("LAIKA_MYSQL_PASSWORD"),
+		os.Getenv("LAIKA_MYSQL_HOST"),
+		os.Getenv("LAIKA_MYSQL_PORT"),
+		os.Getenv("LAIKA_MYSQL_DBNAME"),
+	)
+	require.NoError(t, err)
+
+	env, err := s.GetEnvironmentByName("test")
+	if err != nil {
+		environment := store.Environment{
+			Name: store.String("test"),
+		}
+		err = s.CreateEnvironment(&environment)
+		require.NoError(t, err)
+		env = &environment
+	}
+
+	feature := store.Feature{
+		Name: store.String("test_feature" + store.Token()),
+	}
+
+	err = s.CreateFeature(&feature)
+	require.NoError(t, err)
+
+	status := store.FeatureStatus{
+		Enabled:       store.Bool(true),
+		FeatureId:     store.Int(feature.Id),
+		EnvironmentId: store.Int(env.Id),
+	}
+
+	err = s.CreateFeatureStatus(&status)
+	require.NoError(t, err)
+
+	return *feature.Name
 }
