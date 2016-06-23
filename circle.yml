@@ -26,11 +26,3 @@ dependencies:
 test:
     override:
         - make all
-
-deployment:
-  hub:
-    branch: master
-    commands:
-      - docker build -t medigo/laika:latest .
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker push medigo/laika:latest

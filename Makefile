@@ -5,7 +5,7 @@ ifeq ($(CI), true)
 	dc = docker-compose -f docker-compose-ci.yml
 endif
 
-all: build deps lint test
+all: build deps lint test publish
 
 build:
 	@echo "===> Building project..."
@@ -36,6 +36,12 @@ run:
 shell:
 	@echo "===> Opening shell..."
 	@$(dc) run laika sh
+
+publish:
+	@echo "===> Publishing docker image..."
+	@docker build -t medigo/laika:latest .
+	@docker login -e $(DOCKER_EMAIL) -u $(DOCKER_USER) -p $(DOCKER_PASS)
+	@docker push medigo/laika:latest
 
 deploy:
 	@echo "Deploying docker image..."
