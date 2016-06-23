@@ -5,11 +5,8 @@ import (
 	"time"
 
 	"github.com/DataDog/datadog-go/statsd"
-	"github.com/MEDIGO/laika/store"
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // LogMiddleware logs information about the current request.
@@ -48,21 +45,4 @@ func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
 			return next(c)
 		}
 	}
-}
-
-// AuthMiddleware checks login credentials.
-func AuthMiddleware(rootUsername, rootPassword string, s store.Store) echo.MiddlewareFunc {
-	return middleware.BasicAuth(func(username, password string) bool {
-		if username == rootUsername {
-			return password == rootPassword
-		}
-
-		user, err := s.GetUserByUsername(username)
-		if err != nil {
-			log.Error("Failed to retrieve user: ", err)
-			return false
-		}
-
-		return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil
-	})
 }
