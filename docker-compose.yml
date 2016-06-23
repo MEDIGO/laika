@@ -19,23 +19,6 @@ laika:
     volumes:
         - ./:/go/src/github.com/MEDIGO/laika
 
-migrate:
-    build: .
-    command: go run main.go migrate
-    links:
-        - mysql
-    ports:
-        - "8000:8000"
-    environment:
-        LAIKA_MYSQL_HOST: mysql
-        LAIKA_MYSQL_PORT: 3306
-        LAIKA_MYSQL_USERNAME: root
-        LAIKA_MYSQL_PASSWORD: root
-        LAIKA_MYSQL_DBNAME: laika
-    env_file: .env
-    volumes:
-        - ./:/go/src/github.com/MEDIGO/laika
-
 mysql:
     image: mysql:5
     ports:
