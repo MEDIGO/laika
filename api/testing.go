@@ -36,6 +36,14 @@ func NewTestServer(t *testing.T) *httptest.Server {
 	err = s.CreateUser(&user)
 	require.NoError(t, err)
 
+	if _, err = s.GetEnvironmentByName("test"); err != nil {
+		environment := store.Environment{
+			Name: store.String("test"),
+		}
+		err = s.CreateEnvironment(&environment)
+		require.NoError(t, err)
+	}
+
 	server, err := NewServer(ServerConfig{
 		Store:        s,
 		RootUsername: "root",
@@ -58,14 +66,7 @@ func CreateFeatureStatus(t *testing.T) string {
 	require.NoError(t, err)
 
 	env, err := s.GetEnvironmentByName("test")
-	if err != nil {
-		environment := store.Environment{
-			Name: store.String("test"),
-		}
-		err = s.CreateEnvironment(&environment)
-		require.NoError(t, err)
-		env = &environment
-	}
+	require.NoError(t, err)
 
 	feature := store.Feature{
 		Name: store.String("test_feature" + store.Token()),
