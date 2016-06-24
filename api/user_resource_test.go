@@ -11,7 +11,7 @@ func TestCreateUser(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
-	username := "new_awesome_user" + store.Token()
+	username := store.Token()
 
 	found := new(User)
 	err := client.post("/api/users", &User{
@@ -29,7 +29,7 @@ func TestGetUserByUsername(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
-	username := "new_awesome_user" + store.Token()
+	username := store.Token()
 
 	err := client.post("/api/users", &User{
 		Username: username,

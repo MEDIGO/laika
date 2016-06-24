@@ -11,7 +11,7 @@ func TestCreateFeature(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
-	name := "awesome_feature" + store.Token()
+	name := store.Token()
 
 	found := new(Feature)
 	err := client.post("/api/features", &Feature{
@@ -27,7 +27,7 @@ func TestGetFeature(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
-	name := "awesome_feature" + store.Token()
+	name := store.Token()
 
 	err := client.post("/api/features", &Feature{
 		Name: store.String(name),
@@ -45,14 +45,14 @@ func TestUpdateFeature(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
-	name := "awesome_feature" + store.Token()
+	name := store.Token()
 
 	err := client.post("/api/features", &Feature{
 		Name: store.String(name),
 	}, nil)
 	require.NoError(t, err)
 
-	newName := "not_awesome_feature" + store.Token()
+	newName := store.Token()
 
 	found := new(Feature)
 	err = client.patch("/api/features/"+name, &Feature{
@@ -69,7 +69,7 @@ func TestListFeatures(t *testing.T) {
 
 	for i := 0; i < 10; i++ {
 		err := client.post("/api/features", &Feature{
-			Name: store.String("awesome_feature" + store.Token()),
+			Name: store.String(store.Token()),
 		}, nil)
 		require.NoError(t, err)
 	}

@@ -11,7 +11,7 @@ func TestCreateEnvironment(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
-	name := "prod" + store.Token()
+	name := store.Token()
 
 	found := new(Environment)
 	err := client.post("/api/environments", &Feature{
@@ -27,7 +27,7 @@ func TestGetEnvironment(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
-	name := "prod" + store.Token()
+	name := store.Token()
 
 	err := client.post("/api/environments", &Feature{
 		Name: store.String(name),
@@ -45,14 +45,14 @@ func TestUpdateEnvironment(t *testing.T) {
 	client := NewTestClient(t, "root", "root")
 	defer client.Close()
 
-	name := "prod" + store.Token()
+	name := store.Token()
 
 	err := client.post("/api/environments", &Feature{
 		Name: store.String(name),
 	}, nil)
 	require.NoError(t, err)
 
-	newName := "not_prod" + store.Token()
+	newName := store.Token()
 
 	found := new(Environment)
 	err = client.patch("/api/environments/"+name, &Feature{
@@ -69,7 +69,7 @@ func TestListEnvironment(t *testing.T) {
 
 	for i := 0; i < 10; i++ {
 		err := client.post("/api/environments", &Feature{
-			Name: store.String("prod_" + store.Token()),
+			Name: store.String(store.Token()),
 		}, nil)
 		require.NoError(t, err)
 	}
