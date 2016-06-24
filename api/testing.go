@@ -29,18 +29,44 @@ func NewTestServer(t *testing.T) *httptest.Server {
 	err = s.Migrate()
 	require.NoError(t, err)
 
-	user := store.User{
-		Username:     "test_username" + store.Token(),
-		PasswordHash: "awesome_password",
+	if _, err = s.GetUserByUsername("awesome_username"); err != nil {
+		user := store.User{
+			Username:     "awesome_username",
+			PasswordHash: "awesome_password",
+		}
+		err = s.CreateUser(&user)
+		require.NoError(t, err)
 	}
-	err = s.CreateUser(&user)
-	require.NoError(t, err)
 
-	if _, err = s.GetEnvironmentByName("test"); err != nil {
+	env, err := s.GetEnvironmentByName("test")
+	if err != nil {
 		environment := store.Environment{
 			Name: store.String("test"),
 		}
 		err = s.CreateEnvironment(&environment)
+		require.NoError(t, err)
+
+		env = &environment
+	}
+
+	feat, err := s.GetFeatureByName("awesome_feature")
+	if err != nil {
+		feature := store.Feature{
+			Name: store.String("awesome_feature"),
+		}
+		err = s.CreateFeature(&feature)
+		require.NoError(t, err)
+
+		feat = &feature
+	}
+
+	if _, err = s.GetFeatureStatus(feat.Id, env.Id); err != nil {
+		featureStatus := store.FeatureStatus{
+			Enabled:       store.Bool(true),
+			FeatureId:     store.Int(feat.Id),
+			EnvironmentId: store.Int(env.Id),
+		}
+		err = s.CreateFeatureStatus(&featureStatus)
 		require.NoError(t, err)
 	}
 
@@ -52,37 +78,4 @@ func NewTestServer(t *testing.T) *httptest.Server {
 	require.NoError(t, err)
 
 	return httptest.NewServer(server)
-}
-
-// CreateFeatureStatus creates an environment, a feature, and a freature status. Returns the name of the feature.
-func CreateFeatureStatus(t *testing.T) string {
-	s, err := store.NewStore(
-		os.Getenv("LAIKA_MYSQL_USERNAME"),
-		os.Getenv("LAIKA_MYSQL_PASSWORD"),
-		os.Getenv("LAIKA_MYSQL_HOST"),
-		os.Getenv("LAIKA_MYSQL_PORT"),
-		os.Getenv("LAIKA_MYSQL_DBNAME"),
-	)
-	require.NoError(t, err)
-
-	env, err := s.GetEnvironmentByName("test")
-	require.NoError(t, err)
-
-	feature := store.Feature{
-		Name: store.String("test_feature" + store.Token()),
-	}
-
-	err = s.CreateFeature(&feature)
-	require.NoError(t, err)
-
-	status := store.FeatureStatus{
-		Enabled:       store.Bool(true),
-		FeatureId:     store.Int(feature.Id),
-		EnvironmentId: store.Int(env.Id),
-	}
-
-	err = s.CreateFeatureStatus(&status)
-	require.NoError(t, err)
-
-	return *feature.Name
 }
