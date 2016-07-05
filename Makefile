@@ -62,7 +62,7 @@ publish:
 
 deploy:
 	@echo "Deploying docker image..."
-	@docker pull quay.io/medigo/laika:$(commit)
+	@docker pull medigo/laika:$(commit)
 	@aws ecs register-task-definition --family $(ECS_FAMILY) --container-definitions '$(shell ./ecs-container-definitions.sh)'
 	@aws ecs update-service --service $(ECS_FAMILY) --task-definition $(ECS_FAMILY)
 .PHONY: deploy

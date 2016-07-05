@@ -35,7 +35,7 @@ cat << EOM
        ],
        "name": "laika",
        "mountPoints": [],
-       "image": "quay.io/medigo/laika:$(git rev-parse HEAD)",
+       "image": "medigo/laika:$(git rev-parse HEAD)",
        "cpu": 128,
        "portMappings": [
            {
