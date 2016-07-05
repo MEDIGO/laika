@@ -22,10 +22,6 @@ func main() {
 	app := cli.NewApp()
 	app.Author = "MEDIGO GmbH"
 	app.Flags = []cli.Flag{
-		cli.BoolFlag{
-			Name:  "migrate",
-			Usage: "Migrates the store schema to the latest available version",
-		},
 		cli.StringFlag{
 			Name:   "port",
 			Value:  "8000",
@@ -103,7 +99,7 @@ func main() {
 	}
 	app.Commands = []cli.Command{
 		{
-			Name:  "laika",
+			Name:  "run",
 			Usage: "Runs laika's feature flag service",
 			Action: func(c *cli.Context) {
 				store, err := store.NewStore(

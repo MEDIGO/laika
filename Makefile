@@ -6,7 +6,7 @@ ifeq ($(CI), true)
 	dc = docker-compose -f docker-compose-ci.yml
 endif
 
-all: build deps lint migrate test publish
+all: build vendor lint migrate test publish
 .PHONY: all
 
 build:
@@ -14,11 +14,11 @@ build:
 	@$(dc) build
 .PHONY: build
 
-deps:
+vendor:
 	@echo "Installing dependencies..."
 	@$(dc) run laika npm install
 	@$(dc) run laika bower --allow-root install
-.PHONY: deps
+.PHONY: vendor
 
 schema:
 	@echo "Generating schema..."
@@ -36,7 +36,7 @@ test:
 	@$(dc) run laika go test $(pkgs)
 .PHONY: test
 
-run:
+up:
 	@echo "Running services..."
 	@$(dc) up laika
 .PHONY: run
@@ -53,7 +53,6 @@ shell:
 
 publish:
 	@echo "Publishing docker image..."
-	@docker build -t medigo/laika .
 	@docker tag -f medigo/laika:latest medigo/laika:$(commit)
 	@docker login -e $(DOCKER_EMAIL) -u $(DOCKER_USER) -p $(DOCKER_PASS)
 	@docker push medigo/laika:latest
@@ -65,6 +64,7 @@ deploy:
 	@docker pull medigo/laika:$(commit)
 	@aws ecs register-task-definition --family $(ECS_FAMILY) --container-definitions '$(shell ./ecs-container-definitions.sh)'
 	@aws ecs update-service --service $(ECS_FAMILY) --task-definition $(ECS_FAMILY)
+	@aws ecs wait services-stable --services $(ECS_FAMILY)
 .PHONY: deploy
 
 clean:

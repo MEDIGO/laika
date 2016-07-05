@@ -11,6 +11,7 @@ WORKDIR /go/src/github.com/MEDIGO/laika
 COPY package.json /go/src/github.com/MEDIGO/laika/
 RUN npm install
 
+COPY .bowerrc /go/src/github.com/MEDIGO/laika/
 COPY bower.json /go/src/github.com/MEDIGO/laika/
 RUN bower --allow-root install
 
@@ -18,4 +19,4 @@ COPY . /go/src/github.com/MEDIGO/laika
 
 RUN go get .
 
-CMD [“laika”]
+CMD [“laika”, "run"]

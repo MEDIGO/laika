@@ -45,8 +45,10 @@ cat << EOM
            }
        ],
        "command": [
-           "laika"
+           "laika",
+           "run"
        ],
+       "workingDirectory": "/go/src/github.com/MEDIGO/laika",
        "memory": 128,
        "essential": true,
        "volumesFrom": []
