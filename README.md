@@ -68,6 +68,17 @@ func main() {
 }
 ```
 
+## Rolling out new Users
+Create a new user for authentication within Laika
+```
+curl -X POST -H "Content-Type: application/json" -d '{"username":"<NEW_LAIKA_USERNAME>","password":"<NEW_LAIKA_USERNAME>"}' <LAIKA_HOST> --user <LAIKA_ROOT_USERNAME>:<LAIKA_ROOT_PASSWORD>
+```
+
+Update your projects to use the new credentials.
+
+Remove the previous user.
+
+
 ## Setup
 
 Setup docker and docker-compose in your machine (https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/)
