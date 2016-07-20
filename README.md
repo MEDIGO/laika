@@ -89,20 +89,20 @@ If you already have a mysql database set up, you can try out Laika simply by run
 docker run medigo/laika:latest laika run --mysql-host='<MYSQL_HOST>' --mysql-username='<MYSQL_USERNAME>' --mysql-password='<MYSQL_PASSWORD>'
 ```
 
-Otherwise, follow the steps below.
+Otherwise, follow the steps below:
 
-Clone the Laika project, open Docker Quickstart Terminal and go to the project directory.
+- Clone the Laika project, open Docker Quickstart Terminal and go to the project directory.
 
-Create a .env file with a username and password
+- Create a .env file to set up a root user
 
 ```
 LAIKA_ROOT_USERNAME=myusername
 LAIKA_ROOT_PASSWORD=mypassword
 ```
 
-Build the application by running `make build` inside its directory.
+- Build the application by running `make build` inside its directory.
 
-Finally, you can run the application using the `make up` command.
+- Finally, you can run the application using the `make up` command.
 
 After Laika is running, open a browser and enter the IP of your docker machine (get it by running `docker-machine ip`).
 
