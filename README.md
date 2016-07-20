@@ -71,7 +71,7 @@ func main() {
 ## Rolling out new Users
 Create a new user for authentication within Laika
 ```
-curl -X POST -H "Content-Type: application/json" -d '{"username":"<NEW_LAIKA_USERNAME>","password":"<NEW_LAIKA_USERNAME>"}' <LAIKA_HOST> --user <LAIKA_ROOT_USERNAME>:<LAIKA_ROOT_PASSWORD>
+curl -X POST -H "Content-Type: application/json" -d '{"username":"<NEW_LAIKA_USERNAME>","password":"<NEW_LAIKA_PASSWORD>"}' <LAIKA_HOST> --user <LAIKA_ROOT_USERNAME>:<LAIKA_ROOT_PASSWORD>
 ```
 
 Update your projects to use the new credentials.
@@ -82,6 +82,14 @@ Remove the previous user.
 ## Setup
 
 Setup docker and docker-compose in your machine (https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/)
+
+If you already have a mysql database set up, you can try out Laika simply by running
+
+```
+docker run medigo/laika:latest laika run --mysql-host='<MYSQL_HOST>' --mysql-username='<MYSQL_USERNAME>' --mysql-password='<MYSQL_PASSWORD>'
+```
+
+Otherwise, follow the steps below.
 
 Clone the Laika project, open Docker Quickstart Terminal and go to the project directory.
 
@@ -94,7 +102,7 @@ LAIKA_ROOT_PASSWORD=mypassword
 
 Build the application by running `make build` inside its directory.
 
-Finally, you can run the application using the `make run` command.
+Finally, you can run the application using the `make up` command.
 
 After Laika is running, open a browser and enter the IP of your docker machine (get it by running `docker-machine ip`).
 
