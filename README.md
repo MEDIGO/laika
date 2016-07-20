@@ -79,17 +79,19 @@ Update your projects to use the new credentials.
 Remove the previous user.
 
 
-## Setup
+## Run with Docker
 
-Setup docker and docker-compose in your machine (https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/)
-
-If you already have a mysql database set up, you can try out Laika simply by running
+If you already have a mysql database set up, you can try out Laika simply setting up docker and docker-compose in your machine (https://golang.org/doc/install, https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/) and running
 
 ```
 docker run medigo/laika:latest laika run --mysql-host='<MYSQL_HOST>' --mysql-username='<MYSQL_USERNAME>' --mysql-password='<MYSQL_PASSWORD>'
 ```
 
-Otherwise, follow the steps below:
+Some sample data will be created the first time the command is run.
+
+## Build and Run
+
+- Set up Go, docker and docker-compose in your machine (https://golang.org/doc/install, https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/)
 
 - Clone the Laika project, open Docker Quickstart Terminal and go to the project directory.
 
