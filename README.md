@@ -84,7 +84,7 @@ Remove the previous user.
 If you already have a mysql database set up, you can try out Laika simply setting up docker and docker-compose in your machine (https://golang.org/doc/install, https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/) and running
 
 ```
-docker run medigo/laika:latest laika run --mysql-host='<MYSQL_HOST>' --mysql-username='<MYSQL_USERNAME>' --mysql-password='<MYSQL_PASSWORD>'
+docker run medigo/laika:latest laika run --mysql-host='<MYSQL_HOST>' --mysql-username='<MYSQL_USERNAME>' --mysql-password='<MYSQL_PASSWORD>' --mysql-dbname='<MYSQL_DBNAME>'
 ```
 
 Some sample data will be created the first time the command is run.
