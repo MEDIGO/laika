@@ -103,6 +103,8 @@ LAIKA_ROOT_PASSWORD=mypassword
 
 Login by using root or user credentials.
 
+## Creating first environments
+
 Currently, when you create a new feature on the web page, you will not be able to enable/disable it yet as there are no environments. To create environments, you have to add them manually to the database. To do so you can use a software like Sequel Pro and insert the following on the corresponding fields:
 
 ```
