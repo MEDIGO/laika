@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/DataDog/datadog-go/statsd"
-	"github.com/labstack/echo"
-
 	"github.com/MEDIGO/laika/notifier"
 	"github.com/MEDIGO/laika/store"
+	log "github.com/Sirupsen/logrus"
+	"github.com/labstack/echo"
 )
 
 type Feature struct {
@@ -232,9 +232,11 @@ func (r *FeatureResource) Update(c echo.Context) error {
 				return InternalServerError(c, err)
 			}
 
-			if err := r.notifier.NotifyStatusChange(*feature.Name, in.Status[*environment.Name], *environment.Name); err != nil {
-				return InternalServerError(c, err)
-			}
+			go func(feature string, status bool, environment string) {
+				if err := r.notifier.NotifyStatusChange(feature, status, environment); err != nil {
+					log.Error("failed to notify feature status change: ", err)
+				}
+			}(*feature.Name, in.Status[*environment.Name], *environment.Name)
 		}
 	}
 
