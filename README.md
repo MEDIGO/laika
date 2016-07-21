@@ -86,12 +86,9 @@ Remove the previous user.
 - Launch the server `docker run --rm --name=laika -p 8000:8000 -e LAIKA_ROOT_USERNAME=foo -e LAIKA_ROOT_PASSWORD=bar --link laikamysql:mysql medigo/laika:latest laika run`
 - Open your browser to http://localhost:8000
 
-## Build and Run
+## Run with docker-compose
 
-- Set up Go, docker and docker-compose in your machine (https://golang.org/doc/install, https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/)
-
-- Clone the Laika project, open Docker Quickstart Terminal and go to the project directory.
-
+- Make sure you have docker-compose installed on your machine: https://docs.docker.com/compose/install/
 - Create a .env file to set up a root user
 
 ```
@@ -99,11 +96,10 @@ LAIKA_ROOT_USERNAME=myusername
 LAIKA_ROOT_PASSWORD=mypassword
 ```
 
-- Build the application by running `make build` inside its directory.
-
+- Build the application by running `make build`
+- Migrate the databse by running `make migrate`
 - Finally, you can run the application using the `make up` command.
-
-After Laika is running, open a browser and enter the IP of your docker machine (get it by running `docker-machine ip`).
+- Open your browser to http://localhost:8000
 
 Login by using root or user credentials.
 
