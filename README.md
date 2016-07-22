@@ -81,20 +81,14 @@ Remove the previous user.
 
 ## Run with Docker
 
-If you already have a mysql database set up, you can try out Laika simply setting up docker and docker-compose in your machine (https://golang.org/doc/install, https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/) and running
+- Create a MySQL database: `docker run --name=laikamysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laika -d mysql`
+- Run migration to set up database schema: `docker run --rm --name=laika -e LAIKA_ROOT_USERNAME=foo -e LAIKA_ROOT_PASSWORD=bar --link laikamysql:mysql medigo/laika:latest laika migrate`
+- Launch the server `docker run --rm --name=laika -p 8000:8000 -e LAIKA_ROOT_USERNAME=foo -e LAIKA_ROOT_PASSWORD=bar --link laikamysql:mysql medigo/laika:latest laika run`
+- Open your browser to http://localhost:8000
 
-```
-docker run medigo/laika:latest laika run --mysql-host='<MYSQL_HOST>' --mysql-username='<MYSQL_USERNAME>' --mysql-password='<MYSQL_PASSWORD>' --mysql-dbname='<MYSQL_DBNAME>'
-```
+## Run with docker-compose
 
-Some sample data will be created the first time the command is run.
-
-## Build and Run
-
-- Set up Go, docker and docker-compose in your machine (https://golang.org/doc/install, https://docs.docker.com/mac/ and https://docs.docker.com/compose/install/)
-
-- Clone the Laika project, open Docker Quickstart Terminal and go to the project directory.
-
+- Make sure you have docker-compose installed on your machine: https://docs.docker.com/compose/install/
 - Create a .env file to set up a root user
 
 ```
@@ -102,13 +96,14 @@ LAIKA_ROOT_USERNAME=myusername
 LAIKA_ROOT_PASSWORD=mypassword
 ```
 
-- Build the application by running `make build` inside its directory.
-
+- Build the application by running `make build`
+- Migrate the databse by running `make migrate`
 - Finally, you can run the application using the `make up` command.
-
-After Laika is running, open a browser and enter the IP of your docker machine (get it by running `docker-machine ip`).
+- Open your browser to http://localhost:8000
 
 Login by using root or user credentials.
+
+## Creating first environments
 
 Currently, when you create a new feature on the web page, you will not be able to enable/disable it yet as there are no environments. To create environments, you have to add them manually to the database. To do so you can use a software like Sequel Pro and insert the following on the corresponding fields:
 
