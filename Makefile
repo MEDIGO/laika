@@ -1,5 +1,4 @@
 pkgs := . ./api/... ./client/... ./notifier/... ./store/...
-commit := $(shell git rev-parse HEAD)
 
 dc = docker-compose
 ifeq ($(CI), true)
@@ -50,22 +49,6 @@ shell:
 	@echo "Opening shell..."
 	@$(dc) run laika sh
 .PHONY: shell
-
-publish:
-	@echo "Publishing docker image..."
-	@docker tag -f medigo/laika:latest medigo/laika:$(commit)
-	@docker login -e $(DOCKER_EMAIL) -u $(DOCKER_USER) -p $(DOCKER_PASS)
-	@docker push medigo/laika:latest
-	@docker push medigo/laika:$(commit)
-.PHONY: publish
-
-deploy:
-	@echo "Deploying docker image..."
-	@docker pull medigo/laika:$(commit)
-	@aws ecs register-task-definition --family $(ECS_FAMILY) --container-definitions '$(shell ./ecs-container-definitions.sh)'
-	@aws ecs update-service --service $(ECS_FAMILY) --task-definition $(ECS_FAMILY)
-	@aws ecs wait services-stable --services $(ECS_FAMILY)
-.PHONY: deploy
 
 clean:
 	@echo "Cleaning environment..."

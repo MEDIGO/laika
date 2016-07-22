@@ -14,8 +14,11 @@ test:
         - make
 
 deployment:
-    publish:
+    hub:
         branch: master
         owner: medigo
         commands:
-            - make publish
+            - docker tag -f medigo/laika:latest medigo/laika:$(CIRCLE_SHA1)
+            - docker login -e $(DOCKER_EMAIL) -u $(DOCKER_USER) -p $(DOCKER_PASS)
+            - docker push medigo/laika:latest
+            - docker push medigo/laika:$(CIRCLE_SHA1)
