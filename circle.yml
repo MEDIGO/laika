@@ -11,4 +11,11 @@ dependencies:
 
 test:
     override:
-        - make all
+        - make
+
+deployment:
+    publish:
+        branch: master
+        owner: medigo
+        commands:
+            - make publish

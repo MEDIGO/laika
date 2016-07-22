@@ -6,7 +6,7 @@ ifeq ($(CI), true)
 	dc = docker-compose -f docker-compose-ci.yml
 endif
 
-all: build vendor lint migrate test publish
+all: build vendor lint migrate test
 .PHONY: all
 
 build:
