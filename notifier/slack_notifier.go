@@ -4,49 +4,52 @@ import (
 	"github.com/nlopes/slack"
 )
 
+// SlackNotifier is a notifier that send messages to Slack.
 type SlackNotifier struct {
-	token   string
+	client  *slack.Client
 	channel string
 }
 
+// NewSlackNotifier creates a new SlackNotifier
 func NewSlackNotifier(token, channel string) Notifier {
-	return &SlackNotifier{token, channel}
+	return &SlackNotifier{slack.New(token), channel}
 }
 
-func (n *SlackNotifier) NotifyStatusChange(featureName string, status bool, environmentName string) error {
-	statusChange := "disabled"
+// NotifyStatusChange notifies a change in the status of a flag.
+func (n *SlackNotifier) NotifyStatusChange(feature string, status bool, environment string) error {
+	text := "disabled"
 	color := "#e74c3c"
+
 	if status {
-		statusChange = "enabled"
+		text = "enabled"
 		color = "#27ae60"
 	}
 
-	api := slack.New(n.token)
-	params := slack.PostMessageParameters{}
 	attachment := slack.Attachment{
 		Title: "Laika Flag Update!",
 		Color: color,
 		Fields: []slack.AttachmentField{
 			slack.AttachmentField{
 				Title: "Flag",
-				Value: featureName,
+				Value: feature,
 				Short: false,
 			},
 			slack.AttachmentField{
 				Title: "Environment",
-				Value: environmentName,
+				Value: environment,
 				Short: true,
 			},
 			slack.AttachmentField{
 				Title: "Status Change",
-				Value: statusChange,
+				Value: text,
 				Short: true,
 			},
 		},
 	}
 
-	params.Attachments = []slack.Attachment{attachment}
-
-	_, _, err := api.PostMessage(n.channel, "WOOF! WOFF! ARH-WOOOOOOOO!", params)
+	_, _, err := n.client.PostMessage(n.channel, "WOOF! WOFF! ARH-WOOOOOOOO!", slack.PostMessageParameters{
+		AsUser:      true,
+		Attachments: []slack.Attachment{attachment},
+	})
 	return err
 }
