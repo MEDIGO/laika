@@ -25,12 +25,8 @@ cat << EOM
                "value": "$ECS_LAIKA_ROOT_PASSWORD"
            },
            {
-               "name": "LAIKA_SLACK_TOKEN",
-               "value": "$ECS_LAIKA_SLACK_TOKEN"
-           },
-           {
-               "name": "LAIKA_SLACK_CHANNEL",
-               "value": "$ECS_LAIKA_SLACK_CHANNEL"
+               "name": "LAIKA_SLACK_WEBHOOK_URL",
+               "value": "$ECS_LAIKA_SLACK_WEBHOOK_URL"
            }
        ],
        "name": "laika",

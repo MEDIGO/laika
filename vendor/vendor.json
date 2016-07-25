@@ -103,6 +103,12 @@
 			"revisionTime": "2015-08-10T15:23:59Z"
 		},
 		{
+			"checksumSHA1": "WHWY3/8sJGR6jMzVG4c7nb7rDG0=",
+			"path": "github.com/lytics/slackhook",
+			"revision": "a52fd449b27dcdd75cf069c5d6ac5749653d801a",
+			"revisionTime": "2016-06-30T15:45:40Z"
+		},
+		{
 			"checksumSHA1": "3kTYMZ8sngJDk+jDIR3UkJmpmKc=",
 			"origin": "github.com/labstack/echo/vendor/github.com/mattn/go-colorable",
 			"path": "github.com/mattn/go-colorable",

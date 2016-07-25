@@ -1,18 +1,15 @@
 package notifier
 
-import (
-	"github.com/nlopes/slack"
-)
+import "github.com/lytics/slackhook"
 
 // SlackNotifier is a notifier that send messages to Slack.
 type SlackNotifier struct {
-	client  *slack.Client
-	channel string
+	client *slackhook.Client
 }
 
-// NewSlackNotifier creates a new SlackNotifier
-func NewSlackNotifier(token, channel string) Notifier {
-	return &SlackNotifier{slack.New(token), channel}
+// NewSlackNotifier creates a new SlackNotifier.
+func NewSlackNotifier(url string) Notifier {
+	return &SlackNotifier{slackhook.New(url)}
 }
 
 // NotifyStatusChange notifies a change in the status of a flag.
@@ -25,31 +22,30 @@ func (n *SlackNotifier) NotifyStatusChange(feature string, status bool, environm
 		color = "#27ae60"
 	}
 
-	attachment := slack.Attachment{
-		Title: "Laika Flag Update!",
-		Color: color,
-		Fields: []slack.AttachmentField{
-			slack.AttachmentField{
-				Title: "Flag",
-				Value: feature,
-				Short: false,
-			},
-			slack.AttachmentField{
-				Title: "Environment",
-				Value: environment,
-				Short: true,
-			},
-			slack.AttachmentField{
-				Title: "Status Change",
-				Value: text,
-				Short: true,
+	return n.client.Send(&slackhook.Message{
+		Text: "WOOF! WOFF! ARH-WOOOOOOOO!",
+		Attachments: []*slackhook.Attachment{
+			&slackhook.Attachment{
+				Title: "Laika Flag Update!",
+				Color: color,
+				Fields: []slackhook.Field{
+					slackhook.Field{
+						Title: "Flag",
+						Value: feature,
+						Short: false,
+					},
+					slackhook.Field{
+						Title: "Environment",
+						Value: environment,
+						Short: true,
+					},
+					slackhook.Field{
+						Title: "Status",
+						Value: text,
+						Short: true,
+					},
+				},
 			},
 		},
-	}
-
-	_, _, err := n.client.PostMessage(n.channel, "WOOF! WOFF! ARH-WOOOOOOOO!", slack.PostMessageParameters{
-		AsUser:      true,
-		Attachments: []slack.Attachment{attachment},
 	})
-	return err
 }

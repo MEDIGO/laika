@@ -87,14 +87,9 @@ func main() {
 			EnvVar: "LAIKA_ROOT_PASSWORD",
 		},
 		cli.StringFlag{
-			Name:   "slack-token",
-			Usage:  "Slack API Token",
-			EnvVar: "LAIKA_SLACK_TOKEN",
-		},
-		cli.StringFlag{
-			Name:   "slack-channel",
-			Usage:  "Slack Channel",
-			EnvVar: "LAIKA_SLACK_CHANNEL",
+			Name:   "slack-webhook-url",
+			Usage:  "Slack webhook URL",
+			EnvVar: "LAIKA_SLACK_WEBHOOK_URL",
 		},
 	}
 	app.Commands = []cli.Command{
@@ -119,7 +114,7 @@ func main() {
 					log.Fatal("Failed to create Statsd client: ", err)
 				}
 
-				notifier := notifier.NewSlackNotifier(c.GlobalString("slack-token"), c.GlobalString("slack-channel"))
+				notifier := notifier.NewSlackNotifier(c.GlobalString("slack-webhook-url"))
 
 				server, err := api.NewServer(api.ServerConfig{
 					RootUsername: c.GlobalString("root-username"),
