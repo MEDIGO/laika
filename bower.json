@@ -1,8 +1,8 @@
 {
   "name": "laika",
-  "homepage": "https://github.com/mbernardes/laika",
+  "homepage": "https://github.com/MEDIGO/laika",
   "authors": [
-    "Miguel Bernardes <miguel.bernardes@medigo.com>"
+    "MEDIGO GmbH"
   ],
   "dependencies": {
     "iron-ajax": "git://github.com/PolymerElements/iron-ajax.git#^1.1.1",

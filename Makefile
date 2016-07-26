@@ -16,19 +16,18 @@ build:
 
 vendor:
 	@echo "Installing dependencies..."
-	@$(dc) run laika npm install
-	@$(dc) run laika bower --allow-root install
+	@$(dc) run laika bower install --allow-root
 .PHONY: vendor
 
 schema:
 	@echo "Generating schema..."
-	@go-bindata -pkg schema -o store/schema/schema.go -ignore \.go store/schema/...
+	@$(dc) run laika go-bindata -pkg schema -o store/schema/schema.go -ignore \.go store/schema/...
 .PHONY: schema
 
 lint:
 	@echo "Linting sourcecode..."
 	@$(dc) run laika go vet $(pkgs)
-	@$(dc) run laika ./node_modules/gulp-cli/bin/gulp.js eslint
+	@$(dc) run laika eslint .
 .PHONY: lint
 
 test:
