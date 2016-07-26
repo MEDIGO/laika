@@ -17,6 +17,7 @@ build:
 vendor:
 	@echo "Installing dependencies..."
 	@$(dc) run laika bower install --allow-root
+	@$(dc) run laika glide install
 .PHONY: vendor
 
 schema:

@@ -1,0 +1,24 @@
+package: github.com/MEDIGO/laika
+import:
+- package: github.com/DataDog/datadog-go
+  subpackages:
+  - statsd
+- package: github.com/Masterminds/squirrel
+- package: github.com/Sirupsen/logrus
+- package: github.com/codegangsta/cli
+- package: github.com/go-sql-driver/mysql
+- package: github.com/labstack/echo
+  subpackages:
+  - engine
+  - engine/standard
+  - middleware
+- package: github.com/lytics/slackhook
+- package: github.com/rubenv/sql-migrate
+- package: github.com/russross/meddler
+- package: github.com/stretchr/testify
+  subpackages:
+  - require
+- package: golang.org/x/crypto
+  subpackages:
+  - bcrypt
+- package: gopkg.in/tylerb/graceful.v1

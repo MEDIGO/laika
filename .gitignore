@@ -2,3 +2,4 @@
 .env
 public/bower_components/
 node_modules/
+vendor/
