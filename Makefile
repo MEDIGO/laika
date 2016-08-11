@@ -53,7 +53,7 @@ shell:
 
 publish:
 	@echo "Publishing docker image..."
-	@docker tag -f medigo/laika:latest medigo/laika:$(commit)
+	@docker tag medigo/laika:latest medigo/laika:$(commit)
 	@docker login -e $(DOCKER_EMAIL) -u $(DOCKER_USER) -p $(DOCKER_PASS)
 	@docker push medigo/laika:latest
 	@docker push medigo/laika:$(commit)
