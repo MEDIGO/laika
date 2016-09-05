@@ -1,12 +1,14 @@
-# Laika [![CircleCI](https://circleci.com/gh/MEDIGO/laika.svg?style=shield)](https://circleci.com/gh/MEDIGO/laika)
+# Laika
+
+[![CircleCI](https://circleci.com/gh/MEDIGO/laika.svg?style=shield)](https://circleci.com/gh/MEDIGO/laika)
 
 Laika is a feature flag/feature toggle service, written in Go, that allows the creation of flags and their activation/deactivation for specific environments. This way it is possible to control in which environments each feature is available. For instance, when a new feature is developed and released, it would make sense if it was only made available, at first, in a testing or Q&A environment, and only later in production. With Laika this can be achieved by simply going to a web page, selecting the feature, and changing its status on the desired environments.
 
 Using Laika in a project thus allows for fast and continuous feature release and deployment.
 
-`laika-php` is a PHP library that handles communication with Laika's API. You can get it here https://github.com/MEDIGO/laika-php.
+`laika-php` is a PHP library that handles communication with Laika's API. You can get it [here](https://github.com/MEDIGO/laika-php).
 
-## API
+## API Reference
 
 | Method  | Endpoint                  | Description                |
 | ------- | ------------------------- | -------------------------- |
@@ -24,16 +26,12 @@ Using Laika in a project thus allows for fast and continuous feature release and
 
 ## Client
 
-Laika contains a polling HTTP client that allows to easily check for enabled/disabled
-features on Go code. It can be found in the `client` pacakge. While Laika uses
-the `vendor` directory to store external dependencies, `client` can be imported
-without any vendoring.
-
+Laika contains a polling HTTP client that allows to easily check for enabled/disabled features on Go code. It can be found in the `client` package. While Laika uses the `vendor` directory to store external dependencies, `client` can be imported without any vendoring.
 
 ### Install
 
 ```
-go get github.com/MEDIGO/laika/client
+$ go get -u github.com/MEDIGO/laika/client
 ```
 
 ### Usage
@@ -48,14 +46,13 @@ import (
 )
 
 func main() {
-	cfg := client.Config{
+	c, err := client.NewClient(client.Config{
 		Addr:        "127.0.0.1:8000",
 		Username:    "my-username",
 		Password:    "my-password",
 		Environment: "prod",
-	}
+	})
 
-	c, err := client.NewClient(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -68,79 +65,50 @@ func main() {
 }
 ```
 
-## Rolling out new Users
-Create a new user for authentication within Laika
-```
-curl -X POST -H "Content-Type: application/json" -d '{"username":"<NEW_LAIKA_USERNAME>","password":"<NEW_LAIKA_PASSWORD>"}' <LAIKA_HOST> --user <LAIKA_ROOT_USERNAME>:<LAIKA_ROOT_PASSWORD>
-```
+## Developing
 
-Update your projects to use the new credentials.
+You will need [Docker Compose](https://docs.docker.com/compose/) to easily run Laika locally. The application can be boostraped with the following steps:
 
-Remove the previous user.
+```sh
+# setup the root username and password
+$ echo "LAIKA_ROOT_USERNAME=my-username" > .env
+$ echo "LAIKA_ROOT_PASSWORD=my-password" >> .env
 
+# build the application
+$ make build
 
-## Run with Docker
+# migrate the database
+$ make migrate
 
-- Create a MySQL database: `docker run --name=laikamysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=laika -d mysql`
-- Run migration to set up database schema: `docker run --rm --name=laika -e LAIKA_ROOT_USERNAME=foo -e LAIKA_ROOT_PASSWORD=bar --link laikamysql:mysql medigo/laika:latest laika migrate`
-- Launch the server `docker run --rm --name=laika -p 8000:8000 -e LAIKA_ROOT_USERNAME=foo -e LAIKA_ROOT_PASSWORD=bar --link laikamysql:mysql medigo/laika:latest laika run`
-- Open your browser to http://localhost:8000
+# run the application
+$ make run
 
-## Run with docker-compose
-
-- Make sure you have docker-compose installed on your machine: https://docs.docker.com/compose/install/
-- Create a .env file to set up a root user
-
-```
-LAIKA_ROOT_USERNAME=myusername
-LAIKA_ROOT_PASSWORD=mypassword
+# open the web UI
+$ open http://localhost:8000
 ```
 
-- Build the application by running `make build`
-- Migrate the databse by running `make migrate`
-- Finally, you can run the application using the `make up` command.
-- Open your browser to http://localhost:8000
+## Testing
 
-Login by using root or user credentials.
-
-## Creating first environments
-
-Currently, when you create a new feature on the web page, you will not be able to enable/disable it yet as there are no environments. To create environments, you have to add them manually to the database. To do so you can use a software like Sequel Pro and insert the following on the corresponding fields:
+Laika contains an integration tests suite that requires a available MySQL instance. When using Docker Compose, the whole test suite can be run with:
 
 ```
-Host: (the IP address you get by running the `docker-machine ip` command)
-Username: root
-Password: root
-Port: (run the command `docker-compose ps`. Under Ports you will have something like `0.0.0.0:11111->2222/tcp`. In this case, your port would be `11111`)
-```
-
-Once connected to the database, create an entry to the `environment` table. It will now show on Laika's web page and you will be able to enable and disable features for the new environment.
-
-## Tests
-
-To run tests:
-
-```
-make test
+$ make test
 ```
 
 ## Current state of the project
+
 In the current release of Laika, it is possible to create feature flags and enable/disable them in the existing environments.
 
-## Wishlist
+### Wishlist
 
-- Specify country access (e.g. feature only enabled in Germany)
-- Specify user access with percentage (e.g. feature only enabled for 30% of the user base)
-- Have a field for environment creation on the web page
-- History for flag status changes
-- New flags auto-registering when seen for the first time by laika
+- Specify country access (e.g. feature only enabled in Germany).
+- Specify user access with percentage (e.g. feature only enabled for 30% of the user base).
+- Have a field for environment creation on the web page.
+- History for flag status changes.
+- New flags auto-registering when seen for the first time by laika.
 
-## How to contribute
+## Copyright and license
 
-- Fork the repository
-- Clone it
-- `git remote add upstream git@github.com:MEDIGO/laika.git`
-- Code code code code
-- Make a pull request
+Copyright © 2016 MEDIGO GmbH.
 
-### Thank you!
+Laika is licensed under the MIT License. See [LICENSE](LICENSE) for the full license text.
