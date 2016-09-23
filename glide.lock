@@ -1,5 +1,5 @@
-hash: 85a7d346b163962ff014c92ed041649cb4355aa936f171c434ad08ba827b3fd5
-updated: 2016-07-26T16:24:10.535534849+02:00
+hash: 9f7f1ba7c70cf41f04399e8a89cc7b3f0aca2d5217ab7f2114b5013abbc7ec2a
+updated: 2016-09-23T16:42:00.378732947+02:00
 imports:
 - name: github.com/codegangsta/cli
   version: d9021faab69f92295ef7061bd39e4a76dcbdef32
@@ -51,6 +51,8 @@ imports:
   - sqlparse
 - name: github.com/russross/meddler
   version: f742b0f9424f3bfaffe189e921d734608929e84f
+- name: github.com/satori/go.uuid
+  version: 0aa62d5ddceb50dbcb909d790b5345affd3669b6
 - name: github.com/Sirupsen/logrus
   version: a283a10442df8dc09befd873fab202bf8a253d6a
 - name: github.com/stretchr/testify

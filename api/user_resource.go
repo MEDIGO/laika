@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"time"
 
 	"github.com/DataDog/datadog-go/statsd"
@@ -16,18 +15,6 @@ type User struct {
 	Password  string     `json:"password,omitempty"`
 	CreatedAt time.Time  `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
-}
-
-func (u *User) Validate() error {
-	if u.Username == "" {
-		return errors.New("missing username")
-	}
-
-	if u.Password == "" {
-		return errors.New("missing password")
-	}
-
-	return nil
 }
 
 type UserResource struct {
@@ -45,7 +32,7 @@ func (r *UserResource) Get(c echo.Context) error {
 	user, err := r.store.GetUserByUsername(username)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}
@@ -63,11 +50,15 @@ func (r *UserResource) Get(c echo.Context) error {
 func (r *UserResource) Create(c echo.Context) error {
 	in := new(User)
 	if err := c.Bind(&in); err != nil {
-		return BadRequest(c, err)
+		return BadRequest(c, "Payload must be a valid JSON object")
 	}
 
-	if err := in.Validate(); err != nil {
-		return BadRequest(c, err)
+	if in.Username == "" {
+		return Invalid(c, "Username is required")
+	}
+
+	if in.Password == "" {
+		return Invalid(c, "Password is required")
 	}
 
 	user := &store.User{

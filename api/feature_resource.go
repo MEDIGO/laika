@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"time"
 
 	"github.com/DataDog/datadog-go/statsd"
@@ -16,13 +15,6 @@ type Feature struct {
 	CreatedAt *time.Time      `json:"created_at,omitempty"`
 	Name      *string         `json:"name,omitempty"`
 	Status    map[string]bool `json:"status,omitempty"`
-}
-
-func (f *Feature) Validate() error {
-	if f.Name == nil {
-		return errors.New("missing name")
-	}
-	return nil
 }
 
 type FeatureResource struct {
@@ -41,7 +33,7 @@ func (r *FeatureResource) Get(c echo.Context) error {
 	feature, err := r.store.GetFeatureByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}
@@ -49,7 +41,7 @@ func (r *FeatureResource) Get(c echo.Context) error {
 	featureStatus, err := r.store.ListFeatureStatus(&feature.Id, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}
@@ -57,7 +49,7 @@ func (r *FeatureResource) Get(c echo.Context) error {
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}
@@ -87,13 +79,16 @@ func (r *FeatureResource) Get(c echo.Context) error {
 func (r *FeatureResource) List(c echo.Context) error {
 	features, err := r.store.ListFeatures()
 	if err != nil {
+		if err == store.ErrNoRows {
+			return NotFound(c)
+		}
 		return InternalServerError(c, err)
 	}
 
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}
@@ -105,7 +100,7 @@ func (r *FeatureResource) List(c echo.Context) error {
 	featureStatus, err := r.store.ListFeatureStatus(nil, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}
@@ -137,14 +132,14 @@ func (r *FeatureResource) List(c echo.Context) error {
 func (r *FeatureResource) Create(c echo.Context) error {
 	in := new(Feature)
 	if err := c.Bind(&in); err != nil {
-		return BadRequest(c, err)
+		return BadRequest(c, "Payload must be a valid JSON object")
 	}
 
 	feature, err := r.store.GetFeatureByName(*in.Name)
 	if err != nil {
 		if err == store.ErrNoRows {
-			if err := in.Validate(); err != nil {
-				return BadRequest(c, err)
+			if in.Name == nil {
+				return Invalid(c, "Name is required")
 			}
 
 			feature = &store.Feature{
@@ -160,7 +155,7 @@ func (r *FeatureResource) Create(c echo.Context) error {
 		return InternalServerError(c, err)
 	}
 
-	return Conflict(c, errors.New("Feature already exists"))
+	return Conflict(c, "Feature already exists")
 }
 
 func (r *FeatureResource) Update(c echo.Context) error {
@@ -169,14 +164,14 @@ func (r *FeatureResource) Update(c echo.Context) error {
 	feature, err := r.store.GetFeatureByName(name)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}
 
 	in := new(Feature)
 	if err := c.Bind(&in); err != nil {
-		return BadRequest(c, err)
+		return BadRequest(c, "Payload must be a valid JSON object")
 	}
 
 	if in.Name != nil {
@@ -186,7 +181,7 @@ func (r *FeatureResource) Update(c echo.Context) error {
 	environments, err := r.store.ListEnvironments()
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}
@@ -194,7 +189,7 @@ func (r *FeatureResource) Update(c echo.Context) error {
 	featureStatus, err := r.store.ListFeatureStatus(&feature.Id, nil)
 	if err != nil {
 		if err == store.ErrNoRows {
-			return NotFound(c, err)
+			return NotFound(c)
 		}
 		return InternalServerError(c, err)
 	}

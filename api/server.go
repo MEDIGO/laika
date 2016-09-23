@@ -43,6 +43,7 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 
 	basicAuthMiddleware := AuthMiddleware(conf.RootUsername, conf.RootPassword, conf.Store)
 
+	e.Use(TraceMiddleware())
 	e.Use(LogMiddleware())
 	e.Use(InstrumentMiddleware(conf.Stats))
 	e.Use(middleware.Recover())

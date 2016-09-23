@@ -9,8 +9,19 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
+
+// TraceMiddleware attaches an ID to the current request.
+func TraceMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			c.Set("request_id", uuid.NewV4().String())
+			return next(c)
+		}
+	}
+}
 
 // LogMiddleware logs information about the current request.
 func LogMiddleware() echo.MiddlewareFunc {
@@ -18,14 +29,14 @@ func LogMiddleware() echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			defer func(start time.Time) {
 				log.WithFields(log.Fields{
-					"uri":                   c.Request().URI(),
-					"method":                c.Request().Method(),
-					"remote_addr":           c.Request().RemoteAddress(),
-					"status":                c.Response().Status(),
-					"duration_microseconds": int(time.Since(start).Seconds() * 1000000),
+					"request_id":                    RequestID(c),
+					"request_uri":                   c.Request().URI(),
+					"request_method":                c.Request().Method(),
+					"request_remote_addr":           c.Request().RemoteAddress(),
+					"request_status_code":           c.Response().Status(),
+					"request_duration_microseconds": int(time.Since(start).Seconds() * 1000000),
 				}).Info("request handled")
 			}(time.Now())
-
 			return next(c)
 		}
 	}

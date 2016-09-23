@@ -22,3 +22,4 @@ import:
   subpackages:
   - bcrypt
 - package: gopkg.in/tylerb/graceful.v1
+- package: github.com/satori/go.uuid
