@@ -14,7 +14,7 @@ import (
 // environment named "test" with an enabled featured named "test_feature",
 // and a user whose username is "user" and password is "password".
 func NewTestServer(t *testing.T) *httptest.Server {
-	s, err := store.NewStore(
+	s, err := store.NewMySQLStore(
 		os.Getenv("LAIKA_MYSQL_USERNAME"),
 		os.Getenv("LAIKA_MYSQL_PASSWORD"),
 		os.Getenv("LAIKA_MYSQL_HOST"),
@@ -48,7 +48,7 @@ func NewTestServer(t *testing.T) *httptest.Server {
 
 // CreateFeatureStatus creates an environment, a feature, and a freature status. Returns the name of the feature.
 func CreateFeatureStatus(t *testing.T) string {
-	s, err := store.NewStore(
+	s, err := store.NewMySQLStore(
 		os.Getenv("LAIKA_MYSQL_USERNAME"),
 		os.Getenv("LAIKA_MYSQL_PASSWORD"),
 		os.Getenv("LAIKA_MYSQL_HOST"),

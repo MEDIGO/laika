@@ -97,7 +97,7 @@ func main() {
 			Name:  "run",
 			Usage: "Runs laika's feature flag service",
 			Action: func(c *cli.Context) {
-				store, err := store.NewStore(
+				store, err := store.NewMySQLStore(
 					c.GlobalString("mysql-username"),
 					c.GlobalString("mysql-password"),
 					c.GlobalString("mysql-host"),
@@ -136,7 +136,7 @@ func main() {
 			Name:  "migrate",
 			Usage: "Migrates the store schema to the latest available version",
 			Action: func(c *cli.Context) {
-				store, err := store.NewStore(
+				store, err := store.NewMySQLStore(
 					c.GlobalString("mysql-username"),
 					c.GlobalString("mysql-password"),
 					c.GlobalString("mysql-host"),
