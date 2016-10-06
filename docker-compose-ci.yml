@@ -19,6 +19,7 @@ services:
             LAIKA_TEST_MYSQL_DBNAME: laika
             LAIKA_STATSD_HOST: localhost
             LAIKA_STATSD_PORT: 812
+            COVERALLS_TOKEN:
     mysql:
         image: mysql:5
         ports:

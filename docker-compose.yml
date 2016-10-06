@@ -23,6 +23,7 @@ services:
             LAIKA_STATSD_PORT: 8125
             LAIKA_ROOT_USERNAME: root
             LAIKA_ROOT_PASSWORD: root
+            COVERALLS_TOKEN:
         env_file: .env
         volumes:
             - ./:/go/src/github.com/MEDIGO/laika
