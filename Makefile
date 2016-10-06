@@ -1,12 +1,9 @@
-pkgs := . ./api/... ./client/... ./notifier/... ./store/...
-commit := $(shell git rev-parse HEAD)
-
 dc = docker-compose
 ifeq ($(CI), true)
 	dc = docker-compose -f docker-compose-ci.yml
 endif
 
-all: build vendor lint migrate test
+all: build install lint migrate test
 .PHONY: all
 
 build:
@@ -14,26 +11,24 @@ build:
 	@$(dc) build
 .PHONY: build
 
-vendor:
+install:
 	@echo "Installing dependencies..."
-	@$(dc) run laika bower install --allow-root
-	@$(dc) run laika glide install
-.PHONY: vendor
+	@$(dc) run laika scripts/install.sh
+.PHONY: install
 
-schema:
-	@echo "Generating schema..."
-	@$(dc) run laika go-bindata -pkg schema -o store/schema/schema.go -ignore \.go store/schema/...
-.PHONY: schema
+generate:
+	@echo "Generating source code..."
+	@$(dc) run laika scripts/generate.sh
+.PHONY: generate
 
 lint:
 	@echo "Linting sourcecode..."
-	@$(dc) run laika go vet $(pkgs)
-	@$(dc) run laika eslint .
+	@$(dc) run laika scripts/lint.sh
 .PHONY: lint
 
 test:
 	@echo "Running tests..."
-	@$(dc) run laika go test $(pkgs)
+	@$(dc) run laika scripts/test.sh
 .PHONY: test
 
 up:
@@ -43,7 +38,7 @@ up:
 
 migrate:
 	@echo "Migrating DB..."
-	@$(dc) run laika go run main.go migrate
+	@$(dc) run laika scripts/migrate.sh
 .PHONY: migrate
 
 shell:
@@ -51,20 +46,19 @@ shell:
 	@$(dc) run laika sh
 .PHONY: shell
 
+report:
+	@echo "Reporting coverage..."
+	@$(dc) run laika scripts/report.sh
+.PHONY: report
+
 publish:
 	@echo "Publishing docker image..."
-	@docker tag medigo/laika:latest medigo/laika:$(commit)
-	@docker login -e $(DOCKER_EMAIL) -u $(DOCKER_USER) -p $(DOCKER_PASS)
-	@docker push medigo/laika:latest
-	@docker push medigo/laika:$(commit)
+	scripts/publish.sh
 .PHONY: publish
 
 deploy:
 	@echo "Deploying docker image..."
-	@docker pull medigo/laika:$(commit)
-	@aws ecs register-task-definition --family $(ECS_FAMILY) --container-definitions '$(shell ./ecs-container-definitions.sh)'
-	@aws ecs update-service --service $(ECS_FAMILY) --task-definition $(ECS_FAMILY)
-	@aws ecs wait services-stable --services $(ECS_FAMILY)
+	scripts/deploy.sh
 .PHONY: deploy
 
 clean:

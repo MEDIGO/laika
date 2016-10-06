@@ -3,3 +3,5 @@
 public/bower_components/
 node_modules/
 vendor/
+coverage.out
+combined_coverage.out
