@@ -4,10 +4,9 @@ import (
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/labstack/echo"
 
+	"github.com/MEDIGO/laika/models"
 	"github.com/MEDIGO/laika/store"
 )
-
-type Environment store.Environment
 
 type EnvironmentResource struct {
 	store store.Store
@@ -38,21 +37,25 @@ func (r *EnvironmentResource) List(c echo.Context) error {
 	if err != nil {
 		return InternalServerError(c, err)
 	}
+
 	return OK(c, environments)
 }
 
 func (r *EnvironmentResource) Create(c echo.Context) error {
-	in := new(Environment)
-	if err := c.Bind(&in); err != nil {
+	input := struct {
+		Name string `json:"name"`
+	}{}
+
+	if err := c.Bind(&input); err != nil {
 		return BadRequest(c, "Payload must be a valid JSON object")
 	}
 
-	if in.Name == nil {
+	if input.Name == "" {
 		return Invalid(c, "Name is required")
 	}
 
-	environment := &store.Environment{
-		Name: store.String(*in.Name),
+	environment := &models.Environment{
+		Name: input.Name,
 	}
 
 	if err := r.store.CreateEnvironment(environment); err != nil {
@@ -70,16 +73,20 @@ func (r *EnvironmentResource) Update(c echo.Context) error {
 		if err == store.ErrNoRows {
 			return NotFound(c)
 		}
+
 		return InternalServerError(c, err)
 	}
 
-	in := new(store.Environment)
-	if err := c.Bind(&in); err != nil {
+	input := struct {
+		Name string `json:"name"`
+	}{}
+
+	if err := c.Bind(&input); err != nil {
 		return BadRequest(c, "Payload must be a valid JSON object")
 	}
 
-	if in.Name != nil {
-		environment.Name = in.Name
+	if input.Name != "" {
+		environment.Name = input.Name
 	}
 
 	if err := r.store.UpdateEnvironment(environment); err != nil {

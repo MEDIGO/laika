@@ -3,6 +3,7 @@ package api
 import (
 	"testing"
 
+	"github.com/MEDIGO/laika/models"
 	"github.com/MEDIGO/laika/store"
 	"github.com/stretchr/testify/require"
 )
@@ -13,14 +14,14 @@ func TestCreateEnvironment(t *testing.T) {
 
 	name := "prod" + store.Token()
 
-	found := new(Environment)
-	err := client.post("/api/environments", &Feature{
-		Name: store.String(name),
+	found := new(models.Environment)
+	err := client.post("/api/environments", &models.Feature{
+		Name: name,
 	}, found)
 	require.NoError(t, err)
 
-	require.NotEqual(t, 0, found.Id)
-	require.Equal(t, name, *found.Name)
+	require.NotEqual(t, 0, found.ID)
+	require.Equal(t, name, found.Name)
 }
 
 func TestGetEnvironment(t *testing.T) {
@@ -29,16 +30,16 @@ func TestGetEnvironment(t *testing.T) {
 
 	name := "prod" + store.Token()
 
-	err := client.post("/api/environments", &Feature{
-		Name: store.String(name),
+	err := client.post("/api/environments", &models.Feature{
+		Name: name,
 	}, nil)
 	require.NoError(t, err)
 
-	found := new(Environment)
+	found := new(models.Environment)
 	err = client.get("/api/environments/"+name, found)
 	require.NoError(t, err)
 
-	require.Equal(t, name, *found.Name)
+	require.Equal(t, name, found.Name)
 }
 
 func TestUpdateEnvironment(t *testing.T) {
@@ -47,20 +48,20 @@ func TestUpdateEnvironment(t *testing.T) {
 
 	name := "prod" + store.Token()
 
-	err := client.post("/api/environments", &Feature{
-		Name: store.String(name),
+	err := client.post("/api/environments", &models.Feature{
+		Name: name,
 	}, nil)
 	require.NoError(t, err)
 
 	newName := "not_prod" + store.Token()
 
-	found := new(Environment)
-	err = client.patch("/api/environments/"+name, &Feature{
-		Name: store.String(newName),
+	found := new(models.Environment)
+	err = client.patch("/api/environments/"+name, &models.Feature{
+		Name: newName,
 	}, found)
 	require.NoError(t, err)
 
-	require.Equal(t, newName, *found.Name)
+	require.Equal(t, newName, found.Name)
 }
 
 func TestListEnvironment(t *testing.T) {
@@ -68,13 +69,13 @@ func TestListEnvironment(t *testing.T) {
 	defer client.Close()
 
 	for i := 0; i < 10; i++ {
-		err := client.post("/api/environments", &Feature{
-			Name: store.String("prod_" + store.Token()),
+		err := client.post("/api/environments", &models.Feature{
+			Name: "prod_" + store.Token(),
 		}, nil)
 		require.NoError(t, err)
 	}
 
-	found := []Environment{}
+	found := []models.Environment{}
 	err := client.get("/api/environments", &found)
 	require.NoError(t, err)
 

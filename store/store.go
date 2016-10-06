@@ -3,31 +3,38 @@ package store
 import (
 	"database/sql"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/MEDIGO/laika/models"
 )
 
 var ErrNoRows = sql.ErrNoRows
 var ErrTxDone = sql.ErrTxDone
 
+// Store describes a data store.
 type Store interface {
-	CreateEnvironment(environment *Environment) error
-	CreateFeature(feature *Feature) error
-	CreateFeatureStatus(featureStatus *FeatureStatus) error
-	CreateUser(user *User) error
-	GetEnvironmentByName(name string) (*Environment, error)
-	GetFeatureByName(name string) (*Feature, error)
-	GetFeatureStatus(featureId int64, environmentId int64) (*FeatureStatus, error)
-	GetUserByUsername(username string) (*User, error)
-	ListEnvironments() ([]*Environment, error)
-	ListFeatures() ([]*Feature, error)
-	ListFeatureStatus(featureId *int64, environmentId *int64) ([]*FeatureStatus, error)
-	ListFeatureStatusHistory(featureId *int64, environmentId *int64, featureStatusId *int64) ([]*FeatureStatusHistory, error)
+	// CreateEnvironment creates an environment.
+	CreateEnvironment(environment *models.Environment) error
+	// GetEnvironmentByName gets an environment by name.
+	GetEnvironmentByName(name string) (*models.Environment, error)
+	// UpdateEnvironment updates an environment.
+	UpdateEnvironment(environment *models.Environment) error
+	// ListEnvironments list all the environments.
+	ListEnvironments() ([]*models.Environment, error)
+	// CreateFeature creates a feature.
+	CreateFeature(feature *models.Feature) error
+	// GetFeatureByName gets a feature by its name.
+	GetFeatureByName(name string) (*models.Feature, error)
+	// UpdateFeature updates a feature.
+	UpdateFeature(feature *models.Feature) error
+	// ListFeatures list all features.
+	ListFeatures() ([]*models.Feature, error)
+	// CreateUser creates an User.
+	CreateUser(user *models.User) error
+	//GetUserByUsername gets an User by its username.
+	GetUserByUsername(username string) (*models.User, error)
 	// Migrate migrates the database schema to the latest available version.
 	Migrate() error
+	// Ping checks the contnectivity with the store.
 	Ping() error
 	// Reset removes all stored data.
 	Reset() error
-	UpdateEnvironment(environment *Environment) error
-	UpdateFeature(feature *Feature) error
-	UpdateFeatureStatus(featureStatus *FeatureStatus) error
 }

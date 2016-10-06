@@ -1,21 +1,12 @@
 package api
 
 import (
-	"time"
-
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/labstack/echo"
 
+	"github.com/MEDIGO/laika/models"
 	"github.com/MEDIGO/laika/store"
 )
-
-type User struct {
-	ID        int64      `json:"id"`
-	Username  string     `json:"username,omitempty"`
-	Password  string     `json:"password,omitempty"`
-	CreatedAt time.Time  `json:"created_at,omitempty"`
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
-}
 
 type UserResource struct {
 	store store.Store
@@ -37,40 +28,35 @@ func (r *UserResource) Get(c echo.Context) error {
 		return InternalServerError(c, err)
 	}
 
-	apiUser := &User{
-		ID:        user.ID,
-		Username:  user.Username,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
-	}
-
-	return OK(c, apiUser)
+	return OK(c, user)
 }
 
 func (r *UserResource) Create(c echo.Context) error {
-	in := new(User)
-	if err := c.Bind(&in); err != nil {
+	input := struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}{}
+
+	if err := c.Bind(&input); err != nil {
 		return BadRequest(c, "Payload must be a valid JSON object")
 	}
 
-	if in.Username == "" {
+	if input.Username == "" {
 		return Invalid(c, "Username is required")
 	}
 
-	if in.Password == "" {
+	if input.Password == "" {
 		return Invalid(c, "Password is required")
 	}
 
-	user := &store.User{
-		Username:     in.Username,
-		PasswordHash: in.Password,
+	user := &models.User{
+		Username: input.Username,
+		Password: input.Password,
 	}
 
 	if err := r.store.CreateUser(user); err != nil {
 		return InternalServerError(c, err)
 	}
 
-	in.Password = ""
-
-	return Created(c, in)
+	return Created(c, user)
 }

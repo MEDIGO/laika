@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/MEDIGO/laika/models"
 	"github.com/MEDIGO/laika/store"
 	"github.com/stretchr/testify/require"
 )
@@ -29,7 +30,7 @@ func NewTestServer(t *testing.T) *httptest.Server {
 	err = s.Migrate()
 	require.NoError(t, err)
 
-	user := store.User{
+	user := models.User{
 		Username:     "test_username" + store.Token(),
 		PasswordHash: "awesome_password",
 	}
@@ -46,8 +47,8 @@ func NewTestServer(t *testing.T) *httptest.Server {
 	return httptest.NewServer(server)
 }
 
-// CreateFeatureStatus creates an environment, a feature, and a freature status. Returns the name of the feature.
-func CreateFeatureStatus(t *testing.T) string {
+// CreateTestFeature creates a random feature to be used during testing.
+func CreateTestFeature(t *testing.T) *models.Feature {
 	s, err := store.NewMySQLStore(
 		os.Getenv("LAIKA_MYSQL_USERNAME"),
 		os.Getenv("LAIKA_MYSQL_PASSWORD"),
@@ -59,29 +60,22 @@ func CreateFeatureStatus(t *testing.T) string {
 
 	env, err := s.GetEnvironmentByName("test")
 	if err != nil {
-		environment := store.Environment{
-			Name: store.String("test"),
+		env = &models.Environment{
+			Name: "test",
 		}
-		err = s.CreateEnvironment(&environment)
+		err = s.CreateEnvironment(env)
 		require.NoError(t, err)
-		env = &environment
 	}
 
-	feature := store.Feature{
-		Name: store.String("test_feature" + store.Token()),
+	feature := &models.Feature{
+		Name: "test_feature" + store.Token(),
+		Status: map[string]bool{
+			"test": true,
+		},
 	}
 
-	err = s.CreateFeature(&feature)
+	err = s.CreateFeature(feature)
 	require.NoError(t, err)
 
-	status := store.FeatureStatus{
-		Enabled:       store.Bool(true),
-		FeatureId:     store.Int(feature.Id),
-		EnvironmentId: store.Int(env.Id),
-	}
-
-	err = s.CreateFeatureStatus(&status)
-	require.NoError(t, err)
-
-	return *feature.Name
+	return feature
 }

@@ -3,6 +3,7 @@ package api
 import (
 	"testing"
 
+	"github.com/MEDIGO/laika/models"
 	"github.com/MEDIGO/laika/store"
 	"github.com/stretchr/testify/require"
 )
@@ -13,8 +14,8 @@ func TestCreateUser(t *testing.T) {
 
 	username := "new_awesome_user" + store.Token()
 
-	found := new(User)
-	err := client.post("/api/users", &User{
+	found := new(models.User)
+	err := client.post("/api/users", &models.User{
 		Username: username,
 		Password: "awesome_password",
 	}, found)
@@ -31,13 +32,13 @@ func TestGetUserByUsername(t *testing.T) {
 
 	username := "new_awesome_user" + store.Token()
 
-	err := client.post("/api/users", &User{
+	err := client.post("/api/users", &models.User{
 		Username: username,
 		Password: "awesome_password",
 	}, nil)
 	require.NoError(t, err)
 
-	found := new(User)
+	found := new(models.User)
 	err = client.get("/api/users/"+username, found)
 
 	require.NoError(t, err)

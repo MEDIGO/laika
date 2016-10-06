@@ -12,7 +12,7 @@ func TestClientIsEnabled(t *testing.T) {
 	server := api.NewTestServer(t)
 	defer server.Close()
 
-	feature := api.CreateFeatureStatus(t)
+	feature := api.CreateTestFeature(t)
 
 	client, err := NewClient(Config{
 		Addr:        server.URL,
@@ -22,7 +22,7 @@ func TestClientIsEnabled(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	status := client.IsEnabled(feature, false)
+	status := client.IsEnabled(feature.Name, false)
 	require.True(t, status)
 }
 
