@@ -29,7 +29,12 @@ type mySQLStore struct {
 
 // NewMySQLStore creates a new store that uses MySQL as a backend.
 func NewMySQLStore(username, password, host, port, dbname string) (Store, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", username, password, host, port, dbname)
+	creds := username
+	if password != "" {
+		creds += ":" + password
+	}
+
+	dsn := fmt.Sprintf("%s@tcp(%s:%s)/%s?parseTime=true", creds, host, port, dbname)
 	db, err := sql.Open("mysql", dsn)
 
 	if err != nil {

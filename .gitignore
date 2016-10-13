@@ -1,7 +1,8 @@
 .DS_Store
 .env
-public/bower_components/
-node_modules/
-vendor/
-coverage.out
 combined_coverage.out
+coverage.out
+node_modules/
+public/bower_components/
+release/
+vendor/

@@ -1,23 +1,21 @@
 machine:
-    pre:
-        - sudo curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
-        - sudo chmod 0755 /usr/bin/docker
-    services:
-        - docker
+  environment:
+    PROJECT_GOPATH: "${HOME}/.go_project"
+    PROJECT_PARENT_PATH: "${PROJECT_GOPATH}/src/github.com/MEDIGO"
+    PROJECT_PATH: "${PROJECT_PARENT_PATH}/laika"
+    GOPATH: "${HOME}/.go_workspace:/usr/local/go_workspace:${PROJECT_GOPATH}"
+    LAIKA_TEST_MYSQL_HOST: localhost
+    LAIKA_TEST_MYSQL_USERNAME: ubuntu
+    LAIKA_TEST_MYSQL_DBNAME: circle_test
 
 dependencies:
-    override:
-        - sudo apt-get update; sudo apt-get install python-dev -y
-        - sudo pip install --upgrade docker-compose==1.7.1
+  pre:
+    - go get github.com/Masterminds/glide
+    - go get github.com/jteeuwen/go-bindata/...
+  override:
+    - mkdir -p "${PROJECT_PARENT_PATH}"
+    - rsync -avC "${HOME}/laika/" "${PROJECT_PATH}"
 
 test:
-    override:
-        - make
-        - make report
-
-deployment:
-    publish:
-        branch: master
-        owner: MEDIGO
-        commands:
-            - make publish
+  override:
+    - cd "${PROJECT_PATH}" && make
