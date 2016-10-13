@@ -68,8 +68,6 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 	e.Get("/api/users/:username", users.Get, basicAuthMiddleware)
 	e.Post("/api/users", users.Create, basicAuthMiddleware)
 
-	e.Static("/", "public")
-
 	server := standard.WithConfig(engine.Config{})
 	server.SetHandler(e)
 

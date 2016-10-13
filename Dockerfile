@@ -1,7 +1,6 @@
 FROM golang:1.6-alpine
 
-RUN apk add --update --no-cache bash git nodejs curl gcc musl-dev
-RUN npm install -g bower eslint
+RUN apk add --update --no-cache bash git curl gcc musl-dev
 
 ENV GLIDE_VERSION 0.11.1
 RUN curl -sSL https://github.com/Masterminds/glide/releases/download/v$GLIDE_VERSION/glide-v$GLIDE_VERSION-linux-386.tar.gz -o glide.tar.gz \
@@ -18,10 +17,6 @@ WORKDIR /go/src/github.com/MEDIGO/laika
 COPY glide.yaml /go/src/github.com/MEDIGO/laika/
 COPY glide.lock /go/src/github.com/MEDIGO/laika/
 RUN glide install
-
-COPY .bowerrc /go/src/github.com/MEDIGO/laika/
-COPY bower.json /go/src/github.com/MEDIGO/laika/
-RUN bower --allow-root install
 
 COPY . /go/src/github.com/MEDIGO/laika
 RUN go install .
