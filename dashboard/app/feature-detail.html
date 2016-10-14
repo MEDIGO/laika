@@ -1,0 +1,29 @@
+<h2 class="feature-title">{{feature.name}}</h2>
+<p class="feature-details">Created {{feature.created_at | amTimeAgo}}</p>
+
+<h3>Status</h3>
+<div class="panel panel-default">
+  <ul class="list-group">
+  	<li *ngFor="let item of feature.status | itermap" class="list-group-item status-item">
+      <span class="status-item-name">{{item.key}}</span>
+      <span class="status-item-key">({{item.key}})</span>
+
+      <div class="btn-group pull-right" role="group">
+        <button
+          type="button"
+          class="btn btn-default"
+          [ngClass]="{'active': item.value}"
+          (click)="handleToggle(true, item.key)">
+          On
+        </button>
+        <button
+          type="button"
+          class="btn btn-default"
+          [ngClass]="{'active': !item.value}"
+          (click)="handleToggle(false, item.key)">
+          Off
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>

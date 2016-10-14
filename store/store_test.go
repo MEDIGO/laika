@@ -105,31 +105,60 @@ func testStoreFeatures(t *testing.T, store Store) {
 
 	// it should get a feature with the status of all environments
 	err = store.CreateEnvironment(&models.Environment{
+		Name: "dev",
+	})
+	require.NoError(t, err)
+
+	err = store.CreateEnvironment(&models.Environment{
 		Name: "staging",
+	})
+	require.NoError(t, err)
+
+	err = store.CreateEnvironment(&models.Environment{
+		Name: "prod",
 	})
 	require.NoError(t, err)
 
 	found, err = store.GetFeatureByName("not_awesome_feature")
 	require.NoError(t, err)
-	require.Len(t, found.Status, 1)
-	require.Equal(t, false, found.Status["staging"])
+	require.Len(t, found.Status, 3)
+	require.False(t, found.Status["dev"])
+	require.False(t, found.Status["staging"])
+	require.False(t, found.Status["prod"])
 
 	// it should update the status of a feature in an environment
-	found.Status["staging"] = true
+	found.Status["dev"] = true
 
 	err = store.UpdateFeature(found)
 	require.NoError(t, err)
 
 	found, err = store.GetFeatureByName("not_awesome_feature")
 	require.NoError(t, err)
-	require.Equal(t, true, found.Status["staging"])
+	require.True(t, found.Status["dev"])
+	require.False(t, found.Status["staging"])
+	require.False(t, found.Status["prod"])
+
+	found.Status["staging"] = true
+
+	// update a second time to execute a different code path when the environment status
+	// already exist
+	err = store.UpdateFeature(found)
+	require.NoError(t, err)
+
+	found, err = store.GetFeatureByName("not_awesome_feature")
+	require.NoError(t, err)
+	require.True(t, found.Status["dev"])
+	require.True(t, found.Status["staging"])
+	require.False(t, found.Status["prod"])
 
 	// it should list all features with the status on all environments
 	list, err = store.ListFeatures()
 	require.NoError(t, err)
 	require.Len(t, list, 1)
 	require.Equal(t, found.ID, list[0].ID)
+	require.True(t, list[0].Status["dev"])
 	require.True(t, list[0].Status["staging"])
+	require.False(t, list[0].Status["prod"])
 }
 
 func getenv(name, val string) string {

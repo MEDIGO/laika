@@ -26,6 +26,11 @@ test:
 	@scripts/test.sh
 .PHONY: test
 
+watch:
+	@echo "Watching source code..."
+	@scripts/watch.sh
+.PHONY: watch
+
 migrate:
 	@echo "Migrating DB..."
 	@scripts/migrate.sh
@@ -53,5 +58,5 @@ deploy:
 
 clean:
 	@echo "Cleaning environment..."
-	@rm -rf bin
+	@rm -rf bin public
 .PHONY: clean

@@ -36,7 +36,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "mysql-host",
-			Value:  "mysql",
+			Value:  "localhost",
 			Usage:  "MySQL host",
 			EnvVar: "LAIKA_MYSQL_HOST",
 		},
@@ -79,11 +79,13 @@ func main() {
 		cli.StringFlag{
 			Name:   "root-username",
 			Usage:  "Root username",
+			Value:  "root",
 			EnvVar: "LAIKA_ROOT_USERNAME",
 		},
 		cli.StringFlag{
 			Name:   "root-password",
 			Usage:  "Root password",
+			Value:  "root",
 			EnvVar: "LAIKA_ROOT_PASSWORD",
 		},
 		cli.StringFlag{

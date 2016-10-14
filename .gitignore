@@ -1,8 +1,11 @@
 .DS_Store
 .env
+application-build-*
+bin/
 combined_coverage.out
 coverage.out
 node_modules/
+npm-debug.log
+public/
 public/bower_components/
-release/
 vendor/

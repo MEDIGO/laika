@@ -255,6 +255,7 @@ func (s *mySQLStore) UpdateFeature(feature *models.Feature) error {
 				continue
 			}
 
+			stat.Enabled = enabled
 			err := s.updateStatus(stat)
 			if err != nil {
 				return err

@@ -13,7 +13,7 @@ func TestMySQLStore(t *testing.T) {
 	}
 
 	port := getenv("LAIKA_TEST_MYSQL_PORT", "3306")
-	username := getenv("LAIKA_TEST_MYSQL_USERNAME", "laika")
+	username := getenv("LAIKA_TEST_MYSQL_USERNAME", "root")
 	password := getenv("LAIKA_TEST_MYSQL_PASSWORD", "")
 	database := getenv("LAIKA_TEST_MYSQL_DBNAME", "test")
 
