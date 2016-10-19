@@ -2,6 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/MEDIGO/laika.svg?style=shield)](https://circleci.com/gh/MEDIGO/laika) [![Coverage Status](https://coveralls.io/repos/github/MEDIGO/laika/badge.svg)](https://coveralls.io/github/MEDIGO/laika)
 
+Maintainer: Diego
+
 Laika is a feature flag/feature toggle service, written in Go, that allows the creation of flags and their activation/deactivation for specific environments. This way it is possible to control in which environments each feature is available. For instance, when a new feature is developed and released, it would make sense if it was only made available, at first, in a testing or Q&A environment, and only later in production. With Laika this can be achieved by simply going to a web page, selecting the feature, and changing its status on the desired environments.
 
 Using Laika in a project thus allows for fast and continuous feature release and deployment.
