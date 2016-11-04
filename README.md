@@ -69,12 +69,15 @@ func main() {
 
 ## Developing
 
-You will need [Docker Compose](https://docs.docker.com/compose/) to easily run Laika locally. The application can be boostraped with the following steps:
+You will need [Docker Compose](https://docs.docker.com/compose/) and to easily run Laika locally. The application can be boostraped with the following steps:
 
 ```sh
 # setup the root username and password
 $ echo "LAIKA_ROOT_USERNAME=my-username" > .env
 $ echo "LAIKA_ROOT_PASSWORD=my-password" >> .env
+
+# install the dependencies
+$ make install
 
 # build the application
 $ make build

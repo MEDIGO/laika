@@ -20,6 +20,7 @@ type Config struct {
 // Client is a threadsafe client for the Laika API.
 type Client interface {
 	IsEnabled(string, bool) bool
+	GetFeatures() map[string]bool
 }
 
 type client struct {
@@ -138,4 +139,15 @@ func (c *client) IsEnabled(name string, defval bool) bool {
 	}
 
 	return status
+}
+
+func (c *client) GetFeatures() map[string]bool {
+	features := make(map[string]bool)
+	for k, v := range c.features.GetAll() {
+		status, _ := v.Status[c.environment]
+		// what if !ok?
+		features[k] = status
+	}
+
+	return features
 }

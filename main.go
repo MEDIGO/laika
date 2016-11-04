@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"time"
-
+	
 	"github.com/DataDog/datadog-go/statsd"
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
@@ -135,7 +135,7 @@ func main() {
 		{
 			Name:  "migrate",
 			Usage: "Migrates the store schema to the latest available version",
-			Action: func(c *cli.Context) {
+			Action: func(c *cli.Context) error {
 				store, err := store.NewMySQLStore(
 					c.GlobalString("mysql-username"),
 					c.GlobalString("mysql-password"),
@@ -155,6 +155,8 @@ func main() {
 				if err := store.Migrate(); err != nil {
 					log.Fatal("Failed to migrate store schema: ", err)
 				}
+
+				return nil
 
 			},
 		},

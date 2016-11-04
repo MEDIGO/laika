@@ -1,6 +1,10 @@
 package client
 
-import "sync"
+import (
+	"sync"
+	"bytes"
+	"encoding/gob"
+)
 
 // FeatureCache is a in-memory threadsafe cache for Features.
 type FeatureCache struct {
@@ -44,4 +48,27 @@ func (fc *FeatureCache) Get(name string) *Feature {
 	}
 
 	return feature
+}
+
+func (fc *FeatureCache) GetAll() map[string]*Feature {
+	fc.lock.RLock()
+	defer fc.lock.RUnlock()
+
+	// deep clone features map
+	var buf bytes.Buffer
+	enc := gob.NewEncoder(&buf)
+	dec := gob.NewDecoder(&buf)
+
+	err := enc.Encode(fc.features)
+	if err != nil {
+		panic(err)
+	}
+
+	var deepCopy map[string]*Feature
+	err = dec.Decode(&deepCopy)
+	if err != nil {
+		panic(err)
+	}
+
+	return deepCopy
 }
