@@ -1,6 +1,7 @@
 FROM alpine:latest
 
-COPY bin/laika /usr/local/bin/
+COPY bin/laika /
+COPY public /public/
 
-ENTRYPOINT ["laika"]
+ENTRYPOINT ["/laika"]
 CMD ["run"]

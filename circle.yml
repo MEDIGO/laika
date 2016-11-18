@@ -1,4 +1,6 @@
 machine:
+  services:
+    - docker
   environment:
     PROJECT_GOPATH: "${HOME}/.go_project"
     PROJECT_PARENT_PATH: "${PROJECT_GOPATH}/src/github.com/MEDIGO"
@@ -20,3 +22,10 @@ dependencies:
 test:
   override:
     - cd "${PROJECT_PATH}" && make
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - make image
+      - make publish

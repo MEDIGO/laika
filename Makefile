@@ -51,11 +51,6 @@ publish:
 	@scripts/publish.sh
 .PHONY: publish
 
-deploy:
-	@echo "Deploying docker image..."
-	@scripts/deploy.sh
-.PHONY: deploy
-
 clean:
 	@echo "Cleaning environment..."
 	@rm -rf bin public
