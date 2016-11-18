@@ -69,35 +69,48 @@ func main() {
 
 ## Developing
 
-You will need [Docker Compose](https://docs.docker.com/compose/) and to easily run Laika locally. The application can be boostraped with the following steps:
+To develop Laika you need to have the following tools installed in your machine:
+
+* [Go](https://golang.org/doc/install)
+* [Node.JS](https://nodejs.org/en/download/)
+* [Glide](https://github.com/Masterminds/glide)
+* [MySQL](https://dev.mysql.com/downloads/installer/)
+
+Then install all the Go and Javascript dependencies with:
 
 ```sh
-# setup the root username and password
-$ echo "LAIKA_ROOT_USERNAME=my-username" > .env
-$ echo "LAIKA_ROOT_PASSWORD=my-password" >> .env
-
-# install the dependencies
 $ make install
+```
 
-# build the application
-$ make build
+Build continuously the server and UI with:
 
-# migrate the database
-$ make migrate
+```sh
+$ make watch
+```
 
-# run the application
-$ make run
+And start hacking!
 
-# open the web UI
+```sh
 $ open http://localhost:8000
 ```
 
 ## Testing
 
-Laika contains an integration tests suite that requires a available MySQL instance. When using Docker Compose, the whole test suite can be run with:
+The whole test suite can be executed with:
 
 ```
 $ make test
+```
+
+Some test require a MySQL instance, you can pass the configuration to them with the following
+environment variables:
+
+```
+LAIKA_TEST_MYSQL_HOST=localhost
+LAIKA_TEST_MYSQL_PORT=3306
+LAIKA_TEST_MYSQL_USERNAME=root
+LAIKA_TEST_MYSQL_PASSWORD=root
+LAIKA_TEST_MYSQL_DBNAME=test
 ```
 
 ## Current state of the project
@@ -110,7 +123,6 @@ In the current release of Laika, it is possible to create feature flags and enab
 - Specify user access with percentage (e.g. feature only enabled for 30% of the user base).
 - Have a field for environment creation on the web page.
 - History for flag status changes.
-- New flags auto-registering when seen for the first time by laika.
 
 ## Copyright and license
 
