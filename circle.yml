@@ -27,5 +27,4 @@ deployment:
   hub:
     branch: master
     commands:
-      - make image
-      - make publish
+      - cd "${PROJECT_PATH}" && make image publish
