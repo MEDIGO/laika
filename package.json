@@ -31,10 +31,12 @@
     "raw-loader": "^0.5.1",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.2",
+    "moment": "2.15.2",
     "style-loader": "^0.13.1",
     "to-string-loader": "^1.1.4",
     "typescript": "^2.0.2",
     "url-loader": "^0.5.7",
+    "file-loader": "0.9.0",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.0",
     "webpack-merge": "^0.8.4"

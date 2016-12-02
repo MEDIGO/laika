@@ -82,6 +82,14 @@ Then install all the Go and Javascript dependencies with:
 $ make install
 ```
 
+
+Migrate the database with:
+
+```sh
+$ make migrate
+```
+
+
 Build continuously the server and UI with:
 
 ```sh
