@@ -17,10 +17,11 @@ import (
 func init() {
 	log.SetFormatter(&log.JSONFormatter{})
 }
-
+//TODO set Prefix by echo Router library?
 func main() {
 	app := cli.NewApp()
 	app.Author = "MEDIGO GmbH"
+	os.Setenv("PREFIX_ROUTE", "/laika") //Added a prefix as an environment variable
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "port",
@@ -163,6 +164,5 @@ func main() {
 			},
 		},
 	}
-
 	app.Run(os.Args)
 }
