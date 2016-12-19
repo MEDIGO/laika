@@ -97,7 +97,7 @@ func main() {
 		cli.StringFlag{
 			Name: "route-prefix",
 			Usage: "Route prefix",
-			EnvVar: "ROUTE_PREFIX",
+			EnvVar: "LAIKA_ROUTE_PREFIX",
 			Value: "/laika",
 		},
 	}
