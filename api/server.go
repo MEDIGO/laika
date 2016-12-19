@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"os"
 
 	"github.com/DataDog/datadog-go/statsd"
 	log "github.com/Sirupsen/logrus"
@@ -22,11 +21,11 @@ type ServerConfig struct {
 	Store        store.Store
 	Stats        *statsd.Client
 	Notifier     notifier.Notifier
+	PrefixRoute  string
 }
 
 // NewServer creates a new server.
 func NewServer(conf ServerConfig) (*standard.Server, error) {
-	log.Warn(os.Getenv("PREFIX_ROUTE"))
 
 	if conf.RootPassword == "" {
 		return nil, errors.New("missing root username")
@@ -57,20 +56,20 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 	environments := NewEnvironmentResource(conf.Store, conf.Stats)
 	users := NewUserResource(conf.Store, conf.Stats)
 
-	e.Get(os.Getenv("PREFIX_ROUTE")+"/api/health", standard.WrapHandler(healthz.Handler()))
+	e.Get(conf.PrefixRoute+"/api/health", standard.WrapHandler(healthz.Handler()))
 
-	e.Get(os.Getenv("PREFIX_ROUTE")+"/api/features/:name", features.Get, basicAuthMiddleware)
-	e.Get(os.Getenv("PREFIX_ROUTE")+"/api/features", features.List, basicAuthMiddleware)
-	e.Post(os.Getenv("PREFIX_ROUTE")+"/api/features", features.Create, basicAuthMiddleware)
-	e.Patch(os.Getenv("PREFIX_ROUTE")+"/api/features/:name", features.Update, basicAuthMiddleware)
+	e.Get(conf.PrefixRoute+"/api/features/:name", features.Get, basicAuthMiddleware)
+	e.Get(conf.PrefixRoute+"/api/features", features.List, basicAuthMiddleware)
+	e.Post(conf.PrefixRoute+"/api/features", features.Create, basicAuthMiddleware)
+	e.Patch(conf.PrefixRoute+"/api/features/:name", features.Update, basicAuthMiddleware)
 
-	e.Get(os.Getenv("PREFIX_ROUTE")+"/api/environments/:name", environments.Get, basicAuthMiddleware)
-	e.Get(os.Getenv("PREFIX_ROUTE")+"/api/environments", environments.List, basicAuthMiddleware)
-	e.Post(os.Getenv("PREFIX_ROUTE")+"/api/environments", environments.Create, basicAuthMiddleware)
-	e.Patch(os.Getenv("PREFIX_ROUTE")+"/api/environments/:name", environments.Update, basicAuthMiddleware)
+	e.Get(conf.PrefixRoute+"/api/environments/:name", environments.Get, basicAuthMiddleware)
+	e.Get(conf.PrefixRoute+"/api/environments", environments.List, basicAuthMiddleware)
+	e.Post(conf.PrefixRoute+"/api/environments", environments.Create, basicAuthMiddleware)
+	e.Patch(conf.PrefixRoute+"/api/environments/:name", environments.Update, basicAuthMiddleware)
 
-	e.Get(os.Getenv("PREFIX_ROUTE")+"/api/users/:username", users.Get, basicAuthMiddleware)
-	e.Post(os.Getenv("PREFIX_ROUTE")+"/api/users", users.Create, basicAuthMiddleware)
+	e.Get(conf.PrefixRoute+"/api/users/:username", users.Get, basicAuthMiddleware)
+	e.Post(conf.PrefixRoute+"/api/users", users.Create, basicAuthMiddleware)
 
 	e.Static("/static", "public")
 	e.File("/*", "public/index.html")

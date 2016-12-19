@@ -94,6 +94,12 @@ func main() {
 			Usage:  "Slack webhook URL",
 			EnvVar: "LAIKA_SLACK_WEBHOOK_URL",
 		},
+		cli.StringFlag{
+			Name: "route-prefix",
+			Usage: "Route prefix",
+			EnvVar: "ROUTE_PREFIX",
+			Value: "/laika",
+		},
 	}
 	app.Commands = []cli.Command{
 		{
@@ -125,6 +131,7 @@ func main() {
 					Store:        store,
 					Stats:        stats,
 					Notifier:     notifier,
+					PrefixRoute:  c.GlobalString("route-prefix"),
 				})
 				if err != nil {
 					log.Fatal("Failed to create server: ", err)
