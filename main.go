@@ -17,10 +17,11 @@ import (
 func init() {
 	log.SetFormatter(&log.JSONFormatter{})
 }
-
+//TODO set Prefix by echo Router library?
 func main() {
 	app := cli.NewApp()
 	app.Author = "MEDIGO GmbH"
+	os.Setenv("PREFIX_ROUTE", "/laika") //Added a prefix as an environment variable
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "port",
@@ -93,6 +94,12 @@ func main() {
 			Usage:  "Slack webhook URL",
 			EnvVar: "LAIKA_SLACK_WEBHOOK_URL",
 		},
+		cli.StringFlag{
+			Name: "route-prefix",
+			Usage: "Route prefix",
+			EnvVar: "ROUTE_PREFIX",
+			Value: "/laika",
+		},
 	}
 	app.Commands = []cli.Command{
 		{
@@ -124,6 +131,7 @@ func main() {
 					Store:        store,
 					Stats:        stats,
 					Notifier:     notifier,
+					PrefixRoute:  c.GlobalString("route-prefix"),
 				})
 				if err != nil {
 					log.Fatal("Failed to create server: ", err)
@@ -163,6 +171,5 @@ func main() {
 			},
 		},
 	}
-
 	app.Run(os.Args)
 }

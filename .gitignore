@@ -9,3 +9,4 @@ npm-debug.log
 public/
 public/bower_components/
 vendor/
+.idea/
