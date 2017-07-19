@@ -1,0 +1,17 @@
+.lk-alert {
+  color: rgba(0,0,0,.7);
+  font-weight: 400;
+  padding: 10px 20px;
+  border-radius: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  border: 1px solid #e1d697;
+  margin-bottom: 20px;
+  border-radius: 3px;
+}
+
+.lk-alert--danger {
+  background: #fdf6f5;
+  border-color: #e7c0bc;
+}
