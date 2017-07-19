@@ -1,0 +1,52 @@
+.lk-toggle {
+  border-radius: 28px;
+  display: inline-block;
+  height: 22px;
+  position: relative;
+  width: 48px;
+}
+
+.lk-toggle input {
+  display: none;
+}
+
+.lk-toggle span {
+  background-color: #c9c0d1;
+  border-radius: 28px;
+  bottom: 0;
+  box-shadow: inset 0 2px 0 rgba(0,0,0,.04);
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .2s;
+  -webkit-transition: .2s;
+}
+
+.lk-toggle span:before {
+  background-color: white;
+  border-radius: 28px;
+  bottom: 3px;
+  content: "";
+  height: 16px;
+  left: 3px;
+  position: absolute;
+  transition: .2s;
+  -webkit-transition: .2s;
+  width: 16px;
+}
+
+.lk-toggle input:checked + span {
+  background-color: #6c5fc7;
+}
+
+.lk-toggle input:focus + span {
+  box-shadow: 0 0 1px #6c5fc7;
+}
+
+.lk-toggle input:checked + span:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}

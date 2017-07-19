@@ -1,0 +1,18 @@
+.lk-feature-detail__header h2 {
+  font-size: 22px;
+  margin-bottom: 0;
+}
+
+.lk-feature-detail__header div {
+  color: #968ba0;
+  font-size: 13px;
+  margin-right: 10px;
+}
+
+.lk-feature-details__environment-name span {
+  color: #968ba0;
+}
+
+.lk-feature-details__environment-control {
+  float: right;
+}

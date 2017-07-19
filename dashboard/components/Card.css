@@ -1,0 +1,21 @@
+.lk-card {
+  border: 1px solid #e2dee6;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  max-width: 600px;
+  margin: auto;
+}
+
+.lk-card__title {
+  background: #fbfbfc;
+  border-bottom: 1px solid #e2dee6;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  padding: 15px 30px 10px;
+}
+
+.lk-card__content {
+  background: #fff;
+  padding: 15px 30px 15px;
+}

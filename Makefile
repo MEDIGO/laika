@@ -26,10 +26,10 @@ test:
 	@scripts/test.sh
 .PHONY: test
 
-watch:
-	@echo "Watching source code..."
-	@scripts/watch.sh
-.PHONY: watch
+develop:
+	@echo "Running server..."
+	@scripts/develop.sh
+.PHONY: develop
 
 report:
 	@echo "Reporting coverage..."
