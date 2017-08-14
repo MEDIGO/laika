@@ -1,13 +1,12 @@
 package main
 
 import (
-	"os"
-	"time"
-	
 	"github.com/DataDog/datadog-go/statsd"
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	graceful "gopkg.in/tylerb/graceful.v1"
+	"os"
+	"time"
 
 	"github.com/MEDIGO/laika/api"
 	"github.com/MEDIGO/laika/notifier"
