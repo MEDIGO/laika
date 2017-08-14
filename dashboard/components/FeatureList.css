@@ -1,0 +1,27 @@
+.lk-feature-list__item {
+  margin: -10px;
+  padding: 10px;
+}
+
+.lk-feature-list a {
+  text-decoration: none;
+}
+
+.lk-feature-list__item:hover {
+  background: #f8fafd;
+  cursor: pointer;
+}
+
+.lk-feature-list__name {
+  font-weight: bold;
+  color: #2f2936;
+}
+
+.lk-feature-list__time {
+  font-size: 14px;
+  color: #7c6a8e;
+}
+
+.lk-feature-list__status-list {
+  float: right;
+}

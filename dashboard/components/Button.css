@@ -1,0 +1,23 @@
+.lk-button {
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.lk-button:focus {
+  outline: 0;
+}
+
+.lk-button--primary {
+  color: #fff;
+  background: #6c5fc7;
+  border-color: #413496;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.15);
+  box-shadow: 0 2px 0 rgba(0,0,0,.08);
+}
+
+.lk-button--primary:hover {
+  background-color: #5b4cc0;
+}
