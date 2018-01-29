@@ -132,6 +132,6 @@ In the current release of Laika, it is possible to create feature flags and enab
 
 ## Copyright and license
 
-Copyright © 2017 MEDIGO GmbH.
+Copyright © 2016 MEDIGO GmbH.
 
 Laika is licensed under the MIT License. See [LICENSE](LICENSE) for the full license text.
