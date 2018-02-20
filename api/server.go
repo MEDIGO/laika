@@ -51,22 +51,16 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 
 	features := NewFeatureResource(conf.Store, conf.Stats, conf.Notifier)
 	environments := NewEnvironmentResource(conf.Store, conf.Stats)
-	users := NewUserResource(conf.Store, conf.Stats)
+	events := NewEventResource(conf.Store, conf.Stats, conf.Notifier)
 
 	e.Get("/api/health", standard.WrapHandler(healthz.Handler()))
 
+	e.Post("/api/events/:type", events.Create, basicAuthMiddleware)
+
 	e.Get("/api/features/:name", features.Get, basicAuthMiddleware)
 	e.Get("/api/features", features.List, basicAuthMiddleware)
-	e.Post("/api/features", features.Create, basicAuthMiddleware)
-	e.Patch("/api/features/:name", features.Update, basicAuthMiddleware)
 
-	e.Get("/api/environments/:name", environments.Get, basicAuthMiddleware)
 	e.Get("/api/environments", environments.List, basicAuthMiddleware)
-	e.Post("/api/environments", environments.Create, basicAuthMiddleware)
-	e.Patch("/api/environments/:name", environments.Update, basicAuthMiddleware)
-
-	e.Get("/api/users/:username", users.Get, basicAuthMiddleware)
-	e.Post("/api/users", users.Create, basicAuthMiddleware)
 
 	e.Static("/static", "public")
 	e.File("/*", "public/index.html")

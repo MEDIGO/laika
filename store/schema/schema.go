@@ -3,6 +3,7 @@
 // store/schema/1_init.sql
 // store/schema/2.sql
 // store/schema/3.sql
+// store/schema/4.sql
 // DO NOT EDIT!
 
 package schema
@@ -85,7 +86,7 @@ func storeSchema1_initSql() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "store/schema/1_init.sql", size: 1458, mode: os.FileMode(420), modTime: time.Unix(1463045052, 0)}
+	info := bindataFileInfo{name: "store/schema/1_init.sql", size: 1458, mode: os.FileMode(420), modTime: time.Unix(1489595209, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -105,7 +106,7 @@ func storeSchema2Sql() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "store/schema/2.sql", size: 172, mode: os.FileMode(420), modTime: time.Unix(1463045052, 0)}
+	info := bindataFileInfo{name: "store/schema/2.sql", size: 172, mode: os.FileMode(420), modTime: time.Unix(1489595209, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -125,7 +126,27 @@ func storeSchema3Sql() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "store/schema/3.sql", size: 327, mode: os.FileMode(420), modTime: time.Unix(1463131836, 0)}
+	info := bindataFileInfo{name: "store/schema/3.sql", size: 327, mode: os.FileMode(420), modTime: time.Unix(1489595209, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _storeSchema4Sql = []byte("\x1f\x8b\x08\x00\x00\x09\x6e\x88\x00\xff\x5c\xd0\xc1\x4b\xc3\x30\x14\x06\xf0\xfb\xfb\x2b\xbe\x63\x8b\xee\x22\x0c\x84\xe1\x21\xae\x6f\x18\x6c\xd2\x92\xbe\xc8\x76\xb2\x85\x45\xe9\x61\x73\x68\x54\xfc\xef\x6d\x2c\x68\x5c\x6e\x0f\x7e\x5f\xde\xe3\x5b\x2c\x70\x71\x18\x9f\x5f\x87\x18\xe0\x4f\x44\x6b\xc7\x4a\x18\xa2\x6e\x6b\x86\xde\xc0\x36\x02\xde\xea\x4e\x3a\xf4\xe1\x23\x1c\xe3\x5b\x8f\x82\x80\x7e\xdc\xf7\xc8\x9e\xb6\xf2\x63\xad\xaf\x6b\x28\x2f\xcd\xa3\xb6\xd3\x5f\x86\xad\x5c\x26\x1e\xc7\x43\xc8\x02\xa2\x0d\x77\xa2\x4c\xfb\x1b\x9a\xd5\xd7\x29\x57\x0f\xca\xad\xef\x94\x2b\xae\x96\xcb\xf2\x3f\xdc\x0f\x71\xc8\xa0\xe1\x4a\x7b\x23\xbc\x95\x8c\x4d\xae\x75\xda\x28\xb7\xc3\x3d\xef\x50\xa4\x93\xcb\x94\x9e\xa6\x62\x3e\x28\x1b\xd3\xe6\x92\x4a\x54\xbc\x51\xbe\x16\xa4\xc5\x1d\xcb\xcd\x7b\x7c\xba\x5e\x11\xe5\x3d\x55\x2f\x9f\x47\xa2\xca\x35\xed\x5f\x4f\x67\x1d\xad\xe8\x3b\x00\x00\xff\xff\xf1\xed\x37\x22\x59\x01\x00\x00")
+
+func storeSchema4SqlBytes() ([]byte, error) {
+	return bindataRead(
+		_storeSchema4Sql,
+		"store/schema/4.sql",
+	)
+}
+
+func storeSchema4Sql() (*asset, error) {
+	bytes, err := storeSchema4SqlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "store/schema/4.sql", size: 345, mode: os.FileMode(436), modTime: time.Unix(1519308068, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -185,6 +206,7 @@ var _bindata = map[string]func() (*asset, error){
 	"store/schema/1_init.sql": storeSchema1_initSql,
 	"store/schema/2.sql": storeSchema2Sql,
 	"store/schema/3.sql": storeSchema3Sql,
+	"store/schema/4.sql": storeSchema4Sql,
 }
 
 // AssetDir returns the file names below a certain
@@ -232,6 +254,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 			"1_init.sql": &bintree{storeSchema1_initSql, map[string]*bintree{}},
 			"2.sql": &bintree{storeSchema2Sql, map[string]*bintree{}},
 			"3.sql": &bintree{storeSchema3Sql, map[string]*bintree{}},
+			"4.sql": &bintree{storeSchema4Sql, map[string]*bintree{}},
 		}},
 	}},
 }}

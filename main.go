@@ -110,6 +110,10 @@ func main() {
 					log.Fatal("Failed to create Store: ", err)
 				}
 
+				if _, err := store.State(); err != nil {
+					log.Fatal("Failed to compute initial state: ", err)
+				}
+
 				stats, err := statsd.New(c.GlobalString("statsd-host") + ":" + c.GlobalString("statsd-port"))
 				if err != nil {
 					log.Fatal("Failed to create Statsd client: ", err)

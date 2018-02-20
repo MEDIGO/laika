@@ -68,12 +68,18 @@ func AuthMiddleware(rootUsername, rootPassword string, s store.Store) echo.Middl
 			return password == rootPassword
 		}
 
-		user, err := s.GetUserByUsername(username)
+		state, err := s.State()
 		if err != nil {
-			log.Error("Failed to retrieve user: ", err)
+			log.Error("Failed to get state: ", err)
 			return false
 		}
 
-		return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil
+		for _, user := range state.Users {
+			if user.Username == username {
+				return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil
+			}
+		}
+
+		return false
 	})
 }
