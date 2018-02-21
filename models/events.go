@@ -3,15 +3,12 @@ package models
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/MEDIGO/laika/notifier"
 	log "github.com/Sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
-
-const IDLength = 8
 
 type Event interface {
 	// Validate validates the event data against given (immutable) state.
@@ -37,26 +34,16 @@ var types = map[string](func() Event){
 }
 
 type EnvironmentCreated struct {
-	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
 func (e *EnvironmentCreated) Validate(s *State) (error, error) {
-	if len(e.ID) != IDLength {
-		return fmt.Errorf("ID must be %d characters long", IDLength), nil
-	}
-
 	if e.Name == "" {
 		return errors.New("Name must not be empty"), nil
 	}
 
-	for _, env := range s.Environments {
-		if e.ID == env.ID {
-			return errors.New("ID is already in use"), nil
-		}
-		if e.Name == env.Name {
-			return errors.New("Name is already in use"), nil
-		}
+	if s.getEnvByName(e.Name) != nil {
+		return errors.New("Name is already in use"), nil
 	}
 
 	return nil, nil
@@ -65,7 +52,6 @@ func (e *EnvironmentCreated) Validate(s *State) (error, error) {
 func (e *EnvironmentCreated) Update(s *State, t time.Time) *State {
 	state := *s
 	state.Environments = append(state.Environments, Environment{
-		ID:        e.ID,
 		Name:      e.Name,
 		CreatedAt: t,
 	})
@@ -80,26 +66,16 @@ func (*EnvironmentCreated) Notify(*State, notifier.Notifier) {
 }
 
 type FeatureCreated struct {
-	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
 func (e *FeatureCreated) Validate(s *State) (error, error) {
-	if len(e.ID) != IDLength {
-		return fmt.Errorf("ID must be %d characters long", IDLength), nil
-	}
-
 	if e.Name == "" {
 		return errors.New("Name must not be empty"), nil
 	}
 
-	for _, env := range s.Features {
-		if e.ID == env.ID {
-			return errors.New("ID is already in use"), nil
-		}
-		if e.Name == env.Name {
-			return errors.New("Name is already in use"), nil
-		}
+	if s.getFeatureByName(e.Name) != nil {
+		return errors.New("Name is already in use"), nil
 	}
 
 	return nil, nil
@@ -108,7 +84,6 @@ func (e *FeatureCreated) Validate(s *State) (error, error) {
 func (e *FeatureCreated) Update(s *State, t time.Time) *State {
 	state := *s
 	state.Features = append(state.Features, Feature{
-		ID:        e.ID,
 		Name:      e.Name,
 		CreatedAt: t,
 	})
@@ -122,18 +97,18 @@ func (e *FeatureCreated) PrePersist(*State) (Event, error) {
 func (*FeatureCreated) Notify(*State, notifier.Notifier) {}
 
 type FeatureToggled struct {
-	FeatureID     string `json:"feature_id"`
-	EnvironmentID string `json:"environment_id"`
-	Status        bool   `json:"status"`
+	Feature     string `json:"feature"`
+	Environment string `json:"environment"`
+	Status      bool   `json:"status"`
 }
 
 func (e *FeatureToggled) Validate(s *State) (error, error) {
-	if s.getEnvByID(e.EnvironmentID) == nil {
+	if s.getEnvByName(e.Environment) == nil {
 		return errors.New("Bad environment"), nil
 	}
 
-	if s.getFeatureByID(e.FeatureID) == nil {
-		return errors.New("Bad environment"), nil
+	if s.getFeatureByName(e.Feature) == nil {
+		return errors.New("Bad Feature"), nil
 	}
 
 	return nil, nil
@@ -143,24 +118,17 @@ func (e *FeatureToggled) Update(s *State, t time.Time) *State {
 	state := *s
 
 	if e.Status {
-		state.Enabled[EnvFeature{e.EnvironmentID, e.FeatureID}] = true
+		state.Enabled[EnvFeature{e.Environment, e.Feature}] = true
 	} else {
-		delete(state.Enabled, EnvFeature{e.EnvironmentID, e.FeatureID})
+		delete(state.Enabled, EnvFeature{e.Environment, e.Feature})
 	}
 
 	return &state
 }
 
 func (e *FeatureToggled) Notify(s *State, n notifier.Notifier) {
-	feature := s.getFeatureByID(e.FeatureID)
-	env := s.getEnvByID(e.EnvironmentID)
-
-	if feature == nil || env == nil {
-		return
-	}
-
 	go func() {
-		if err := n.NotifyStatusChange(feature.Name, e.Status, env.Name); err != nil {
+		if err := n.NotifyStatusChange(e.Feature, e.Status, e.Environment); err != nil {
 			log.Error("failed to notify feature status change: ", err)
 		}
 	}()
@@ -171,28 +139,18 @@ func (e *FeatureToggled) PrePersist(*State) (Event, error) {
 }
 
 type UserCreated struct {
-	ID           string  `json:"id"`
 	Username     string  `json:"username"`
 	Password     *string `json:"password,omitempty"`
 	PasswordHash string  `json:"password_hash"`
 }
 
 func (e *UserCreated) Validate(s *State) (error, error) {
-	if len(e.ID) != IDLength {
-		return fmt.Errorf("ID must be %d characters long", IDLength), nil
-	}
-
 	if e.Username == "" {
 		return errors.New("Username must not be empty"), nil
 	}
 
-	for _, user := range s.Users {
-		if e.ID == user.ID {
-			return errors.New("ID is already in use"), nil
-		}
-		if e.Username == user.Username {
-			return errors.New("Name is already in use"), nil
-		}
+	if s.getUserByName(e.Username) != nil {
+		return errors.New("Name is already in use"), nil
 	}
 
 	if e.Password == nil && e.PasswordHash == "" ||
@@ -207,7 +165,6 @@ func (e *UserCreated) Update(s *State, t time.Time) *State {
 	state := *s
 
 	state.Users = append(state.Users, User{
-		ID:           e.ID,
 		Username:     e.Username,
 		PasswordHash: e.PasswordHash,
 	})

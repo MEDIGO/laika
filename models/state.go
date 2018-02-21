@@ -5,27 +5,24 @@ import (
 )
 
 type User struct {
-	ID           string    `json:"id"`
 	Username     string    `json:"name"`
 	PasswordHash string    `json:"password_hash"`
 	CreatedAt    time.Time `json:"created_at"`
 }
 
 type Environment struct {
-	ID        string    `json:"id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
 type Feature struct {
-	ID        string    `json:"id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
 type EnvFeature struct {
-	EnvID     string
-	FeatureID string
+	Env     string
+	Feature string
 }
 
 type State struct {
@@ -45,9 +42,9 @@ func NewState() *State {
 
 }
 
-func (s *State) getFeatureByID(id string) *Feature {
+func (s *State) getFeatureByName(name string) *Feature {
 	for _, feature := range s.Features {
-		if feature.ID == id {
+		if feature.Name == name {
 			return &feature
 		}
 	}
@@ -55,10 +52,20 @@ func (s *State) getFeatureByID(id string) *Feature {
 	return nil
 }
 
-func (s *State) getEnvByID(id string) *Environment {
+func (s *State) getEnvByName(name string) *Environment {
 	for _, env := range s.Environments {
-		if env.ID == id {
+		if env.Name == name {
 			return &env
+		}
+	}
+
+	return nil
+}
+
+func (s *State) getUserByName(username string) *User {
+	for _, user := range s.Users {
+		if user.Username == username {
+			return &user
 		}
 	}
 

@@ -60,8 +60,8 @@ func getFeatureStatus(feature *models.Feature, s *models.State) *featureStatus {
 	}
 	for _, env := range s.Environments {
 		enabled, ok := s.Enabled[models.EnvFeature{
-			EnvID:     env.ID,
-			FeatureID: feature.ID,
+			Env:     env.Name,
+			Feature: feature.Name,
 		}]
 		fs.Status[env.Name] = ok && enabled
 	}
