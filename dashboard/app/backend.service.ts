@@ -11,15 +11,21 @@ export class BackendService {
   }
 
   createFeature(feature) {
-    return this.request('post', '/api/features', feature);
+    return this.request('post', '/api/events/feature_created', {
+      'name': feature.name
+    })
   }
 
   getFeature(name) {
-    return this.request('get', '/api/features/' + name);
+    return this.request('get', '/api/features/' + (window as any).encodeURIComponent(name));
   }
 
-  updateFeature(name: string, feature) {
-    return this.request('patch', '/api/features/' + name, feature);
+  toggleFeature(env: string, feature: string, status: boolean) {
+    return this.request('post', '/api/events/feature_toggled', {
+      'environment': env,
+      'feature': feature,
+      'status': status,
+    })
   }
 
   listEnvironments() {
@@ -27,7 +33,9 @@ export class BackendService {
   }
 
   createEnvironment(env) {
-    return this.request('post', '/api/environments', env)
+    return this.request('post', '/api/events/environment_created', {
+      'name': env.name
+    })
   }
 
   private get(path: string) {

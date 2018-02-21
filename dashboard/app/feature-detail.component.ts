@@ -28,10 +28,10 @@ export class FeatureDetailComponent implements OnInit {
   }
 
   handleToggle(status: boolean, name: string) {
-    this.feature.status[name] = status;
-
-    this.backend.updateFeature(this.feature.name, {status: this.feature.status}).subscribe(
-      feature => this.feature = feature,
+    let updated = JSON.parse(JSON.stringify(this.feature));
+    updated.status[name] = status;
+    this.backend.toggleFeature(name, this.feature.name, status).subscribe(
+      feature => this.feature = updated,
       error =>  this.error = error
     );
   }
