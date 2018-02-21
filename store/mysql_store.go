@@ -60,8 +60,11 @@ func (s *mySQLStore) Migrate() error {
 		Dir:      "store/schema",
 	}
 
-	_, err := migrate.Exec(s.db, "mysql", migrations, migrate.Up)
-	return err
+	if _, err := migrate.Exec(s.db, "mysql", migrations, migrate.Up); err != nil {
+		return err
+	}
+
+	return s.migrateData()
 }
 
 func (s *mySQLStore) Reset() error {
