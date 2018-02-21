@@ -110,6 +110,14 @@ func main() {
 					log.Fatal("Failed to create Store: ", err)
 				}
 
+				if err := store.Ping(); err != nil {
+					log.Fatal("Could not ping database: ", err)
+				}
+
+				if err := store.Migrate(); err != nil {
+					log.Fatal("Failed to migrate store schema: ", err)
+				}
+
 				if _, err := store.State(); err != nil {
 					log.Fatal("Failed to compute initial state: ", err)
 				}
@@ -135,34 +143,6 @@ func main() {
 
 				log.Info("Starting server on port ", c.GlobalString("port"))
 				graceful.Run(":"+c.GlobalString("port"), time.Duration(c.Int("timeout"))*time.Second, server)
-			},
-		},
-		{
-			Name:  "migrate",
-			Usage: "Migrates the store schema to the latest available version",
-			Action: func(c *cli.Context) error {
-				store, err := store.NewMySQLStore(
-					c.GlobalString("mysql-username"),
-					c.GlobalString("mysql-password"),
-					c.GlobalString("mysql-host"),
-					c.GlobalString("mysql-port"),
-					c.GlobalString("mysql-dbname"),
-				)
-
-				if err != nil {
-					log.Fatal("Failed to create Store: ", err)
-				}
-
-				if err := store.Ping(); err != nil {
-					log.Fatal("Failed to connect with store: ", err)
-				}
-
-				if err := store.Migrate(); err != nil {
-					log.Fatal("Failed to migrate store schema: ", err)
-				}
-
-				return nil
-
 			},
 		},
 	}

@@ -81,13 +81,6 @@ $ make install
 ```
 
 
-Migrate the database with:
-
-```sh
-$ make migrate
-```
-
-
 Build continuously the server and UI with:
 
 ```sh

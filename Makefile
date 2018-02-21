@@ -31,11 +31,6 @@ watch:
 	@scripts/watch.sh
 .PHONY: watch
 
-migrate:
-	@echo "Migrating DB..."
-	@scripts/migrate.sh
-.PHONY: migrate
-
 report:
 	@echo "Reporting coverage..."
 	@scripts/report.sh
