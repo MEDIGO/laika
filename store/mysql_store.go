@@ -69,6 +69,7 @@ func (s *mySQLStore) Migrate() error {
 
 func (s *mySQLStore) Reset() error {
 	tables := []string{
+		"events",
 		"feature_status_history",
 		"feature_status",
 		"environment",
@@ -81,7 +82,7 @@ func (s *mySQLStore) Reset() error {
 	}
 
 	for _, table := range tables {
-		if _, err := s.db.Exec("TRUNCATE TABLE " + table); err != nil {
+		if _, err := s.db.Exec("DELETE FROM " + table); err != nil {
 			return err
 		}
 	}

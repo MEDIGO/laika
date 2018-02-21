@@ -24,13 +24,7 @@ func TestMySQLStore(t *testing.T) {
 	require.NoError(t, err)
 
 	require.NoError(t, store.Reset())
-	testStoreUsers(t, store)
-
-	require.NoError(t, store.Reset())
-	testStoreEnvironments(t, store)
-
-	require.NoError(t, store.Reset())
-	testStoreFeatures(t, store)
+	testStoreEvents(t, store)
 
 	require.NoError(t, store.Reset())
 }
