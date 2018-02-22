@@ -1,6 +1,8 @@
 package api
 
 import (
+	"net/url"
+
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/MEDIGO/laika/models"
 	"github.com/MEDIGO/laika/notifier"
@@ -20,7 +22,10 @@ func NewFeatureResource(store store.Store, stats *statsd.Client, notifier notifi
 }
 
 func (r *FeatureResource) Get(c echo.Context) error {
-	name := c.Param("name")
+	name, err := url.QueryUnescape(c.Param("name"))
+	if err != nil {
+		return BadRequest(c, "Bad feature name")
+	}
 
 	feature, err := r.store.GetFeatureByName(name)
 	if err != nil {
