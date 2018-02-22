@@ -22,6 +22,7 @@ var types = map[string](func() Event){
 	"environment_created": func() Event { return &EnvironmentCreated{} },
 	"feature_created":     func() Event { return &FeatureCreated{} },
 	"feature_toggled":     func() Event { return &FeatureToggled{} },
+	"feature_deleted":     func() Event { return &FeatureDeleted{} },
 	"user_created":        func() Event { return &UserCreated{} },
 }
 

@@ -27,6 +27,7 @@ The command endpoint is for manipulating data.
 | `POST`  | `/api/events/feature_created`     | `{"name":"feature1"}`                                          | Create a new feature.     |
 | `POST`  | `/api/events/user`                | `{"username":"admin","password":"secret"}`                     | Create a new user.        |
 | `POST`  | `/api/events/feature_toggled`     | `{"feature":"feature1","environment":"staging","status":true}` | Toggle a feature.         |
+| `POST`  | `/api/events/feature_deleted`     | `{"name":"feature1"}`                                          | Delete a feature.         |
 
 ## Client
 
