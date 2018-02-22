@@ -16,7 +16,8 @@ export class FeatureListComponent implements OnInit {
 
   ngOnInit() {
     this.backend.listFeatures().subscribe(
-      features => this.features = features,
+      features => this.features = features.sort(
+        (a, b) => b.created_at < a.created_at ? -1 : b.created_at > a.created_at),
       error =>  this.error = error);
   }
 }
