@@ -21,11 +21,6 @@ type Event interface {
 	Notify(*State, notifier.Notifier)
 }
 
-type EventMeta struct {
-	Type string          `json:"type"`
-	Data json.RawMessage `json:"data"`
-}
-
 var types = map[string](func() Event){
 	"environment_created": func() Event { return &EnvironmentCreated{} },
 	"feature_created":     func() Event { return &FeatureCreated{} },
@@ -94,7 +89,8 @@ func (e *FeatureCreated) PrePersist(*State) (Event, error) {
 	return e, nil
 }
 
-func (*FeatureCreated) Notify(*State, notifier.Notifier) {}
+func (*FeatureCreated) Notify(*State, notifier.Notifier) {
+}
 
 type FeatureToggled struct {
 	Feature     string `json:"feature"`
