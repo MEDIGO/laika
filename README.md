@@ -10,19 +10,23 @@ Using Laika in a project thus allows for fast and continuous feature release and
 
 ## API Reference
 
+Laika uses CQRS, the query endpoints are as follows.
+
 | Method  | Endpoint                  | Description                |
 | ------- | ------------------------- | -------------------------- |
 | `GET`   | `/api/health`             | Check the service health   |
 | `GET`   | `/api/features`           | List all features          |
 | `GET`   | `/api/features/:name`     | Get a feature by name      |
-| `POST`  | `/api/features`           | Create a feature           |
-| `PATCH` | `/api/features/:name`     | Update a feature           |
 | `GET`   | `/api/environments`       | List all environments      |
-| `GET`   | `/api/environments/:name` | Get an environment by name |
-| `POST`  | `/api/environments`       | Create an environment      |
-| `PATCH` | `/api/environments/:name` | Update an environment      |
-| `GET`   | `/api/users/:username`    | Get a user by username     |
-| `POST`  | `/api/users`              | Create a user              |
+
+The command endpoint is for manipulating data.
+
+| Method  | Endpoint                          | Example body                                                   | Description               |
+| ------- | --------------------------------- | -------------------------------------------------------------- | ------------------------- |
+| `POST`  | `/api/events/environment_created` | `{"name":"staging"}`                                           | Create a new environment. |
+| `POST`  | `/api/events/feature_created`     | `{"name":"feature1"}`                                          | Create a new feature.     |
+| `POST`  | `/api/events/user`                | `{"username":"admin","password":"secret"}`                     | Create a new user.        |
+| `POST`  | `/api/events/feature_toggled`     | `{"feature":"feature1","environment":"staging","status":true}` | Toggle a feature.         |
 
 ## Client
 

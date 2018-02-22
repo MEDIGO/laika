@@ -3,7 +3,6 @@ import:
 - package: github.com/DataDog/datadog-go
   subpackages:
   - statsd
-- package: github.com/Masterminds/squirrel
 - package: github.com/Sirupsen/logrus
 - package: github.com/codegangsta/cli
 - package: github.com/go-sql-driver/mysql
@@ -14,7 +13,6 @@ import:
   - middleware
 - package: github.com/lytics/slackhook
 - package: github.com/rubenv/sql-migrate
-- package: github.com/russross/meddler
 - package: github.com/stretchr/testify
   subpackages:
   - require
@@ -24,3 +22,4 @@ import:
 - package: gopkg.in/tylerb/graceful.v1
 - package: github.com/satori/go.uuid
 - package: github.com/MEDIGO/go-healthz
+- package: gopkg.in/gorp.v1
