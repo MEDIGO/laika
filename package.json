@@ -4,8 +4,8 @@
   "description": "A feature flag service",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --colors --progress",
-    "watch": "npm run build -- --watch"
+    "build": "webpack --display-modules --config webpack.prod.config.js --colors --progress",
+    "watch": "webpack --config webpack.dev.config.js --colors --progress --watch"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,8 @@
     "eslint-plugin-react": "^6.10.3",
     "html-webpack-plugin": "^2.28.0",
     "style-loader": "^0.17.0",
-    "webpack": "^2.4.1"
+    "webpack": "^2.4.1",
+    "uglifyjs-webpack-plugin": "1.2.0"
   },
   "dependencies": {
     "history": "^4.6.3",
