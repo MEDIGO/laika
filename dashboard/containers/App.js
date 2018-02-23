@@ -11,7 +11,7 @@ import Footer from '../components/Footer';
 
 export default function App() {
   return (
-    <Router history={history}>
+    <Router>
       <div>
         <Header />
 
