@@ -34,11 +34,13 @@ export function listFeatures() {
 }
 
 export function createFeature(feature) {
-  return post('/api/features', feature);
+  return post('/api/events/feature_created', {
+    'name': feature.name
+  });
 }
 
 export function getFeature(name) {
-  return get(`/api/features/${name}`);
+  return get(`/api/features/${window.encodeURIComponent(name)}`);
 }
 
 export function listEnvironments() {
@@ -46,13 +48,15 @@ export function listEnvironments() {
 }
 
 export function createEnvironment(environment) {
-  return post('/api/environments', environment);
+  return post('/api/events/environment_created', {
+    'name': environment.name
+  });
 }
 
-export function getUser(username) {
-  return get(`/api/users/${username}`);
-}
-
-export function updateFeature(name, feature) {
-  return patch(`/api/features/${name}`, feature);
+export function toggleFeature(environment, feature, status) {
+  return post('/api/events/feature_toggled', {
+    'environment': environment,
+    'feature': feature,
+    'status': status
+  });
 }

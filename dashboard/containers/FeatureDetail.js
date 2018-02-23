@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import FeatureDetailComponent from '../components/FeatureDetail';
-import { getFeature, updateFeature } from '../utils/api';
+import { getFeature, toggleFeature } from '../utils/api';
 
 class FeatureDetail extends Component {
   constructor(props) {
@@ -17,17 +17,21 @@ class FeatureDetail extends Component {
   }
 
   componentDidMount() {
-    getFeature(this.props.match.params.name).then(feature => this.setState({
+    getFeature(window.decodeURIComponent(this.props.match.params.name)).then(feature => this.setState({
       loading: false,
       feature,
     }));
   }
 
   handleToggle(name, value) {
-    updateFeature(this.props.match.params.name, { status: { [name]: value } }).then(() => {
-      const feature = this.state.feature;
-      feature.status[name] = value;
-      this.setState({ feature });
+    toggleFeature(name, this.state.feature.name, value).then(() => {
+      this.setState({
+        feature: Object.assign({}, this.state.feature, {
+          status: Object.assign({}, this.state.feature.status, {
+            [name]: value
+          })
+        })
+      });
     });
   }
 

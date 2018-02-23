@@ -10,8 +10,8 @@ import './FeatureList.css';
 
 function sort(features) {
   return features.sort((a, b) => {
-    if (a.id < b.id) return 1;
-    if (a.id > b.id) return -1;
+    if (a.created_at < b.created_at) return 1;
+    if (a.created_at > b.created_at) return -1;
     return 0;
   });
 }
@@ -22,8 +22,8 @@ function parseStatus(status) {
 
 export default function FeatureList({ features }) {
   const items = sort(features).map(feature =>
-    <div key={feature.id} className="lk-feature-list__item">
-      <Link to={`/features/${feature.name}`}>
+    <div key={feature.name} className="lk-feature-list__item">
+      <Link to={`/features/${window.encodeURIComponent(feature.name)}`}>
         <div className="lk-feature-list__name">
           <span>{feature.name}</span>
           <span className="lk-feature-list__status-list">
