@@ -8,14 +8,14 @@ import './FeatureDetail.css';
 
 import { capitalize } from '../utils/string';
 
-export default function FeatureDetail({ feature, onToggle }) {
-  const environments = Object.keys(feature.status).map(name =>
-    <div key={name}>
+export default function FeatureDetail({ environments, feature, onToggle }) {
+  const envStatus = environments.map(env =>
+    <div key={env.name}>
       <span className="lk-feature-details__environment-name">
-        {capitalize(name)} <span>({name})</span>
+        {capitalize(env.name)} <span>({env.name})</span>
       </span>
       <span className="lk-feature-details__environment-control">
-        <Toggle name={name} value={feature.status[name]} onChange={onToggle} />
+        <Toggle name={env.name} value={feature.status[env.name]} onChange={onToggle} />
       </span>
     </div>,
   );
@@ -27,13 +27,16 @@ export default function FeatureDetail({ feature, onToggle }) {
         <div>Created {moment(feature.created_at).fromNow()}</div>
       </div>
       <Section title="Environments">
-        {environments}
+        {envStatus}
       </Section>
     </div>
   );
 }
 
 FeatureDetail.propTypes = {
+  environments: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+  })).isRequired,
   feature: PropTypes.shape({
     name: PropTypes.string,
   }).isRequired,

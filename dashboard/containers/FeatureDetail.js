@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import FeatureDetailComponent from '../components/FeatureDetail';
-import { getFeature, toggleFeature } from '../utils/api';
+import { listEnvironments, getFeature, toggleFeature } from '../utils/api';
 
 class FeatureDetail extends Component {
   constructor(props) {
@@ -10,6 +10,7 @@ class FeatureDetail extends Component {
 
     this.state = {
       loading: true,
+      environments: [],
       feature: null,
     };
 
@@ -17,10 +18,14 @@ class FeatureDetail extends Component {
   }
 
   componentDidMount() {
-    getFeature(window.decodeURIComponent(this.props.match.params.name)).then(feature => this.setState({
-      loading: false,
-      feature,
-    }));
+    Promise.all([
+      listEnvironments(),
+      getFeature(window.decodeURIComponent(this.props.match.params.name))
+    ]).then(([environments, feature]) => this.setState({
+        loading: false,
+        environments,
+        feature,
+      }));
   }
 
   handleToggle(name, value) {
@@ -39,6 +44,7 @@ class FeatureDetail extends Component {
     if (this.state.loading) return null;
     return (
       <FeatureDetailComponent
+        environments={this.state.environments}
         feature={this.state.feature}
         onToggle={this.handleToggle}
       />

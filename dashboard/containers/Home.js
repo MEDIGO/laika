@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import FeatureList from '../components/FeatureList';
-import { listFeatures } from '../utils/api';
+import { listFeatures, listEnvironments } from '../utils/api';
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      environments: [],
       features: [],
     };
   }
 
   componentDidMount() {
-    listFeatures().then(features => this.setState({ features }));
+    Promise.all([
+      listEnvironments(),
+      listFeatures()
+    ]).then(([environments, features]) => this.setState({ environments, features }));
   }
 
   render() {
-    return <FeatureList features={this.state.features} />;
+    return <FeatureList environments={this.state.environments} features={this.state.features} />;
   }
 }
 
