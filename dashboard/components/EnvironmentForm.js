@@ -36,7 +36,7 @@ export default class FeatureForm extends Component {
             value={this.state.name}
             required
             onChange={this.handleChange}
-            placeholder="i.e. development"
+            placeholder="e.g. development"
           />
         </Form>
       </Card>
