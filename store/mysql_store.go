@@ -16,6 +16,7 @@ import (
 
 type mySQLStore struct {
 	db          *sql.DB
+	mux         sync.Mutex
 	lastEventID int
 	state       *models.State
 }
@@ -111,9 +112,8 @@ func (s *mySQLStore) Persist(eventType string, data string) (int64, error) {
 }
 
 func (s *mySQLStore) State() (*models.State, error) {
-	var mux sync.Mutex
-	mux.Lock()
-	defer mux.Unlock()
+	s.mux.Lock()
+	defer s.mux.Unlock()
 
 	rows, err := s.db.Query(
 		"SELECT `id`, `time`, `type`, `data` FROM `events` WHERE `id` > ? ORDER BY `time`, `id`",
