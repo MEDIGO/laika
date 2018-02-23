@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Container from './Container';
 import './Header.css';
 
-export default function Header({ isLoggedIn }) {
+export default function Header() {
   return (
     <div className="lk-header">
       <Container>
@@ -15,21 +15,8 @@ export default function Header({ isLoggedIn }) {
             <li><Link to="/environments/new">New Environment</Link></li>
             <li><Link to="/features/new">New Feature</Link></li>
           </ul>
-          <ul>
-            <li>
-              {
-                isLoggedIn()
-                  ? <Link to="/logout">Log Out</Link>
-                  : <Link to="/login">Log In</Link>
-              }
-            </li>
-          </ul>
         </div>
       </Container>
     </div>
   );
 }
-
-Header.propTypes = {
-  isLoggedIn: PropTypes.func.isRequired,
-};

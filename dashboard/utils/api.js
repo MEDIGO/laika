@@ -1,23 +1,13 @@
-function basic(username, password) {
-  return `Basic ${btoa(`${username}:${password}`)}`;
-}
-
 function request(method, endpoint, payload) {
   const opts = {
     headers: {},
+    credentials: 'same-origin',
     method,
   };
 
   if (payload) {
     opts.headers['Content-Type'] = 'application/json';
     opts.body = JSON.stringify(payload);
-  }
-
-  const username = localStorage.getItem('credentials.username');
-  const password = localStorage.getItem('credentials.password');
-
-  if (username && password) {
-    opts.headers.Authorization = basic(username, password);
   }
 
   return fetch(endpoint, opts)

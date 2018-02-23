@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import FeatureList from '../components/FeatureList';
 import { listFeatures } from '../utils/api';
-import { withAuth } from '../utils/auth';
 
 class Home extends Component {
   constructor(props) {
@@ -22,4 +21,4 @@ class Home extends Component {
   }
 }
 
-export default withAuth(withRouter(Home));
+export default withRouter(Home);

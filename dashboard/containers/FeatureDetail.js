@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import FeatureDetailComponent from '../components/FeatureDetail';
 import { getFeature, updateFeature } from '../utils/api';
-import { withAuth } from '../utils/auth';
 
 class FeatureDetail extends Component {
   constructor(props) {
@@ -49,4 +48,4 @@ FeatureDetail.propTypes = {
   }).isRequired,
 };
 
-export default withAuth(withRouter(FeatureDetail));
+export default withRouter(FeatureDetail);

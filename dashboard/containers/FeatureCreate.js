@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import FeatureForm from '../components/FeatureForm';
 import { createFeature } from '../utils/api';
-import { withAuth } from '../utils/auth';
 
 function FeatureCreate({ history }) {
   const handleSubmit = ({ name }) => {
@@ -26,4 +25,4 @@ FeatureCreate.propTypes = {
   }).isRequired,
 };
 
-export default withAuth(withRouter(FeatureCreate));
+export default withRouter(FeatureCreate);

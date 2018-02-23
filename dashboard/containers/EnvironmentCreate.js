@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import EnvironmentForm from '../components/EnvironmentForm';
 import { createEnvironment } from '../utils/api';
-import { withAuth } from '../utils/auth';
 
 function EnvironmentCreate({ history }) {
   const handleSubmit = ({ name }) => {
@@ -26,4 +25,4 @@ EnvironmentCreate.propTypes = {
   }).isRequired,
 };
 
-export default withAuth(withRouter(EnvironmentCreate));
+export default withRouter(EnvironmentCreate);
