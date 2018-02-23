@@ -6,6 +6,10 @@
   cursor: pointer;
 }
 
+.lk-button + .lk-button {
+  margin-left: 8px;
+}
+
 .lk-button:focus {
   outline: 0;
 }
@@ -20,4 +24,9 @@
 
 .lk-button--primary:hover {
   background-color: #5b4cc0;
+}
+
+.lk-button--disabled {
+  cursor: default;
+  color: gray;
 }

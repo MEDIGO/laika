@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import FeatureDetailComponent from '../components/FeatureDetail';
-import { listEnvironments, getFeature, toggleFeature } from '../utils/api';
+import { listEnvironments, getFeature, toggleFeature, deleteFeature } from '../utils/api';
 
 class FeatureDetail extends Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class FeatureDetail extends Component {
     };
 
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -40,6 +41,10 @@ class FeatureDetail extends Component {
     });
   }
 
+  handleDelete(name) {
+    deleteFeature(name).then(() => this.props.history.push('/'));
+  }
+
   render() {
     if (this.state.loading) return null;
     return (
@@ -47,6 +52,7 @@ class FeatureDetail extends Component {
         environments={this.state.environments}
         feature={this.state.feature}
         onToggle={this.handleToggle}
+        onDelete={this.handleDelete}
       />
     );
   }
@@ -55,6 +61,9 @@ class FeatureDetail extends Component {
 FeatureDetail.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.object,
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
   }).isRequired,
 };
 

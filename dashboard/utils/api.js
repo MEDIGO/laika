@@ -60,3 +60,7 @@ export function toggleFeature(environment, feature, status) {
     'status': status
   });
 }
+
+export function deleteFeature(name) {
+  return post('/api/events/feature_deleted', { name });
+}
