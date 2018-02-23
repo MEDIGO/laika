@@ -12,6 +12,7 @@ export default function Input({
   error,
   onChange,
   placeholder,
+  autoFocus,
 }) {
   return (
     <div className="lk-input">
@@ -26,6 +27,7 @@ export default function Input({
         required={required}
         type={type}
         placeholder={placeholder}
+        autoFocus={autoFocus}
       />
       { error ? <div>{error}</div> : null }
     </div>
@@ -41,6 +43,7 @@ Input.propTypes = {
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string,
   placeholder: PropTypes.string,
+  autoFocus: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -49,4 +52,5 @@ Input.defaultProps = {
   value: '',
   type: '',
   placeholder: '',
+  autoFocus: false,
 };

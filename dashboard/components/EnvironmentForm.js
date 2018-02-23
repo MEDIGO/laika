@@ -37,6 +37,7 @@ export default class FeatureForm extends Component {
             required
             onChange={this.handleChange}
             placeholder="e.g. development"
+            autoFocus={true}
           />
         </Form>
       </Card>

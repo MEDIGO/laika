@@ -37,6 +37,7 @@ export default class FeatureForm extends Component {
             required
             onChange={this.handleChange}
             placeholder="e.g. user-follow-up-emails"
+            autoFocus={true}
           />
         </Form>
       </Card>
