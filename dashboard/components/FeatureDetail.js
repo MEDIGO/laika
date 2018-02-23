@@ -6,9 +6,7 @@ import Toggle from './Toggle';
 import Section from './Section';
 import './FeatureDetail.css';
 
-function capitalize(s) {
-  return s[0].toUpperCase() + s.slice(1);
-}
+import { capitalize } from '../utils/string';
 
 export default function FeatureDetail({ feature, onToggle }) {
   const environments = Object.keys(feature.status).map(name =>
