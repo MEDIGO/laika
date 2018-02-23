@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
 import Home from './Home';
 import Container from '../components/Container';
@@ -21,6 +21,7 @@ export default function App() {
             <Route exact path="/features/:name" component={FeatureDetail} />
             <Route exact path="/new/feature" component={FeatureCreate} />
             <Route exact path="/new/environment" component={EnvironmentCreate} />
+            <Redirect to="/" />
           </Switch>
         </Container>
 
