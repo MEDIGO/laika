@@ -18,9 +18,9 @@ export default function App() {
         <Container>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/features/new" component={FeatureCreate} />
             <Route exact path="/features/:name" component={FeatureDetail} />
-            <Route exact path="/environments/new" component={EnvironmentCreate} />
+            <Route exact path="/new/feature" component={FeatureCreate} />
+            <Route exact path="/new/environment" component={EnvironmentCreate} />
           </Switch>
         </Container>
 

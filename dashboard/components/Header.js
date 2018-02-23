@@ -12,8 +12,8 @@ export default function Header() {
         <div className="lk-header__wrapper">
           <ul>
             <li><Link to="/">LAIKA</Link></li>
-            <li><Link to="/environments/new">New Environment</Link></li>
-            <li><Link to="/features/new">New Feature</Link></li>
+            <li><Link to="/new/environment">New Environment</Link></li>
+            <li><Link to="/new/feature">New Feature</Link></li>
           </ul>
         </div>
       </Container>
