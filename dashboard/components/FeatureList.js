@@ -3,8 +3,8 @@ import { arrayOf, shape, string } from 'prop-types'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 
-import Tag from './Tag'
 import Section from './Section'
+import TagList from './TagList'
 
 import './FeatureList.css'
 
@@ -26,13 +26,7 @@ const FeatureList = ({ environments, features }) => {
       <Link to={`/features/${window.encodeURIComponent(feature.name)}`}>
         <div className='lk-feature-list__name'>
           <span>{feature.name}</span>
-          <span className='lk-feature-list__status-list'>
-            {parseStatus(environments, feature.status).map(status => (
-              <Tag key={status.name} type={status.enabled ? 'success' : null}>
-                {status.name}
-              </Tag>
-            ))}
-          </span>
+          <TagList tags={parseStatus(environments, feature.status)} />
         </div>
         <div className='lk-feature-list__time'>
           Created {moment(feature.created_at).fromNow()}
