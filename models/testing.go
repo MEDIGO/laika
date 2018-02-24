@@ -14,3 +14,10 @@ func requireValid(t *testing.T, s *State, e Event) Event {
 
 	return e
 }
+
+func requireInvalid(t *testing.T, s *State, e Event) {
+	valErr, err := e.Validate(s)
+
+	require.Error(t, valErr, "validation must fail")
+	require.NoError(t, err, "error during validaton")
+}
