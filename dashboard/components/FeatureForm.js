@@ -29,6 +29,7 @@ export default class FeatureForm extends Component {
         <Form
           onSubmit={this.handleSubmit}
           submitText={this.props.submitText}
+          errorText={this.props.errorText}
         >
           <Input
             label="Name"
@@ -49,8 +50,10 @@ FeatureForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   submitText: PropTypes.string,
   titleText: PropTypes.string.isRequired,
+  errorText: PropTypes.string,
 };
 
 FeatureForm.defaultProps = {
   submitText: null,
+  errorText: null,
 };

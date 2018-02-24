@@ -12,7 +12,9 @@ function request(method, endpoint, payload) {
 
   return fetch(endpoint, opts)
     .then((res) => {
-      if (!res.ok) throw new Error(`${res.status}`);
+      if (!res.ok) {
+        return res.json().then(err => { throw new Error(err.message); });
+      }
       return res.json();
     });
 }

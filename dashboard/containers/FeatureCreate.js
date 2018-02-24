@@ -1,22 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import FeatureForm from '../components/FeatureForm';
 import { createFeature } from '../utils/api';
 
-function FeatureCreate({ history }) {
-  const handleSubmit = ({ name }) => {
-    createFeature({ name })
-      .then(() => history.push('/'));
-  };
+class FeatureCreate extends Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <FeatureForm
-      titleText="Create a feature"
-      submitText="Create feature"
-      onSubmit={handleSubmit}
-    />
-  );
+    this.state = {
+      errorText: null,
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(feature) {
+    createFeature(feature)
+      .then(() => this.props.history.push('/'))
+      .catch(err => this.setState({ errorText: err.message }));
+  }
+
+  render() {
+    return (
+      <FeatureForm
+        titleText="Create a feature"
+        submitText="Create feature"
+        errorText={this.state.errorText}
+        onSubmit={this.handleSubmit}
+      />
+    );
+  }
 }
 
 FeatureCreate.propTypes = {

@@ -1,22 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import EnvironmentForm from '../components/EnvironmentForm';
 import { createEnvironment } from '../utils/api';
 
-function EnvironmentCreate({ history }) {
-  const handleSubmit = ({ name }) => {
-    createEnvironment({ name })
-      .then(() => history.push('/'));
-  };
+class EnvironmentCreate extends Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <EnvironmentForm
-      titleText="Create an environment"
-      submitText="Create environment"
-      onSubmit={handleSubmit}
-    />)
-  ;
+    this.state = {
+      errorText: null,
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(env) {
+    createEnvironment(env)
+      .then(() => this.props.history.push('/'))
+      .catch(err => this.setState({ errorText: err.message }));
+  }
+
+  render() {
+    return (
+      <EnvironmentForm
+        errorText={this.state.errorText}
+        titleText="Create an environment"
+        submitText="Create environment"
+        onSubmit={this.handleSubmit}
+      />)
+    ;
+  }
 }
 
 EnvironmentCreate.propTypes = {
