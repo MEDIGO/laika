@@ -1,9 +1,11 @@
 .lk-button {
-  border: 1px solid transparent;
+  background: white;
   border-radius: 3px;
+  border: 1px solid #413496;
+  color: #413496;
+  cursor: pointer;
   font-size: 14px;
   padding: 8px 16px;
-  cursor: pointer;
 }
 
 .lk-button + .lk-button {
@@ -15,11 +17,9 @@
 }
 
 .lk-button--primary {
-  color: #fff;
   background: #6c5fc7;
   border-color: #413496;
-  text-shadow: 0 -1px 0 rgba(0,0,0,.15);
-  box-shadow: 0 2px 0 rgba(0,0,0,.08);
+  color: #fff;
 }
 
 .lk-button--primary:hover {
@@ -27,6 +27,8 @@
 }
 
 .lk-button--disabled {
-  cursor: default;
+  background-color: whitesmoke;
+  border-color: lightgray;
   color: gray;
+  cursor: default;
 }

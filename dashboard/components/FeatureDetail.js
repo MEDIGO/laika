@@ -44,7 +44,7 @@ export default class FeatureDetail extends Component {
       </div>,
     );
 
-    const cancel = deleteUnlocked ? <Button onClick={this.lockDelete} label="Cancel" type="primary" /> : null
+    const cancel = deleteUnlocked ? <Button onClick={this.lockDelete} label="Cancel" /> : null
     const del = deleteUnlocked ? <Button onClick={() => onDelete(feature.name)} label="Confirm deletion" type="primary" /> : null
 
     return (
