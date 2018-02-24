@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { oneOf, node } from 'prop-types'
 
 import './Tag.css'
 
@@ -8,8 +8,8 @@ export default function Tag({ children, type }) {
 }
 
 Tag.propTypes = {
-  children: PropTypes.node,
-  type: PropTypes.oneOf(['success', 'default'])
+  children: node,
+  type: oneOf(['success', 'default'])
 }
 
 Tag.defaultProps = {

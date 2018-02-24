@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { shape, func } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import FeatureForm from '../components/FeatureForm'
 import { createFeature } from '../utils/api'
@@ -34,8 +34,8 @@ class FeatureCreate extends Component {
 }
 
 FeatureCreate.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func
+  history: shape({
+    push: func
   }).isRequired
 }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { arrayOf, shape, string } from 'prop-types'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 
@@ -52,14 +52,14 @@ export default function FeatureList({ environments, features }) {
 }
 
 FeatureList.propTypes = {
-  features: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string
+  features: arrayOf(
+    shape({
+      name: string
     })
   ).isRequired,
-  environments: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string
+  environments: arrayOf(
+    shape({
+      name: string
     })
   ).isRequired
 }

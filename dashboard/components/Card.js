@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { string, node } from 'prop-types'
 
 import './Card.css'
 
@@ -13,8 +13,8 @@ export default function Card({ title, children }) {
 }
 
 Card.propTypes = {
-  title: PropTypes.string,
-  children: PropTypes.node
+  title: string,
+  children: node
 }
 
 Card.defaultProps = {

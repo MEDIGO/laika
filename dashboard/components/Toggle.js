@@ -1,5 +1,5 @@
 import React from 'react'
-import PropType from 'prop-types'
+import { string, bool, func } from 'prop-types'
 
 import './Toggle.css'
 
@@ -23,7 +23,7 @@ export default function Toggle({ name, value, onChange }) {
 }
 
 Toggle.propTypes = {
-  name: PropType.string.isRequired,
-  value: PropType.bool.isRequired,
-  onChange: PropType.func.isRequired
+  name: string.isRequired,
+  value: bool.isRequired,
+  onChange: func.isRequired
 }

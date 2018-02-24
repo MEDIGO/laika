@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { string, node } from 'prop-types'
 
 import './Section.css'
 
@@ -19,6 +19,6 @@ export default function Section({ title, children }) {
 }
 
 Section.propTypes = {
-  title: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired
+  title: string.isRequired,
+  children: node.isRequired
 }

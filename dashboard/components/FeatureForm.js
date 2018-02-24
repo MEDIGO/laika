@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { func, string } from 'prop-types'
 
 import Form from './Form'
 import Input from './Input'
@@ -47,10 +47,10 @@ export default class FeatureForm extends Component {
 }
 
 FeatureForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  submitText: PropTypes.string,
-  titleText: PropTypes.string.isRequired,
-  errorText: PropTypes.string
+  onSubmit: func.isRequired,
+  submitText: string,
+  titleText: string.isRequired,
+  errorText: string
 }
 
 FeatureForm.defaultProps = {

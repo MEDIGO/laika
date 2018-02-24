@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { string, func, node } from 'prop-types'
 
 import Alert from './Alert'
 import Button from './Button'
@@ -25,10 +25,10 @@ export default function Form({ submitText, onSubmit, errorText, children }) {
 }
 
 Form.propTypes = {
-  submitText: PropTypes.string,
-  onSubmit: PropTypes.func.isRequired,
-  errorText: PropTypes.string,
-  children: PropTypes.node
+  submitText: string,
+  onSubmit: func.isRequired,
+  errorText: string,
+  children: node
 }
 
 Form.defaultProps = {

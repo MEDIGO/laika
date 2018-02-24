@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { bool, func, string } from 'prop-types'
 
 import './Input.css'
 
@@ -36,15 +36,15 @@ export default function Input({
 }
 
 Input.propTypes = {
-  label: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  required: PropTypes.bool,
-  error: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  type: PropTypes.string,
-  placeholder: PropTypes.string,
-  autoFocus: PropTypes.bool
+  label: string.isRequired,
+  name: string.isRequired,
+  value: string.isRequired,
+  required: bool,
+  error: string,
+  onChange: func.isRequired,
+  type: string,
+  placeholder: string,
+  autoFocus: bool
 }
 
 Input.defaultProps = {

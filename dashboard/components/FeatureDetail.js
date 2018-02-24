@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { arrayOf, shape, string, func } from 'prop-types'
 import moment from 'moment'
 
 import Button from './Button'
@@ -81,14 +81,14 @@ export default class FeatureDetail extends Component {
 }
 
 FeatureDetail.propTypes = {
-  environments: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string
+  environments: arrayOf(
+    shape({
+      name: string
     })
   ).isRequired,
-  feature: PropTypes.shape({
-    name: PropTypes.string
+  feature: shape({
+    name: string
   }).isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onToggle: func.isRequired,
+  onDelete: func.isRequired
 }

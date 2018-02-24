@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { oneOf, node } from 'prop-types'
 
 import './Alert.css'
 
@@ -8,8 +8,8 @@ export default function Alert({ type, children }) {
 }
 
 Alert.propTypes = {
-  type: PropTypes.oneOf(['danger']),
-  children: PropTypes.node
+  type: oneOf(['danger']),
+  children: node
 }
 
 Alert.defaultProps = {

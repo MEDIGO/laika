@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { shape, object, func } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import FeatureDetailComponent from '../components/FeatureDetail'
 import {
@@ -66,11 +66,11 @@ class FeatureDetail extends Component {
 }
 
 FeatureDetail.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.object
+  match: shape({
+    params: object
   }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func
+  history: shape({
+    push: func
   }).isRequired
 }
 

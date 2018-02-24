@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import { shape, func } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import EnvironmentForm from '../components/EnvironmentForm'
 import { createEnvironment } from '../utils/api'
@@ -34,8 +34,8 @@ class EnvironmentCreate extends Component {
 }
 
 EnvironmentCreate.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func
+  history: shape({
+    push: func
   }).isRequired
 }
 

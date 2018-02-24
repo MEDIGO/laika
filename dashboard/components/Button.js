@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { string, oneOf, func } from 'prop-types'
 
 import './Button.css'
 
@@ -14,9 +14,9 @@ export default function Button({ label, type, onClick }) {
 }
 
 Button.propTypes = {
-  label: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['primary', 'default']),
-  onClick: PropTypes.func
+  label: string.isRequired,
+  type: oneOf(['primary', 'default']),
+  onClick: func
 }
 
 Button.defaultProps = {
