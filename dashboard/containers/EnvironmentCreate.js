@@ -12,8 +12,8 @@ function EnvironmentCreate({ history }) {
 
   return (
     <EnvironmentForm
-      titleText="Create an Environment"
-      submitText="Create Environment"
+      titleText="Create an environment"
+      submitText="Create environment"
       onSubmit={handleSubmit}
     />)
   ;

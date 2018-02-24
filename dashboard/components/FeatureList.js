@@ -37,7 +37,7 @@ export default function FeatureList({ environments, features }) {
 
   return (
     <div className="lk-feature-list">
-      <Section title="Features">
+      <Section title={`Features (${items.length})`}>
         {items}
       </Section>
     </div>

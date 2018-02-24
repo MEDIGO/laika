@@ -12,8 +12,8 @@ function FeatureCreate({ history }) {
 
   return (
     <FeatureForm
-      titleText="Create a Feature"
-      submitText="Create Feature"
+      titleText="Create a feature"
+      submitText="Create feature"
       onSubmit={handleSubmit}
     />
   );
