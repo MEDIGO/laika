@@ -9,4 +9,4 @@ if ! which glide > /dev/null 2>&1 ; then
 fi
 
 glide install
-npm install
+(cd dashboard && npm install)

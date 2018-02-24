@@ -64,8 +64,8 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 	api.GET("/environments", environments.List)
 	api.GET("/*", func(c echo.Context) error { return NotFound(c) })
 
-	e.Static("/assets", "public/assets")
-	e.File("/*", "public/index.html")
+	e.Static("/assets", "dashboard/public/assets")
+	e.File("/*", "dashboard/public/index.html")
 
 	server := standard.WithConfig(engine.Config{})
 	server.SetHandler(e)
