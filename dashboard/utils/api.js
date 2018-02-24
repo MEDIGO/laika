@@ -1,4 +1,4 @@
-function request(method, endpoint, payload) {
+const request = (method, endpoint, payload) => {
   const opts = {
     headers: {},
     credentials: 'same-origin',
@@ -20,46 +20,39 @@ function request(method, endpoint, payload) {
   })
 }
 
-function get(endpoint) {
-  return request('GET', endpoint)
-}
+const get = (endpoint) =>
+  request('GET', endpoint)
 
-function post(endpoint, payload) {
-  return request('POST', endpoint, payload)
-}
+const post = (endpoint, payload) =>
+  request('POST', endpoint, payload)
 
-export function listFeatures() {
-  return get('/api/features')
-}
+const listFeatures = () =>
+  get('/api/features')
 
-export function createFeature(feature) {
-  return post('/api/events/feature_created', {
+const createFeature = (feature) =>
+  post('/api/events/feature_created', {
     name: feature.name
   })
-}
 
-export function getFeature(name) {
-  return get(`/api/features/${window.encodeURIComponent(name)}`)
-}
+const getFeature = (name) =>
+  get(`/api/features/${window.encodeURIComponent(name)}`)
 
-export function listEnvironments() {
-  return get('/api/environments')
-}
+const listEnvironments = () =>
+  get('/api/environments')
 
-export function createEnvironment(environment) {
-  return post('/api/events/environment_created', {
+const createEnvironment = (environment) =>
+  post('/api/events/environment_created', {
     name: environment.name
   })
-}
 
-export function toggleFeature(environment, feature, status) {
-  return post('/api/events/feature_toggled', {
+const toggleFeature = (environment, feature, status) =>
+  post('/api/events/feature_toggled', {
     environment: environment,
     feature: feature,
     status: status
   })
-}
 
-export function deleteFeature(name) {
-  return post('/api/events/feature_deleted', { name })
-}
+const deleteFeature = (name) =>
+  post('/api/events/feature_deleted', { name })
+
+export { listFeatures, createFeature, getFeature, listEnvironments, createEnvironment, toggleFeature, deleteFeature }

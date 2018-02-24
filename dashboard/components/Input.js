@@ -3,7 +3,7 @@ import { bool, func, string } from 'prop-types'
 
 import './Input.css'
 
-export default function Input({
+const Input = ({
   label,
   name,
   type,
@@ -13,27 +13,24 @@ export default function Input({
   onChange,
   placeholder,
   autoFocus
-}) {
-  return (
-    <div className='lk-input'>
-      <label className='lk-input__label' htmlFor={name}>
-        {label}
-        {required ? '*' : null}
-      </label>
-      <input
-        id={name}
-        className='lk-input__input'
-        value={value}
-        onChange={e => onChange(name, e.target.value)}
-        required={required}
-        type={type}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-      />
-      {error ? <div>{error}</div> : null}
-    </div>
-  )
-}
+}) =>
+  <div className='lk-input'>
+    <label className='lk-input__label' htmlFor={name}>
+      {label}
+      {required ? '*' : null}
+    </label>
+    <input
+      id={name}
+      className='lk-input__input'
+      value={value}
+      onChange={e => onChange(name, e.target.value)}
+      required={required}
+      type={type}
+      placeholder={placeholder}
+      autoFocus={autoFocus}
+    />
+    {error ? <div>{error}</div> : null}
+  </div>
 
 Input.propTypes = {
   label: string.isRequired,
@@ -55,3 +52,5 @@ Input.defaultProps = {
   placeholder: '',
   autoFocus: false
 }
+
+export default Input

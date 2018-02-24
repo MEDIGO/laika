@@ -8,22 +8,19 @@ import Section from './Section'
 
 import './FeatureList.css'
 
-function sort(features) {
-  return features.sort((a, b) => {
-    if (a.created_at < b.created_at) return 1
-    if (a.created_at > b.created_at) return -1
-    return 0
-  })
-}
+const sort = (features) => features.sort((a, b) => {
+  if (a.created_at < b.created_at) return 1
+  if (a.created_at > b.created_at) return -1
+  return 0
+})
 
-function parseStatus(environments, status) {
-  return environments.map(env => ({
+const parseStatus = (environments, status) =>
+  environments.map(env => ({
     name: env.name,
     enabled: status[env.name]
   }))
-}
 
-export default function FeatureList({ environments, features }) {
+const FeatureList = ({ environments, features }) => {
   const items = sort(features).map(feature => (
     <div key={feature.name} className='lk-feature-list__item'>
       <Link to={`/features/${window.encodeURIComponent(feature.name)}`}>
@@ -63,3 +60,5 @@ FeatureList.propTypes = {
     })
   ).isRequired
 }
+
+export default FeatureList

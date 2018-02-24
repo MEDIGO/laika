@@ -3,9 +3,8 @@ import { oneOf, node } from 'prop-types'
 
 import './Tag.css'
 
-export default function Tag({ children, type }) {
-  return <span className={`lk-tag lk-tag--${type}`}>{children}</span>
-}
+const Tag = ({ children, type }) =>
+  <span className={`lk-tag lk-tag--${type}`}>{children}</span>
 
 Tag.propTypes = {
   children: node,
@@ -16,3 +15,5 @@ Tag.defaultProps = {
   children: null,
   type: 'default'
 }
+
+export default Tag

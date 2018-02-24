@@ -14,7 +14,7 @@ import FeatureDetail from './FeatureDetail'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
-export default function App() {
+const App = () => {
   return (
     <Router>
       <div>
@@ -39,3 +39,5 @@ export default function App() {
     </Router>
   )
 }
+
+export default App

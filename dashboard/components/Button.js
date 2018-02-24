@@ -3,7 +3,7 @@ import { string, oneOf, func } from 'prop-types'
 
 import './Button.css'
 
-export default function Button({ label, type, onClick }) {
+const Button = ({ label, type, onClick }) => {
   const state = onClick ? type : 'disabled'
 
   return (
@@ -23,3 +23,5 @@ Button.defaultProps = {
   type: 'default',
   onClick: null
 }
+
+export default Button

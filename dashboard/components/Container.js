@@ -3,9 +3,8 @@ import { node } from 'prop-types'
 
 import './Container.css'
 
-export default function Container({ children }) {
-  return <div className='lk-container'>{children}</div>
-}
+const Container = ({ children }) =>
+  <div className='lk-container'>{children}</div>
 
 Container.propTypes = {
   children: node
@@ -14,3 +13,5 @@ Container.propTypes = {
 Container.defaultProps = {
   children: null
 }
+
+export default Container

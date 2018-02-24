@@ -6,7 +6,7 @@ import Button from './Button'
 
 import './Form.css'
 
-export default function Form({ submitText, onSubmit, errorText, children }) {
+const Form = ({ submitText, onSubmit, errorText, children }) => {
   const handleSubmit = e => {
     e.preventDefault()
     onSubmit(e)
@@ -36,3 +36,5 @@ Form.defaultProps = {
   errorText: null,
   children: null
 }
+
+export default Form
