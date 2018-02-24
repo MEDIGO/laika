@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
-import Form from './Form';
-import Input from './Input';
-import Card from './Card';
+import Form from './Form'
+import Input from './Input'
+import Card from './Card'
 
 export default class FeatureForm extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.state = {};
+    this.state = {}
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleChange(name, value) {
-    this.setState({ [name]: value });
+    this.setState({ [name]: value })
   }
 
   handleSubmit() {
-    this.props.onSubmit(this.state);
+    this.props.onSubmit(this.state)
   }
 
   render() {
@@ -32,17 +32,17 @@ export default class FeatureForm extends Component {
           errorText={this.props.errorText}
         >
           <Input
-            label="Name"
-            name="name"
+            label='Name'
+            name='name'
             value={this.state.name}
             required
             onChange={this.handleChange}
-            placeholder="e.g. development"
-            autoFocus={true}
+            placeholder='e.g. development'
+            autoFocus
           />
         </Form>
       </Card>
-    );
+    )
   }
 }
 
@@ -50,10 +50,10 @@ FeatureForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   submitText: PropTypes.string,
   titleText: PropTypes.string.isRequired,
-  errorText: PropTypes.string,
-};
+  errorText: PropTypes.string
+}
 
 FeatureForm.defaultProps = {
   submitText: null,
-  errorText: null,
-};
+  errorText: null
+}

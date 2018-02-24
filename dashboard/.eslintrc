@@ -1,12 +1,16 @@
 {
-    "extends": "airbnb",
+    "extends": [
+        "standard",
+        "standard-react"
+    ],
     "plugins": [
         "react",
         "jsx-a11y",
         "import"
     ],
     "rules": {
-        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+        "space-before-function-paren": ["error", {"named": "never", "anonymous": "never"}]
     },
     "env": {
         "browser": true

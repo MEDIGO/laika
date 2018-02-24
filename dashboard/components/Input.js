@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import './Input.css';
+import './Input.css'
 
 export default function Input({
   label,
@@ -12,16 +12,17 @@ export default function Input({
   error,
   onChange,
   placeholder,
-  autoFocus,
+  autoFocus
 }) {
   return (
-    <div className="lk-input">
-      <label className="lk-input__label" htmlFor={name}>
-        {label}{required ? '*' : null}
+    <div className='lk-input'>
+      <label className='lk-input__label' htmlFor={name}>
+        {label}
+        {required ? '*' : null}
       </label>
       <input
         id={name}
-        className="lk-input__input"
+        className='lk-input__input'
         value={value}
         onChange={e => onChange(name, e.target.value)}
         required={required}
@@ -29,9 +30,9 @@ export default function Input({
         placeholder={placeholder}
         autoFocus={autoFocus}
       />
-      { error ? <div>{error}</div> : null }
+      {error ? <div>{error}</div> : null}
     </div>
-  );
+  )
 }
 
 Input.propTypes = {
@@ -43,8 +44,8 @@ Input.propTypes = {
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string,
   placeholder: PropTypes.string,
-  autoFocus: PropTypes.bool,
-};
+  autoFocus: PropTypes.bool
+}
 
 Input.defaultProps = {
   required: false,
@@ -52,5 +53,5 @@ Input.defaultProps = {
   value: '',
   type: '',
   placeholder: '',
-  autoFocus: false,
-};
+  autoFocus: false
+}

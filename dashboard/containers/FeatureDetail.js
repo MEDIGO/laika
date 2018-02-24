@@ -1,32 +1,39 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
-import FeatureDetailComponent from '../components/FeatureDetail';
-import { listEnvironments, getFeature, toggleFeature, deleteFeature } from '../utils/api';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
+import FeatureDetailComponent from '../components/FeatureDetail'
+import {
+  listEnvironments,
+  getFeature,
+  toggleFeature,
+  deleteFeature
+} from '../utils/api'
 
 class FeatureDetail extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       loading: true,
       environments: [],
-      feature: null,
-    };
+      feature: null
+    }
 
-    this.handleToggle = this.handleToggle.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.handleToggle = this.handleToggle.bind(this)
+    this.handleDelete = this.handleDelete.bind(this)
   }
 
   componentDidMount() {
     Promise.all([
       listEnvironments(),
       getFeature(window.decodeURIComponent(this.props.match.params.name))
-    ]).then(([environments, feature]) => this.setState({
+    ]).then(([environments, feature]) =>
+      this.setState({
         loading: false,
         environments,
-        feature,
-      }));
+        feature
+      })
+    )
   }
 
   handleToggle(name, value) {
@@ -37,16 +44,16 @@ class FeatureDetail extends Component {
             [name]: value
           })
         })
-      });
-    });
+      })
+    })
   }
 
   handleDelete(name) {
-    deleteFeature(name).then(() => this.props.history.push('/'));
+    deleteFeature(name).then(() => this.props.history.push('/'))
   }
 
   render() {
-    if (this.state.loading) return null;
+    if (this.state.loading) return null
     return (
       <FeatureDetailComponent
         environments={this.state.environments}
@@ -54,17 +61,17 @@ class FeatureDetail extends Component {
         onToggle={this.handleToggle}
         onDelete={this.handleDelete}
       />
-    );
+    )
   }
 }
 
 FeatureDetail.propTypes = {
   match: PropTypes.shape({
-    params: PropTypes.object,
+    params: PropTypes.object
   }).isRequired,
   history: PropTypes.shape({
-    push: PropTypes.func,
-  }).isRequired,
-};
+    push: PropTypes.func
+  }).isRequired
+}
 
-export default withRouter(FeatureDetail);
+export default withRouter(FeatureDetail)
