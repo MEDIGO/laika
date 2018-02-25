@@ -14,7 +14,7 @@ dependencies:
   pre:
     - go get github.com/Masterminds/glide
     - go get github.com/jteeuwen/go-bindata/...
-    - npm install -g webpack
+    - yarn install -g webpack
   override:
     - mkdir -p "${PROJECT_PARENT_PATH}"
     - rsync -avC "${HOME}/laika/" "${PROJECT_PATH}"
