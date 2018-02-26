@@ -8,7 +8,7 @@ RUN apk update && \
     apk add ca-certificates
 
 COPY bin/laika /
-COPY dashboard/public /public/
+COPY dashboard/public /dashboard/public/
 
 ENTRYPOINT ["/laika"]
 CMD ["run"]
