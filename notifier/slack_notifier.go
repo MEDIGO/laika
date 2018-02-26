@@ -1,6 +1,10 @@
 package notifier
 
-import "github.com/lytics/slackhook"
+import (
+	"fmt"
+
+	"github.com/vsco/slackhook"
+)
 
 // SlackNotifier is a notifier that send messages to Slack.
 type SlackNotifier struct {
@@ -14,38 +18,29 @@ func NewSlackNotifier(url string) Notifier {
 
 // NotifyStatusChange notifies a change in the status of a flag.
 func (n *SlackNotifier) NotifyStatusChange(feature string, status bool, environment string) error {
-	text := "disabled"
-	color := "#e74c3c"
-
-	if status {
-		text = "enabled"
-		color = "#27ae60"
-	}
+	text := fmt.Sprintf("Feature *%s* is now %s in *%s*.", feature, label(status), environment)
 
 	return n.client.Send(&slackhook.Message{
-		Text: "WOOF! WOFF! ARH-WOOOOOOOO!",
 		Attachments: []*slackhook.Attachment{
 			&slackhook.Attachment{
-				Title: "Laika Flag Update!",
-				Color: color,
-				Fields: []slackhook.Field{
-					slackhook.Field{
-						Title: "Flag",
-						Value: feature,
-						Short: false,
-					},
-					slackhook.Field{
-						Title: "Environment",
-						Value: environment,
-						Short: true,
-					},
-					slackhook.Field{
-						Title: "Status",
-						Value: text,
-						Short: true,
-					},
-				},
+				Text:       text,
+				Color:      color(status),
+				MarkdownIn: []string{"text"},
 			},
 		},
 	})
+}
+
+func color(status bool) string {
+	if status {
+		return "good"
+	}
+	return "danger"
+}
+
+func label(status bool) string {
+	if status {
+		return "enabled"
+	}
+	return "disabled"
 }

@@ -1,5 +1,5 @@
-hash: ff55353495581606ac4ddfdda49912b040503f314e01b3f355e9b66234feae04
-updated: 2018-02-22T11:46:07.278627081+01:00
+hash: 4f6d782181b9afb52a95f6574704f2c37485fc7a7ae3bbb875c0f5d8aa057fb6
+updated: 2018-02-26T22:00:59.139609961+01:00
 imports:
 - name: github.com/codegangsta/cli
   version: d9021faab69f92295ef7061bd39e4a76dcbdef32
@@ -7,6 +7,10 @@ imports:
   version: cc2f4770f4d61871e19bfee967bc767fe730b0d9
   subpackages:
   - statsd
+- name: github.com/davecgh/go-spew
+  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
+  subpackages:
+  - spew
 - name: github.com/dgrijalva/jwt-go
   version: 01aeca54ebda6e0fbfafd0a524d234159c05ec20
 - name: github.com/go-sql-driver/mysql
@@ -25,14 +29,16 @@ imports:
   - color
   - log
   - random
-- name: github.com/lytics/slackhook
-  version: a52fd449b27dcdd75cf069c5d6ac5749653d801a
 - name: github.com/mattn/go-colorable
   version: 9056b7a9f2d1f2d96498d6d146acd1f9d5ed3d59
 - name: github.com/mattn/go-isatty
   version: 56b76bdf51f7708750eac80fa38b952bb9f32639
 - name: github.com/MEDIGO/go-healthz
   version: 9b0725fef6573efc0aacf442d5461ab25590985e
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
 - name: github.com/rubenv/sql-migrate
   version: 6f4757563362064790a6687a6b60f182062c8634
   subpackages:
@@ -48,6 +54,8 @@ imports:
   - require
 - name: github.com/valyala/fasttemplate
   version: 3b874956e03f1636d171bda64b130f9135f42cff
+- name: github.com/vsco/slackhook
+  version: 761b10b6951a2215070cf005e0c452b337edfb83
 - name: golang.org/x/crypto
   version: bc89c496413265e715159bdc8478ee9a92fdc265
   subpackages:
@@ -65,12 +73,4 @@ imports:
   version: 4deece61034873cb5b5416e81abe4cea7bd0da72
 - name: gopkg.in/tylerb/graceful.v1
   version: c838c13b2beeea4f4f54496da96a3a6ae567c37a
-testImports:
-- name: github.com/davecgh/go-spew
-  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
-  subpackages:
-  - spew
-- name: github.com/pmezard/go-difflib
-  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
-  subpackages:
-  - difflib
+testImports: []

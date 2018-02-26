@@ -1,5 +1,12 @@
 # Changes
 
+## ?.?.?
+
+### Bugfixes and minor changes
+
+* Slack notifier is now less spammy.
+
+
 ## 1.0.0
 
 Major changes on frontend and backend. The API contains breaking changes, but neither the Go nor the PHP client are affected by these changes.
@@ -24,6 +31,7 @@ Major changes on frontend and backend. The API contains breaking changes, but ne
 * Unknown API routes now properly return 404.
 * Unknown frontend routes now redirect to the home page.
 
+
 ## 0.8.0
 
 This is the first versioned release.
@@ -36,6 +44,7 @@ This is the first versioned release.
 
 * Names with spaces, slashes, and various other characters no longer break the UI.
 * Fix typescript error with moment.js.
+
 
 ## 0.0.0
 
