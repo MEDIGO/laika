@@ -1,6 +1,8 @@
 machine:
   services:
     - docker
+  node:
+    version: 8.9.4
   environment:
     PROJECT_GOPATH: "${HOME}/.go_project"
     PROJECT_PARENT_PATH: "${PROJECT_GOPATH}/src/github.com/MEDIGO"
