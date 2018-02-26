@@ -16,6 +16,7 @@ Major changes on frontend and backend. The API contains breaking changes, but ne
 * Always migrate database on startup.
 * Increased creation timestamp precision from days to seconds.
 * Order environments by creation time in the UI.
+* Add API endpoint to order environments manually.
 * Auto focus input fields in the UI.
 
 ### Bugfixes and minor changes
