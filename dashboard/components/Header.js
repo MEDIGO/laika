@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import Container from './Container'
+import Logo from './Logo'
 import './Header.css'
 
 const Header = () =>
@@ -10,7 +11,7 @@ const Header = () =>
       <div className='lk-header__wrapper'>
         <ul>
           <li>
-            <Link to='/'>Home</Link>
+            <Link to='/'><Logo /></Link>
           </li>
           <li>
             <Link to='/new/environment'>New environment</Link>

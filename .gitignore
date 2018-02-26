@@ -5,7 +5,6 @@ bin/
 combined_coverage.out
 coverage.out
 node_modules/
-npm-debug.log
-public/
-public/bower_components/
+bundle.js
+dashboard/public/index.html
 vendor/
