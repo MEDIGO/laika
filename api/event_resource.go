@@ -58,6 +58,8 @@ func (r *EventResource) Create(c echo.Context) error {
 		return InternalServerError(c, err)
 	}
 
+	event.Notify(state, r.notifier)
+
 	return Created(c, struct {
 		ID int64 `json:"id"`
 	}{ID: id})
