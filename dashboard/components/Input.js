@@ -50,7 +50,8 @@ Input.defaultProps = {
   value: '',
   type: '',
   placeholder: '',
-  autoFocus: false
+  autoFocus: false,
+  onChange: () => {}
 }
 
 export default Input
