@@ -5,6 +5,7 @@
 ### Bugfixes and minor changes
 
 * Slack notifier is now less spammy.
+* Fix unstable UI sort edge case with old data.
 
 
 ## 1.0.0

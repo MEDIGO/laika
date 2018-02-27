@@ -11,7 +11,7 @@ import './FeatureList.css'
 const sort = (features) => features.sort((a, b) => {
   if (a.created_at < b.created_at) return 1
   if (a.created_at > b.created_at) return -1
-  return 0
+  return b.name < a.name ? -1 : b.name > a.name
 })
 
 const parseStatus = (environments, status) =>
