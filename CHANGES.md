@@ -2,6 +2,10 @@
 
 ## ?.?.?
 
+### New features
+
+* Environments can be deleted through the API.
+
 ### Bugfixes and minor changes
 
 * Slack notifier is now less spammy.
