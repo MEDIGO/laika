@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 	"github.com/MEDIGO/laika/notifier"
 	"github.com/MEDIGO/laika/store"
 	log "github.com/Sirupsen/logrus"
-	"github.com/codegangsta/cli"
+	"github.com/urfave/cli"
 	graceful "gopkg.in/tylerb/graceful.v1"
 )
 
@@ -97,7 +98,7 @@ func main() {
 		{
 			Name:  "run",
 			Usage: "Runs laika's feature flag service",
-			Action: func(c *cli.Context) {
+			Action: func(c *cli.Context) error {
 				store, err := store.NewMySQLStore(
 					c.GlobalString("mysql-username"),
 					c.GlobalString("mysql-password"),
@@ -107,24 +108,24 @@ func main() {
 				)
 
 				if err != nil {
-					log.Fatal("Failed to create Store: ", err)
+					return fmt.Errorf("failed to create store: %s", err)
 				}
 
 				if err := store.Ping(); err != nil {
-					log.Fatal("Could not ping database: ", err)
+					return fmt.Errorf("could not ping database: %s", err)
 				}
 
 				if err := store.Migrate(); err != nil {
-					log.Fatal("Failed to migrate store schema: ", err)
+					return fmt.Errorf("failed to migrate store schema: %s", err)
 				}
 
 				if _, err := store.State(); err != nil {
-					log.Fatal("Failed to compute initial state: ", err)
+					return fmt.Errorf("failed to compute initial state: %s", err)
 				}
 
 				stats, err := statsd.New(c.GlobalString("statsd-host") + ":" + c.GlobalString("statsd-port"))
 				if err != nil {
-					log.Fatal("Failed to create Statsd client: ", err)
+					return fmt.Errorf("failed to create Statsd client: %s", err)
 				}
 
 				notifier := notifier.NewSlackNotifier(c.GlobalString("slack-webhook-url"))
@@ -137,15 +138,19 @@ func main() {
 					Notifier:     notifier,
 				})
 				if err != nil {
-					log.Fatal("Failed to create server: ", err)
+					return fmt.Errorf("failed to create server: %s", err)
 
 				}
 
 				log.Info("Starting server on port ", c.GlobalString("port"))
 				graceful.Run(":"+c.GlobalString("port"), time.Duration(c.Int("timeout"))*time.Second, server)
+				log.Info("Server exiting")
+				return nil
 			},
 		},
 	}
 
-	app.Run(os.Args)
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
 }

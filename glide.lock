@@ -1,8 +1,6 @@
-hash: 4f6d782181b9afb52a95f6574704f2c37485fc7a7ae3bbb875c0f5d8aa057fb6
-updated: 2018-02-26T22:00:59.139609961+01:00
+hash: 44f893eb87b944676706cf6e12835b86a1ecf54f7281c31de303263e02e8e3bc
+updated: 2018-03-05T22:40:32.916964302+01:00
 imports:
-- name: github.com/codegangsta/cli
-  version: d9021faab69f92295ef7061bd39e4a76dcbdef32
 - name: github.com/DataDog/datadog-go
   version: cc2f4770f4d61871e19bfee967bc767fe730b0d9
   subpackages:
@@ -52,6 +50,8 @@ imports:
   subpackages:
   - assert
   - require
+- name: github.com/urfave/cli
+  version: cfb38830724cc34fedffe9a2a29fb54fa9169cd1
 - name: github.com/valyala/fasttemplate
   version: 3b874956e03f1636d171bda64b130f9135f42cff
 - name: github.com/vsco/slackhook
