@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/url"
+	"time"
 
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/MEDIGO/laika/models"
@@ -33,7 +34,7 @@ func (r *FeatureResource) Get(c echo.Context) error {
 
 	for _, feature := range state.Features {
 		if feature.Name == name {
-			return OK(c, *getFeatureStatus(&feature, state))
+			return OK(c, *getFeature(&feature, state))
 		}
 	}
 
@@ -46,30 +47,44 @@ func (r *FeatureResource) List(c echo.Context) error {
 		return InternalServerError(c, err)
 	}
 
-	status := []featureStatus{}
+	status := []featureResource{}
 	for _, feature := range state.Features {
-		status = append(status, *getFeatureStatus(&feature, state))
+		status = append(status, *getFeature(&feature, state))
 	}
 	return OK(c, status)
 }
 
-func getFeatureStatus(feature *models.Feature, s *models.State) *featureStatus {
-	fs := featureStatus{
-		Feature: *feature,
-		Status:  map[string]bool{},
+func getFeature(feature *models.Feature, s *models.State) *featureResource {
+	f := featureResource{
+		Feature:         *feature,
+		Status:          map[string]bool{},
+		FeatureStatuses: []featureStatus{},
 	}
 	for _, env := range s.Environments {
-		enabled, ok := s.Enabled[models.EnvFeature{
+		status, ok := s.Enabled[models.EnvFeature{
 			Env:     env.Name,
 			Feature: feature.Name,
 		}]
-		fs.Status[env.Name] = ok && enabled
+		toggled := ok && status.Enabled
+		f.Status[env.Name] = toggled
+		f.FeatureStatuses = append(f.FeatureStatuses, featureStatus{
+			Name:      env.Name,
+			Status:    toggled,
+			ToggledAt: status.ToggledAt,
+		})
 	}
 
-	return &fs
+	return &f
+}
+
+type featureResource struct {
+	models.Feature
+	Status          map[string]bool `json:"status"`
+	FeatureStatuses []featureStatus `json:"feature_status"`
 }
 
 type featureStatus struct {
-	models.Feature
-	Status map[string]bool `json:"status"`
+	Name      string     `json:"name"`
+	Status    bool       `json:"status"`
+	ToggledAt *time.Time `json:"toggled_at,omitempty"`
 }

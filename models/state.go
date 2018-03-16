@@ -25,11 +25,16 @@ type EnvFeature struct {
 	Feature string
 }
 
+type Status struct {
+	Enabled   bool
+	ToggledAt *time.Time
+}
+
 type State struct {
 	Users        []User
 	Environments []Environment
 	Features     []Feature
-	Enabled      map[EnvFeature]bool
+	Enabled      map[EnvFeature]Status
 }
 
 func NewState() *State {
@@ -37,7 +42,7 @@ func NewState() *State {
 		Environments: []Environment{},
 		Features:     []Feature{},
 		Users:        []User{},
-		Enabled:      map[EnvFeature]bool{},
+		Enabled:      map[EnvFeature]Status{},
 	}
 
 }

@@ -28,13 +28,10 @@ func (e *FeatureToggled) Validate(s *State) (error, error) {
 
 func (e *FeatureToggled) Update(s *State, t time.Time) *State {
 	state := *s
-
-	if e.Status {
-		state.Enabled[EnvFeature{e.Environment, e.Feature}] = true
-	} else {
-		delete(state.Enabled, EnvFeature{e.Environment, e.Feature})
+	state.Enabled[EnvFeature{e.Environment, e.Feature}] = Status{
+		Enabled:   e.Status,
+		ToggledAt: &t,
 	}
-
 	return &state
 }
 
