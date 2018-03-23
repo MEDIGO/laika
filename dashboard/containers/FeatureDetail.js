@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 import { shape, object, func } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import FeatureDetailComponent from '../components/FeatureDetail'
 import {
-  listEnvironments,
   getFeature,
   toggleFeature,
   deleteFeature
@@ -24,26 +24,29 @@ class FeatureDetail extends Component {
   }
 
   componentDidMount() {
-    Promise.all([
-      listEnvironments(),
-      getFeature(window.decodeURIComponent(this.props.match.params.name))
-    ]).then(([environments, feature]) =>
-      this.setState({
-        loading: false,
-        environments,
-        feature
-      })
-    )
+    getFeature(window.decodeURIComponent(this.props.match.params.name))
+      .then((feature) =>
+        this.setState({
+          loading: false,
+          environments: feature.feature_status,
+          feature
+        })
+      )
   }
 
   handleToggle(name, value) {
+    const envs = this.state.environments.map((e) => {
+      if (e.name === name) {
+        return Object.assign({}, e, {
+          status: value,
+          toggled_at: moment()
+        })
+      }
+      return e
+    })
     toggleFeature(name, this.state.feature.name, value).then(() => {
       this.setState({
-        feature: Object.assign({}, this.state.feature, {
-          status: Object.assign({}, this.state.feature.status, {
-            [name]: value
-          })
-        })
+        environments: envs
       })
     })
   }

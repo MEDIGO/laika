@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { arrayOf, shape, string, func } from 'prop-types'
 import moment from 'moment'
-
 import Button from './Button'
 import Toggle from './Toggle'
 import Section from './Section'
@@ -39,9 +38,12 @@ export default class FeatureDetail extends Component {
           {capitalize(env.name)} <span>({env.name})</span>
         </span>
         <span className='lk-feature-details__environment-control'>
+          <span>
+            {env.toggled_at ? 'toggled ' + moment(env.toggled_at).fromNow() : 'never toggled'}
+          </span>
           <Toggle
             name={env.name}
-            value={feature.status[env.name]}
+            value={env.status}
             onChange={onToggle}
           />
         </span>
