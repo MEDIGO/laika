@@ -26,9 +26,10 @@
   background-color: #5b4cc0;
 }
 
-.lk-button--disabled {
-  background-color: whitesmoke;
-  border-color: lightgray;
-  color: gray;
-  cursor: default;
+.lk-button--hidden {
+  display: none;
+}
+
+.lk-button--hidden + .lk-button {
+  margin-left: 0;
 }

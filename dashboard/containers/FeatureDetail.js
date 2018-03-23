@@ -3,11 +3,7 @@ import moment from 'moment'
 import { shape, object, func } from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import FeatureDetailComponent from '../components/FeatureDetail'
-import {
-  getFeature,
-  toggleFeature,
-  deleteFeature
-} from '../utils/api'
+import { getFeature, toggleFeature, deleteFeature } from '../utils/api'
 
 class FeatureDetail extends Component {
   constructor(props) {
@@ -24,18 +20,18 @@ class FeatureDetail extends Component {
   }
 
   componentDidMount() {
-    getFeature(window.decodeURIComponent(this.props.match.params.name))
-      .then((feature) =>
+    getFeature(window.decodeURIComponent(this.props.match.params.name)).then(
+      feature =>
         this.setState({
           loading: false,
           environments: feature.feature_status,
           feature
         })
-      )
+    )
   }
 
   handleToggle(name, value) {
-    const envs = this.state.environments.map((e) => {
+    const envs = this.state.environments.map(e => {
       if (e.name === name) {
         return Object.assign({}, e, {
           status: value,

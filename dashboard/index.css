@@ -1,7 +1,27 @@
 body {
   color: #2f2936;
-  font-family: "Helvetica Neue",Helvetica;
+  font-family: "Helvetica Neue", Helvetica;
   font-size: 16px;
   line-height: 24px;
+  margin: 0;
+}
+
+.app {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100vh;
+}
+
+a:focus {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3 {
   margin: 0;
 }

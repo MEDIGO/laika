@@ -1,5 +1,15 @@
 .lk-container {
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: auto;
+  max-width: 1024px;
+  padding: 2vw;
+  box-sizing: border-box;
+}
+
+@media screen and (orientation: landscape) and (min-width: 1024px) {
+  .lk-container {
+    padding: 1vw;
+  }
 }

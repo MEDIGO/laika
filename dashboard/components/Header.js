@@ -5,13 +5,15 @@ import Container from './Container'
 import Logo from './Logo'
 import './Header.css'
 
-const Header = () =>
-  <div className='lk-header'>
+const Header = () => (
+  <header className='lk-header'>
     <Container>
-      <div className='lk-header__wrapper'>
-        <ul>
+      <nav className='lk-header__nav'>
+        <ul className='lk-header__nav-items'>
           <li>
-            <Link to='/'><Logo /></Link>
+            <Link to='/'>
+              <Logo />
+            </Link>
           </li>
           <li>
             <Link to='/new/environment'>New environment</Link>
@@ -20,8 +22,9 @@ const Header = () =>
             <Link to='/new/feature'>New feature</Link>
           </li>
         </ul>
-      </div>
+      </nav>
     </Container>
-  </div>
+  </header>
+)
 
 export default Header

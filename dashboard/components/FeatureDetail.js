@@ -33,19 +33,17 @@ export default class FeatureDetail extends Component {
     const { deleteUnlocked } = this.state
 
     const envStatus = environments.map(env => (
-      <div key={env.name}>
-        <span className='lk-feature-details__environment-name'>
+      <div className='lk-feature-detail__flex' key={env.name}>
+        <span className='lk-feature-detail__environment-name'>
           {capitalize(env.name)} <span>({env.name})</span>
         </span>
-        <span className='lk-feature-details__environment-control'>
+        <span className='lk-feature-detail__environment-control'>
           <span>
-            {env.toggled_at ? 'toggled ' + moment(env.toggled_at).fromNow() : 'never toggled'}
+            {env.toggled_at
+              ? 'toggled ' + moment(env.toggled_at).fromNow()
+              : 'never toggled'}
           </span>
-          <Toggle
-            name={env.name}
-            value={env.status}
-            onChange={onToggle}
-          />
+          <Toggle name={env.name} value={env.status} onChange={onToggle} />
         </span>
       </div>
     ))

@@ -1,7 +1,7 @@
 .lk-section__title {
   color: #968ba0;
   font-size: 12px;
-  letter-spacing: .8px;
+  letter-spacing: 0.8px;
   margin-bottom: 2px;
   text-transform: uppercase;
 }
@@ -9,12 +9,8 @@
 .lk-section__content {
   border-radius: 3px;
   border: 1px solid #e2dee6;
-  box-shadow: 0 1px 0 rgba(0,0,0,.03);
-  margin: 0 0 20px;
-}
-
-.lk-section__item {
-  padding: 10px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+  margin: 0;
 }
 
 .lk-section__item + .lk-section__item {

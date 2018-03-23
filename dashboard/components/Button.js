@@ -4,7 +4,7 @@ import { string, oneOf, func } from 'prop-types'
 import './Button.css'
 
 const Button = ({ label, type, onClick }) => {
-  const state = onClick ? type : 'disabled'
+  const state = onClick ? type : 'hidden'
 
   return (
     <button className={`lk-button lk-button--${state}`} onClick={onClick}>

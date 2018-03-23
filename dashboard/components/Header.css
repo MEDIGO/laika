@@ -1,41 +1,30 @@
 .lk-header {
   background-color: #342c3e;
   color: #fff;
-  padding: 15px 30px 10px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 0 rgba(0,0,0,.03);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.03);
 }
 
-.lk-header__wrapper {
+.lk-header__nav {
+  width: 100%;
+}
+
+.lk-header .lk-header__nav-items {
+  align-items: center;
   display: flex;
-}
-
-.lk-header ul {
-  list-style: none;
-  display: inline;
-  padding: 0;
+  justify-content: space-between;
+  list-style-type: none;
   margin: 0;
-}
-
-.lk-header ul + ul {
-  margin-left: auto;
-}
-
-.lk-header li {
-  display: inline;
-}
-
-.lk-header li + li {
-  margin-left: 20px;
+  padding: 0;
 }
 
 .lk-header a {
   color: #b9b2d0;
   text-decoration: none;
+  font-size: calc(1rem * 0.9);
 }
 
 .lk-header a:hover {
   color: #fff;
   cursor: pointer;
-  transition: color .2s linear;
+  transition: color 0.5s ease-in-out;
 }

@@ -1,3 +1,4 @@
 .lk-tag-list__status-list {
-  float: right;
+  display: flex;
+  align-items: center;
 }

@@ -1,20 +1,29 @@
-.lk-feature-list__item {
-  margin: -10px;
-  padding: 10px;
+.lk-feature-list {
+  width: 100%;
 }
 
 .lk-feature-list a {
   text-decoration: none;
+  padding: 2vw;
+  display: block;
+  border-radius: 3px;
 }
 
-.lk-feature-list__item:hover {
+@media screen and (orientation: landscape) and (min-width: 1024px) {
+  .lk-feature-list a {
+    padding: 1vw;
+  }
+}
+
+.lk-feature-list a:hover {
   background: #f8fafd;
   cursor: pointer;
 }
-
 .lk-feature-list__name {
-  font-weight: bold;
   color: #2f2936;
+  display: flex;
+  font-weight: bold;
+  justify-content: space-between;
 }
 
 .lk-feature-list__time {
