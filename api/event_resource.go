@@ -31,10 +31,7 @@ func (r *EventResource) Create(c echo.Context) error {
 		return BadRequest(c, "Body must be a valid JSON object")
 	}
 
-	state, err := r.store.State()
-	if err != nil {
-		return InternalServerError(c, err)
-	}
+	state := getState(c)
 
 	valErr, err := event.Validate(state)
 	if err != nil {

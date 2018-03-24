@@ -47,19 +47,17 @@ func NewServer(conf ServerConfig) (*echo.Echo, error) {
 	e.Use(InstrumentMiddleware(conf.Stats))
 	e.Use(middleware.Recover())
 
-	features := NewFeatureResource(conf.Store, conf.Stats, conf.Notifier)
-	environments := NewEnvironmentResource(conf.Store, conf.Stats)
 	events := NewEventResource(conf.Store, conf.Stats, conf.Notifier)
 
 	e.GET("/api/health", echo.WrapHandler(healthz.Handler()))
 
-	api := e.Group("/api", basicAuthMiddleware)
+	api := e.Group("/api", StateMiddleware(conf.Store), basicAuthMiddleware)
 	api.POST("/events/:type", events.Create)
 
-	api.GET("/features/:name", features.Get)
-	api.GET("/features", features.List)
+	api.GET("/features/:name", GetFeature)
+	api.GET("/features", ListFeatures)
 
-	api.GET("/environments", environments.List)
+	api.GET("/environments", ListEnvironments)
 	api.GET("/*", func(c echo.Context) error { return NotFound(c) })
 
 	e.Static("/assets", "dashboard/public/assets")

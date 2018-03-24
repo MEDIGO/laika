@@ -1,6 +1,9 @@
 package api
 
-import "github.com/labstack/echo"
+import (
+	"github.com/MEDIGO/laika/models"
+	"github.com/labstack/echo"
+)
 
 // RequestID returns the request ID from the current context.
 func RequestID(c echo.Context) string {
@@ -10,4 +13,9 @@ func RequestID(c echo.Context) string {
 	}
 
 	return val.(string)
+}
+
+func getState(c echo.Context) *models.State {
+	state, _ := c.Get("state").(*models.State)
+	return state
 }

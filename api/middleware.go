@@ -13,6 +13,20 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// StateMiddleware attaches the state to the request.
+func StateMiddleware(store store.Store) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			state, err := store.State()
+			if err != nil {
+				return InternalServerError(c, err)
+			}
+			c.Set("state", state)
+			return next(c)
+		}
+	}
+}
+
 // TraceMiddleware attaches an ID to the current request.
 func TraceMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -70,13 +84,7 @@ func AuthMiddleware(rootUsername, rootPassword string, s store.Store) echo.Middl
 			return password == rootPassword, nil
 		}
 
-		state, err := s.State()
-		if err != nil {
-			log.Error("Failed to get state: ", err)
-			return false, nil
-		}
-
-		for _, user := range state.Users {
+		for _, user := range getState(c).Users {
 			if user.Username == username {
 				return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil, nil
 			}

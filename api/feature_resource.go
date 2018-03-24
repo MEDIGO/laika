@@ -4,34 +4,17 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/DataDog/datadog-go/statsd"
 	"github.com/MEDIGO/laika/models"
-	"github.com/MEDIGO/laika/notifier"
-	"github.com/MEDIGO/laika/store"
 	"github.com/labstack/echo"
 )
 
-type FeatureResource struct {
-	store    store.Store
-	stats    *statsd.Client
-	notifier notifier.Notifier
-}
-
-func NewFeatureResource(store store.Store, stats *statsd.Client, notifier notifier.Notifier) *FeatureResource {
-	return &FeatureResource{store, stats, notifier}
-}
-
-func (r *FeatureResource) Get(c echo.Context) error {
+func GetFeature(c echo.Context) error {
 	name, err := url.QueryUnescape(c.Param("name"))
 	if err != nil {
 		return BadRequest(c, "Bad feature name")
 	}
 
-	state, err := r.store.State()
-	if err != nil {
-		return InternalServerError(c, err)
-	}
-
+	state := getState(c)
 	for _, feature := range state.Features {
 		if feature.Name == name {
 			return OK(c, *getFeature(&feature, state))
@@ -41,12 +24,8 @@ func (r *FeatureResource) Get(c echo.Context) error {
 	return NotFound(c)
 }
 
-func (r *FeatureResource) List(c echo.Context) error {
-	state, err := r.store.State()
-	if err != nil {
-		return InternalServerError(c, err)
-	}
-
+func ListFeatures(c echo.Context) error {
+	state := getState(c)
 	status := []featureResource{}
 	for _, feature := range state.Features {
 		status = append(status, *getFeature(&feature, state))
