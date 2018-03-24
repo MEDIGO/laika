@@ -17,7 +17,9 @@ import (
 func TraceMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			c.Set("request_id", uuid.NewV4().String())
+			if id, err := uuid.NewV4(); err == nil {
+				c.Set("request_id", id.String())
+			}
 			return next(c)
 		}
 	}
@@ -30,10 +32,10 @@ func LogMiddleware() echo.MiddlewareFunc {
 			defer func(start time.Time) {
 				log.WithFields(log.Fields{
 					"request_id":                    RequestID(c),
-					"request_uri":                   c.Request().URI(),
-					"request_method":                c.Request().Method(),
-					"request_remote_addr":           c.Request().RemoteAddress(),
-					"request_status_code":           c.Response().Status(),
+					"request_uri":                   c.Request().URL.String(),
+					"request_method":                c.Request().Method,
+					"request_remote_addr":           c.Request().RemoteAddr,
+					"request_status_code":           c.Response().Status,
 					"request_duration_microseconds": int(time.Since(start).Seconds() * 1000000),
 				}).Info("request handled")
 			}(time.Now())
@@ -48,8 +50,8 @@ func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			defer func(start time.Time) {
 				tags := []string{
-					"method:" + c.Request().Method(),
-					"status:" + strconv.Itoa(c.Response().Status()),
+					"method:" + c.Request().Method,
+					"status:" + strconv.Itoa(c.Response().Status),
 				}
 
 				stats.Count("laika.request_total", 1, tags, 1)
@@ -63,23 +65,23 @@ func InstrumentMiddleware(stats *statsd.Client) echo.MiddlewareFunc {
 
 // AuthMiddleware checks login credentials.
 func AuthMiddleware(rootUsername, rootPassword string, s store.Store) echo.MiddlewareFunc {
-	return middleware.BasicAuth(func(username, password string) bool {
+	return middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
 		if username == rootUsername {
-			return password == rootPassword
+			return password == rootPassword, nil
 		}
 
 		state, err := s.State()
 		if err != nil {
 			log.Error("Failed to get state: ", err)
-			return false
+			return false, nil
 		}
 
 		for _, user := range state.Users {
 			if user.Username == username {
-				return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil
+				return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil, nil
 			}
 		}
 
-		return false
+		return false, nil
 	})
 }

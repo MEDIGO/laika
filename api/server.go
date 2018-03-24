@@ -8,8 +8,6 @@ import (
 	"github.com/MEDIGO/laika/notifier"
 	"github.com/MEDIGO/laika/store"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/engine"
-	"github.com/labstack/echo/engine/standard"
 	"github.com/labstack/echo/middleware"
 )
 
@@ -23,7 +21,7 @@ type ServerConfig struct {
 }
 
 // NewServer creates a new server.
-func NewServer(conf ServerConfig) (*standard.Server, error) {
+func NewServer(conf ServerConfig) (*echo.Echo, error) {
 	if conf.RootPassword == "" {
 		return nil, errors.New("missing root username")
 	}
@@ -53,7 +51,7 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 	environments := NewEnvironmentResource(conf.Store, conf.Stats)
 	events := NewEventResource(conf.Store, conf.Stats, conf.Notifier)
 
-	e.GET("/api/health", standard.WrapHandler(healthz.Handler()))
+	e.GET("/api/health", echo.WrapHandler(healthz.Handler()))
 
 	api := e.Group("/api", basicAuthMiddleware)
 	api.POST("/events/:type", events.Create)
@@ -67,8 +65,5 @@ func NewServer(conf ServerConfig) (*standard.Server, error) {
 	e.Static("/assets", "dashboard/public/assets")
 	e.File("/*", "dashboard/public/index.html")
 
-	server := standard.WithConfig(engine.Config{})
-	server.SetHandler(e)
-
-	return server, nil
+	return e, nil
 }

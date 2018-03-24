@@ -7,8 +7,6 @@ import:
 - package: github.com/go-sql-driver/mysql
 - package: github.com/labstack/echo
   subpackages:
-  - engine
-  - engine/standard
   - middleware
 - package: github.com/rubenv/sql-migrate
 - package: github.com/stretchr/testify
