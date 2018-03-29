@@ -25,7 +25,7 @@ const FeatureList = ({ environments, features }) => {
     <div key={feature.name} className='lk-feature-list__item'>
       <Link to={`/features/${window.encodeURIComponent(feature.name)}`}>
         <div className='lk-feature-list__name'>
-          <span>{feature.name}</span>
+          <span className='lk-feature-list__item-name'>{feature.name}</span>
           <TagList tags={parseStatus(environments, feature.status)} />
         </div>
         <div className='lk-feature-list__time'>

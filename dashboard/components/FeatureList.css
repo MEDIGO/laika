@@ -19,11 +19,16 @@
   background: #f8fafd;
   cursor: pointer;
 }
+
 .lk-feature-list__name {
   color: #2f2936;
   display: flex;
   font-weight: bold;
   justify-content: space-between;
+}
+
+.lk-feature-list__item-name {
+  word-break: break-all;
 }
 
 .lk-feature-list__time {
