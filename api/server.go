@@ -51,6 +51,8 @@ func NewServer(conf ServerConfig) (*echo.Echo, error) {
 
 	e.GET("/api/health", echo.WrapHandler(healthz.Handler()))
 
+	e.GET("/api/:env/:name/status", GetFeatureStatus)
+
 	api := e.Group("/api", StateMiddleware(conf.Store), basicAuthMiddleware)
 	api.POST("/events/:type", events.Create)
 

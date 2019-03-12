@@ -56,6 +56,32 @@ func getFeature(feature *models.Feature, s *models.State) *featureResource {
 	return &f
 }
 
+func GetFeatureStatus(c echo.Context) error {
+	name_param, err := url.QueryUnescape(c.Param("name"))
+	if err != nil {
+		return BadRequest(c, "Bad feature name")
+	}
+
+	env_param, err := url.QueryUnescape(c.Param("env"))
+	if err != nil {
+		return BadRequest(c, "Bad env name")
+	}
+
+	state := getState(c)
+	for _, environment := range s.Environments {
+		status, ok := s.Enabled[models.EnvFeature{
+			Env:     environment.Name,
+			Feature: feature.Name,
+		}]
+		toggled := ok && status.Enabled
+		if(env_param == environment.Name && name_param == feature.Name) {
+			return OK(c, toggled)
+		}
+	}
+    // Too many errors can help in detecting bad requests either from client or malicious user
+	return NotFound(c)
+}
+
 type featureResource struct {
 	models.Feature
 	Status          map[string]bool `json:"status"`
