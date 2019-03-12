@@ -78,8 +78,7 @@ func GetFeatureStatus(c echo.Context) error {
 			return OK(c, toggled)
 		}
 	}
-    // Too many errors can help in detecting bad requests either from client or malicious user
-	return NotFound(c)
+	return OK(c, false)
 }
 
 type featureResource struct {
