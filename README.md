@@ -17,9 +17,10 @@ Laika uses CQRS, the query endpoints are as follows.
 | `GET`   | `/api/health`                       | Check the service health   |
 | `GET`   | `/api/features`                     | List all features          |
 | `GET`   | `/api/features/:name`               | Get a feature by name      |
-| `GET`   | `/api/environments`                 | List all environments      |
 | `GET`   | `/api/features/:name/status/:env`   | Get the status of a feature|
 |         |                                     | in a particular environment|
+| `GET`   | `/api/environments`                 | List all environments      |
+
 
 The command endpoint is for manipulating data.
 
