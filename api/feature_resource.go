@@ -33,6 +33,29 @@ func ListFeatures(c echo.Context) error {
 	return OK(c, status)
 }
 
+// Return a boolean value indicating the status of the requested feature
+func GetFeatureStatus(c echo.Context) error {
+	name, err := url.QueryUnescape(c.Param("name"))
+	if err != nil {
+		return OK(c, false)
+	}
+
+	env, err := url.QueryUnescape(c.Param("env"))
+	if err != nil {
+		return OK(c, false)
+	}
+
+	state := getState(c)
+	for _, feature := range state.Features {
+		if feature.Name == name {
+			feature_details :=  *getFeature(&feature, state)
+			return OK(c, feature_details.Status[env])
+		}
+	}
+	return OK(c, false)
+}
+
+
 func getFeature(feature *models.Feature, s *models.State) *featureResource {
 	f := featureResource{
 		Feature:         *feature,
