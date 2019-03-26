@@ -51,16 +51,20 @@ func NewServer(conf ServerConfig) (*echo.Echo, error) {
 
 	e.GET("/api/health", echo.WrapHandler(healthz.Handler()))
 
-	e.GET("/api/features/:name/status/:env", GetFeatureStatus)
+	e.Use(StateMiddleware(conf.Store))
 
-	api := e.Group("/api", StateMiddleware(conf.Store), basicAuthMiddleware)
-	api.POST("/events/:type", events.Create)
+	publicApi := e.Group("")
+	privateApi := e.Group("/api", basicAuthMiddleware)
 
-	api.GET("/features/:name", GetFeature)
-	api.GET("/features", ListFeatures)
+	// Public routes go here
+	publicApi.GET("/api/features/:name/status/:env", GetFeatureStatus)
 
-	api.GET("/environments", ListEnvironments)
-	api.GET("/*", func(c echo.Context) error { return NotFound(c) })
+	// Private(behind auth) routes go here
+	privateApi.POST("/events/:type", events.Create)
+	privateApi.GET("/features/:name", GetFeature)
+	privateApi.GET("/features", ListFeatures)
+	privateApi.GET("/environments", ListEnvironments)
+	privateApi.GET("/*", func(c echo.Context) error { return NotFound(c) })
 
 	e.Static("/assets", "dashboard/public/assets")
 	e.File("/*", "dashboard/public/index.html")
