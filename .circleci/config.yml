@@ -6,7 +6,6 @@ jobs:
         steps:
             - checkout
             - run: go get -v -t -d ./...
-            - run: curl https://npmjs.org/install.sh | sh
-            - run: npm install -g yarn@0.18.1
+            - run: apt-get install yarn
             - run: touch .env
             - run: make
