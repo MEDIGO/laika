@@ -1,0 +1,12 @@
+version: 2
+jobs:
+    build:
+        docker:
+          - image: circleci/golang:1
+        steps:
+            - checkout
+            - run: go get -v -t -d ./...
+            - run: sudo apt-get install yarn
+            - run: touch .env
+            - run: pwd
+            - run: make
