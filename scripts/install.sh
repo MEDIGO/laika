@@ -9,4 +9,4 @@ if ! which glide > /dev/null 2>&1 ; then
 fi
 
 glide install
-(cd dashboard && yarn)
+(cd dashboard && apt purge cmdtest && yarn)
