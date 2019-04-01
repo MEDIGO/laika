@@ -9,4 +9,4 @@ if ! which glide > /dev/null 2>&1 ; then
 fi
 
 glide install
-(cd dashboard && sudo apt-get remove cmdtest && sudo apt-get install yarn && yarn install)
+(cd dashboard && sudo apt-get remove cmdtest && sudo apt-get install yarn && yarn)
