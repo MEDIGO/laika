@@ -9,4 +9,5 @@ jobs:
             - run: sudo apt-get install yarn
             - run: touch .env
             - run: pwd
+            - run: ls
             - run: make
