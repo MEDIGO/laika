@@ -6,6 +6,7 @@ jobs:
         steps:
             - checkout
             - run: go get -v -t -d ./...
+            - run: sudo apt-get update
             - run: sudo apt remove yarn
             - run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
             - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
