@@ -46,6 +46,11 @@ publish:
 	@scripts/publish.sh
 .PHONY: publish
 
+ci-publish:
+	@echo "Publishing docker image..."
+	@scripts/publish.sh
+.PHONY: publish
+
 clean:
 	@echo "Cleaning environment..."
 	@rm -rf bin public
