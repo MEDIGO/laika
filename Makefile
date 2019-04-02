@@ -1,4 +1,4 @@
-all: install lint test build report
+all: install build report
 .PHONY: all
 
 build:
@@ -42,11 +42,6 @@ image:
 .PHONY: image
 
 publish:
-	@echo "Publishing docker image..."
-	@scripts/publish.sh
-.PHONY: publish
-
-ci-publish:
 	@echo "Publishing docker image..."
 	@scripts/publish.sh
 .PHONY: publish
