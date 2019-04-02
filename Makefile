@@ -1,4 +1,4 @@
-all: install build report
+all: install build report publish clean
 .PHONY: all
 
 build:
