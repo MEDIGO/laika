@@ -9,4 +9,4 @@ if ! which glide > /dev/null 2>&1 ; then
 fi
 
 glide install
-(cd dashboard && yarn)
+(cd dashboard && sudo apt install curl && curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - && sudo apt-get install -y nodejs && sudo apt-get install -y npm && sudo npm install)
