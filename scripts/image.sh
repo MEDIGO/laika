@@ -5,4 +5,4 @@ set -o nounset
 set -o pipefail
 pwd
 ls
-docker build --pull --rm -t medigo/laika .
+docker build --pull --rm -t medigo/laika . -f Dockerfile
