@@ -1,0 +1,11 @@
+version: 2
+jobs:
+    build:
+        docker:
+          - image: circleci/golang:1
+        steps:
+            - checkout
+            - setup_remote_docker
+            - run: make image
+            - run: make publish
+            - run: make clean
