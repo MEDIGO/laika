@@ -12,7 +12,7 @@ jobs:
             - run: sudo apt-get update && sudo apt-get install yarn
             - run: make install
             - run: ls /usr/local/go/src
-            - run: ls /home/circleci/.go_workspace/src/
+            - run: ls /home/circleci/.go_workspace/src/github.com
             - run: make build
             - run: make image
             - run: make publish
