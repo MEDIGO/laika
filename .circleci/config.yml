@@ -11,9 +11,10 @@ jobs:
             - run: echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
             - run: sudo apt-get update && sudo apt-get install yarn
             - run: make install
-            - run: ls /usr/local/go/src
+            - run: ls /usr/local/go/src/vendor
             - run: ls /home/circleci/.go_workspace/src/github.com
-            - run: cp -a /usr/local/go/src/vendor /usr/local/go/src
+            # - run: ls /home/circleci/.go_workspace/src/github.com
+            # - run: cp -a /usr/local/go/src/vendor /usr/local/go/src
             - run: make build
             - run: make image
             - run: make publish
