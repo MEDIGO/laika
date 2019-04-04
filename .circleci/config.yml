@@ -4,6 +4,7 @@ jobs:
         machine: true
         steps:
             - checkout
+            - run: make install
             - run: make build
             - run: make image
             - run: make publish
