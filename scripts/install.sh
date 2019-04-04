@@ -8,5 +8,6 @@ if ! which glide > /dev/null 2>&1 ; then
   go get github.com/Masterminds/glide
 fi
 
-glide install
+# glide install
+go get -v -t -d ./...
 (cd dashboard && yarn install)
