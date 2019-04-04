@@ -6,7 +6,8 @@ RUN update-ca-certificates
 
 RUN apk update && \
     apk add ca-certificates
-
+RUN pwd
+RUN ls
 COPY bin/laika /
 COPY dashboard/public /dashboard/public/
 
