@@ -1,4 +1,4 @@
-all: install lint test build report
+all: install build report publish clean
 .PHONY: all
 
 build:

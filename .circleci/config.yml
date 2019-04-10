@@ -3,9 +3,18 @@ jobs:
     build:
         docker:
           - image: circleci/golang:1
+        working_directory: /go/src/github.com/MEDIGO/laika
         steps:
-            - setup_remote_docker
             - checkout
+            - run: go get -u -v -t github.com/Masterminds/glide
+            - run: glide install -v
+            - run: touch .env
+            - run: pwd
+            - run: ls
+            - run: make install
+            - run: make build
+            - run: make report
+            - setup_remote_docker:
+                docker_layer_caching: true
             - run: make image
             - run: make publish
-            - run: make clean
