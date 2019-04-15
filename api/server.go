@@ -54,6 +54,10 @@ func NewServer(conf ServerConfig) (*echo.Echo, error) {
 	e.Use(StateMiddleware(conf.Store))
 
 	publicApi := e.Group("")
+	publicApi.Use(CORSWithConfig(CORSConfig{
+		AllowMethods: []string{http.MethodGet},
+	}))
+
 	privateApi := e.Group("/api", basicAuthMiddleware)
 
 	// Public routes go here
