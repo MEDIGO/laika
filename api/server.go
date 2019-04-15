@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/MEDIGO/go-healthz"
@@ -54,7 +55,7 @@ func NewServer(conf ServerConfig) (*echo.Echo, error) {
 	e.Use(StateMiddleware(conf.Store))
 
 	publicApi := e.Group("")
-	publicApi.Use(CORSWithConfig(CORSConfig{
+	publicApi.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowMethods: []string{http.MethodGet},
 	}))
 
