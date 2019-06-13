@@ -10,7 +10,7 @@ else
   COMMIT=${CIRCLE_SHA1}
 fi
 
-docker tag medigo/laika:latest medigo/laika:${COMMIT}
+docker tag ${DOCKER_USER}/laika:latest ${DOCKER_USER}/laika:${COMMIT}
 docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
-docker push medigo/laika:latest
-docker push medigo/laika:${COMMIT}
+docker push ${DOCKER_USER}/laika:latest
+docker push ${DOCKER_USER}/laika:${COMMIT}
