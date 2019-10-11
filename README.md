@@ -7,6 +7,7 @@ Laika is a feature flag/feature toggle service, written in Go, that allows the c
 Using Laika in a project thus allows for fast and continuous feature release and deployment.
 
 `laika-php` is a PHP library that handles communication with Laika's API. You can get it [here](https://github.com/MEDIGO/laika-php).
+`laika-react` is a React JS module that handles communication with Laika's API. You can get it [here](https://github.com/MEDIGO/laika-react).
 
 ## API Reference
 
@@ -135,6 +136,6 @@ In the current release of Laika, it is possible to create feature flags and enab
 
 ## Copyright and license
 
-Copyright © 2016 MEDIGO GmbH.
+Copyright © 2019 MEDIGO GmbH.
 
 Laika is licensed under the MIT License. See [LICENSE](LICENSE) for the full license text.
