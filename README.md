@@ -14,27 +14,26 @@ Using Laika in a project thus allows for fast and continuous feature release and
 
 Laika uses CQRS, the query endpoints are as follows.
 
-| Method  | Endpoint                            | Description                |
-| ------- | ------------------------------------| -------------------------- |
-| `GET`   | `/api/health`                       | Check the service health   |
-| `GET`   | `/api/features`                     | List all features          |
-| `GET`   | `/api/features/:name`               | Get a feature by name      |
-| `GET`   | `/api/features/:name/status/:env`   | Get the status of a feature|
-|         |                                     | in a particular environment|
-| `GET`   | `/api/environments`                 | List all environments      |
-
+| Method | Endpoint                          | Description                 |
+| ------ | --------------------------------- | --------------------------- |
+| `GET`  | `/api/health`                     | Check the service health    |
+| `GET`  | `/api/features`                   | List all features           |
+| `GET`  | `/api/features/:name`             | Get a feature by name       |
+| `GET`  | `/api/features/:name/status/:env` | Get the status of a feature |
+|        |                                   | in a particular environment |
+| `GET`  | `/api/environments`               | List all environments       |
 
 The command endpoint is for manipulating data.
 
-| Method  | Endpoint                          | Example body                                                   | Description               |
-| ------- | --------------------------------- | -------------------------------------------------------------- | ------------------------- |
-| `POST`  | `/api/events/environment_created` | `{"name":"staging"}`                                           | Create a new environment. |
-| `POST`  | `/api/events/feature_created`     | `{"name":"feature1"}`                                          | Create a new feature.     |
-| `POST`  | `/api/events/user_created`        | `{"username":"admin","password":"secret"}`                     | Create a new user.        |
-| `POST`  | `/api/events/feature_toggled`     | `{"feature":"feature1","environment":"staging","status":true}` | Toggle a feature.         |
-| `POST`  | `/api/events/feature_deleted`     | `{"name":"feature1"}`                                          | Delete a feature.         |
-| `POST`  | `/api/events/environments_ordered`| `{"order":["dev","staging"]}`                                  | Change env display order. |
-| `POST`  | `/api/events/environment_deleted` | `{"name":"staging"}`                                           | Delete an environment.    |
+| Method | Endpoint                           | Example body                                                   | Description               |
+| ------ | ---------------------------------- | -------------------------------------------------------------- | ------------------------- |
+| `POST` | `/api/events/environment_created`  | `{"name":"staging"}`                                           | Create a new environment. |
+| `POST` | `/api/events/feature_created`      | `{"name":"feature1"}`                                          | Create a new feature.     |
+| `POST` | `/api/events/user_created`         | `{"username":"admin","password":"secret"}`                     | Create a new user.        |
+| `POST` | `/api/events/feature_toggled`      | `{"feature":"feature1","environment":"staging","status":true}` | Toggle a feature.         |
+| `POST` | `/api/events/feature_deleted`      | `{"name":"feature1"}`                                          | Delete a feature.         |
+| `POST` | `/api/events/environments_ordered` | `{"order":["dev","staging"]}`                                  | Change env display order. |
+| `POST` | `/api/events/environment_deleted`  | `{"name":"staging"}`                                           | Delete an environment.    |
 
 ## Client
 
@@ -81,17 +80,15 @@ func main() {
 
 To develop Laika you need to have the following tools installed in your machine:
 
-* [Go](https://golang.org/doc/install)
-* [Node.JS](https://nodejs.org/en/download/)
-* [Glide](https://github.com/Masterminds/glide)
-* [MySQL](https://dev.mysql.com/downloads/installer/)
+- [Go](https://golang.org/doc/install)
+- [Node.JS](https://nodejs.org/en/download/)
+- [MySQL](https://dev.mysql.com/downloads/installer/)
 
 Then install all the Go and Javascript dependencies with:
 
 ```sh
 $ make install
 ```
-
 
 Build continuously the server and UI with:
 

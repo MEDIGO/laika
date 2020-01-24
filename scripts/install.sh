@@ -4,9 +4,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if ! which glide > /dev/null 2>&1 ; then
-  go get github.com/Masterminds/glide
-fi
+go mod download
 
-glide install
-(cd dashboard && sudo apt install curl && curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - && sudo apt-get install -y nodejs && sudo apt-get install -y npm && sudo npm install)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  (cd dashboard && npm install)
+else
+  (cd dashboard && sudo apt install curl && curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - && sudo apt-get install -y nodejs && sudo apt-get install -y npm && sudo npm install)
+fi
