@@ -143,7 +143,7 @@ func main() {
 				}
 
 				log.Info("Starting server on port ", c.GlobalString("port"))
-				graceful.Run(":"+c.GlobalString("port"), time.Duration(c.Int("timeout"))*time.Second, server)
+				log.Fatal(graceful.RunWithErr(":"+c.GlobalString("port"), time.Duration(c.Int("timeout"))*time.Second, server))
 				log.Info("Server exiting")
 				return nil
 			},
