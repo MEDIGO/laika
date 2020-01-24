@@ -37,7 +37,7 @@ The command endpoint is for manipulating data.
 
 ## Client
 
-Laika contains a polling HTTP client that allows to easily check for enabled/disabled features on Go code. It can be found in the `client` package. While Laika uses the `vendor` directory to store external dependencies, `client` can be imported without any vendoring.
+Laika contains a polling HTTP client that allows to easily check for enabled/disabled features on Go code. It can be found in the `client` package.
 
 ### Install
 

@@ -9,4 +9,4 @@ if ! which rerun > /dev/null 2>&1 ; then
 fi
 
 (cd dashboard && yarn run watch) &
-rerun -a run -i dashboard,node_modules,bin,public,vendor,.git
+rerun -a run -i dashboard,node_modules,bin,public,.git
