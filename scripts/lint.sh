@@ -4,4 +4,4 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-go vet $(go list ./...)
+go vet
