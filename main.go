@@ -36,7 +36,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "mysql-host",
-			Value:  "localhost",
+			Value:  "db",
 			Usage:  "MySQL host",
 			EnvVar: "LAIKA_MYSQL_HOST",
 		},

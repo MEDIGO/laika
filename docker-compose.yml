@@ -1,0 +1,38 @@
+version: "3.3"
+
+services:
+  laika:
+    build:
+      context: ./
+      dockerfile: dev.Dockerfile
+    command: rerun -a run -i dashboard,node_modules,bin,public,.git
+    env_file: .env
+    volumes:
+      - .:/go/src/github.com/MEDIGO/laika
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    links:
+      - db
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: dev.Dockerfile
+    command: yarn run watch
+    volumes:
+      - ./dashboard:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+  db:
+    hostname: db
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laika
+      MYSQL_PASSWORD: root
+volumes:
+  node_modules:

@@ -80,17 +80,9 @@ func main() {
 
 To develop Laika you need to have the following tools installed in your machine:
 
-- [Go](https://golang.org/doc/install)
-- [Node.JS](https://nodejs.org/en/download/)
-- [MySQL](https://dev.mysql.com/downloads/installer/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-Then install all the Go and Javascript dependencies with:
-
-```sh
-$ make install
-```
-
-Build continuously the server and UI with:
+Build and start the docker contaniers and continuously run/build the server and UI with:
 
 ```sh
 $ make develop
@@ -110,7 +102,7 @@ The whole test suite can be executed with:
 $ make test
 ```
 
-Some test require a MySQL instance, you can pass the configuration to them with the following
+The docker setup starts with a mysql database. If you would like to connect to your own database, you can pass the configuration to them with the following
 environment variables:
 
 ```
