@@ -14,5 +14,7 @@ jobs:
             - run: make install
             - run: make build
             - run: make report
+            - setup_remote_docker:
+                docker_layer_caching: false
             - run: make image
             - run: make publish
