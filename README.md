@@ -14,26 +14,27 @@ Using Laika in a project thus allows for fast and continuous feature release and
 
 Laika uses CQRS, the query endpoints are as follows.
 
-| Method | Endpoint                          | Description                 |
-| ------ | --------------------------------- | --------------------------- |
-| `GET`  | `/api/health`                     | Check the service health    |
-| `GET`  | `/api/features`                   | List all features           |
-| `GET`  | `/api/features/:name`             | Get a feature by name       |
-| `GET`  | `/api/features/:name/status/:env` | Get the status of a feature |
-|        |                                   | in a particular environment |
-| `GET`  | `/api/environments`               | List all environments       |
+| Method  | Endpoint                            | Description                |
+| ------- | ------------------------------------| -------------------------- |
+| `GET`   | `/api/health`                       | Check the service health   |
+| `GET`   | `/api/features`                     | List all features          |
+| `GET`   | `/api/features/:name`               | Get a feature by name      |
+| `GET`   | `/api/features/:name/status/:env`   | Get the status of a feature|
+|         |                                     | in a particular environment|
+| `GET`   | `/api/environments`                 | List all environments      |
+
 
 The command endpoint is for manipulating data.
 
-| Method | Endpoint                           | Example body                                                   | Description               |
-| ------ | ---------------------------------- | -------------------------------------------------------------- | ------------------------- |
-| `POST` | `/api/events/environment_created`  | `{"name":"staging"}`                                           | Create a new environment. |
-| `POST` | `/api/events/feature_created`      | `{"name":"feature1"}`                                          | Create a new feature.     |
-| `POST` | `/api/events/user_created`         | `{"username":"admin","password":"secret"}`                     | Create a new user.        |
-| `POST` | `/api/events/feature_toggled`      | `{"feature":"feature1","environment":"staging","status":true}` | Toggle a feature.         |
-| `POST` | `/api/events/feature_deleted`      | `{"name":"feature1"}`                                          | Delete a feature.         |
-| `POST` | `/api/events/environments_ordered` | `{"order":["dev","staging"]}`                                  | Change env display order. |
-| `POST` | `/api/events/environment_deleted`  | `{"name":"staging"}`                                           | Delete an environment.    |
+| Method  | Endpoint                          | Example body                                                   | Description               |
+| ------- | --------------------------------- | -------------------------------------------------------------- | ------------------------- |
+| `POST`  | `/api/events/environment_created` | `{"name":"staging"}`                                           | Create a new environment. |
+| `POST`  | `/api/events/feature_created`     | `{"name":"feature1"}`                                          | Create a new feature.     |
+| `POST`  | `/api/events/user_created`        | `{"username":"admin","password":"secret"}`                     | Create a new user.        |
+| `POST`  | `/api/events/feature_toggled`     | `{"feature":"feature1","environment":"staging","status":true}` | Toggle a feature.         |
+| `POST`  | `/api/events/feature_deleted`     | `{"name":"feature1"}`                                          | Delete a feature.         |
+| `POST`  | `/api/events/environments_ordered`| `{"order":["dev","staging"]}`                                  | Change env display order. |
+| `POST`  | `/api/events/environment_deleted` | `{"name":"staging"}`                                           | Delete an environment.    |
 
 ## Client
 
@@ -102,15 +103,14 @@ The whole test suite can be executed with:
 $ make test
 ```
 
-The docker setup starts with a mysql database. If you would like to connect to your own database, you can pass the configuration to them with the following
-environment variables:
+The docker setup starts with a mysql database. If you would like to connect to your own database, you can pass the configuration to them with the following environment variables:
 
 ```
-LAIKA_TEST_MYSQL_HOST=localhost
+LAIKA_TEST_MYSQL_HOST=db
 LAIKA_TEST_MYSQL_PORT=3306
 LAIKA_TEST_MYSQL_USERNAME=root
 LAIKA_TEST_MYSQL_PASSWORD=root
-LAIKA_TEST_MYSQL_DBNAME=test
+LAIKA_TEST_MYSQL_DBNAME=laika
 ```
 
 ## Current state of the project
