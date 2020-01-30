@@ -38,7 +38,7 @@ The command endpoint is for manipulating data.
 
 ## Client
 
-Laika contains a polling HTTP client that allows to easily check for enabled/disabled features on Go code. It can be found in the `client` package. While Laika uses the `vendor` directory to store external dependencies, `client` can be imported without any vendoring.
+Laika contains a polling HTTP client that allows to easily check for enabled/disabled features on Go code. It can be found in the `client` package.
 
 ### Install
 
@@ -81,19 +81,9 @@ func main() {
 
 To develop Laika you need to have the following tools installed in your machine:
 
-* [Go](https://golang.org/doc/install)
-* [Node.JS](https://nodejs.org/en/download/)
-* [Glide](https://github.com/Masterminds/glide)
-* [MySQL](https://dev.mysql.com/downloads/installer/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-Then install all the Go and Javascript dependencies with:
-
-```sh
-$ make install
-```
-
-
-Build continuously the server and UI with:
+Build and start the docker contaniers and continuously run/build the server and UI with:
 
 ```sh
 $ make develop
@@ -113,15 +103,14 @@ The whole test suite can be executed with:
 $ make test
 ```
 
-Some test require a MySQL instance, you can pass the configuration to them with the following
-environment variables:
+The docker setup starts with a mysql database. If you would like to connect to your own database, you can pass the configuration to them with the following environment variables:
 
 ```
-LAIKA_TEST_MYSQL_HOST=localhost
+LAIKA_TEST_MYSQL_HOST=db
 LAIKA_TEST_MYSQL_PORT=3306
 LAIKA_TEST_MYSQL_USERNAME=root
 LAIKA_TEST_MYSQL_PASSWORD=root
-LAIKA_TEST_MYSQL_DBNAME=test
+LAIKA_TEST_MYSQL_DBNAME=laika
 ```
 
 ## Current state of the project

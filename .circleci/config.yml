@@ -6,8 +6,7 @@ jobs:
         working_directory: /go/src/github.com/MEDIGO/laika
         steps:
             - checkout
-            - run: go get -u -v -t github.com/Masterminds/glide
-            - run: glide install -v
+            - run: go mod download
             - run: touch .env
             - run: pwd
             - run: ls

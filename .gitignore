@@ -7,4 +7,4 @@ coverage.out
 node_modules/
 bundle.js
 dashboard/public/index.html
-vendor/
+/data
