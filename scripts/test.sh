@@ -4,4 +4,4 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-docker-compose run laika go test -v ./... -cover -coverprofile=combined_coverage.out github.com/MEDIGO/laika
+docker-compose run laika go test -v ./... -cover -coverprofile=combined_coverage.out
