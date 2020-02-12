@@ -9,13 +9,13 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-sql-driver/mysql v1.3.1-0.20180308100310-1a676ac6e4dc
+	github.com/google/uuid v1.1.1
 	github.com/labstack/echo v3.3.4+incompatible
 	github.com/labstack/gommon v0.2.2-0.20180316174944-3bc2d333a4c3
 	github.com/mattn/go-colorable v0.1.0
 	github.com/mattn/go-isatty v0.0.4
 	github.com/pmezard/go-difflib v1.0.0
 	github.com/rubenv/sql-migrate v0.0.0-20180217203553-081fe17d19ff
-	github.com/satori/go.uuid v1.2.1-0.20180103174451-36e9d2ebbde5
 	github.com/stretchr/testify v1.2.2-0.20180319223459-c679ae2cc0cb
 	github.com/urfave/cli v1.20.1-0.20180226030253-8e01ec4cd3e2
 	github.com/valyala/bytebufferpool v1.0.0

@@ -7,9 +7,9 @@ import (
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/MEDIGO/laika/store"
 	log "github.com/Sirupsen/logrus"
+	"github.com/google/uuid"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -31,7 +31,7 @@ func StateMiddleware(store store.Store) echo.MiddlewareFunc {
 func TraceMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			if id, err := uuid.NewV4(); err == nil {
+			if id, err := uuid.NewRandom(); err == nil {
 				c.Set("request_id", id.String())
 			}
 			return next(c)
