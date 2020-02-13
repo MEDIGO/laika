@@ -10,6 +10,8 @@ github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumC
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/go-sql-driver/mysql v1.3.1-0.20180308100310-1a676ac6e4dc h1:WhgK0tta5yLnKy4x0XbxaxErBoUbEt2ckjRGZGiF7lo=
 github.com/go-sql-driver/mysql v1.3.1-0.20180308100310-1a676ac6e4dc/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
+github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
+github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/labstack/echo v3.3.4+incompatible h1:83oKvzg2Fa6PN1pQfsUxlfR4MiSjsFzyxbEXKzsE0cQ=
 github.com/labstack/echo v3.3.4+incompatible/go.mod h1:0INS7j/VjnFxD4E2wkz67b8cVwCLbBmJyDaka6Cmk1s=
 github.com/labstack/gommon v0.2.2-0.20180316174944-3bc2d333a4c3 h1:oaPp0U6xfzrmg9lGhEm1ZkBv6WqTiHkgTPuYM7xhocU=
