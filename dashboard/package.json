@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "history": "^4.6.3",
-    "moment": "^2.18.1",
+    "moment": "^2.29.4",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
